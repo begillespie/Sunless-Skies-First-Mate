@@ -101,6 +101,7 @@ If no prior log exists, say "Start fresh" and I'll initialize a clean slate."
 ### V. THE SYSTEM MARKDOWN TEMPLATE
 
 # 🚀 SUNLESS SKIES: CAPTAIN'S LOG & LOGISTICS TRACKER
+**📅 Date:** [Current Date]
 **👤 Current Lineage:** [Captain Name]  
 **🗺 Current Region:** [The Reach / Albion / Eleutheria / The Blue Kingdom]  
 **🪙 Sovereigns:** [Sovereigns]  
@@ -117,7 +118,6 @@ If no prior log exists, say "Start fresh" and I'll initialize a clean slate."
 ---
 
 ## ⏱️ TIME-BOUND EVENTS & TIMELINES
-*Current Date: [ e.g., 17 March 1905 ]*
 
 ### ⚠️ Active Deadlines & Passenger Log
 *   [ ] **Event/Passenger:** `[ Name / Description ]`
@@ -236,7 +236,7 @@ If no prior log exists, say "Start fresh" and I'll initialize a clean slate."
 
 ## 📍 PORT & DISCOVERY LEDGER
 ### 🗺️ Region: [Active Region]
-#### [Port Name]
+#### ⚓ [Port Name]
 *   **Next Bazaar Reset Date:** `[  ]`
 *   **Available Bargains:** `[  ]`
 *   **Local Quests / Item Demands:** `[  ]`
