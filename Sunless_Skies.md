@@ -167,6 +167,7 @@ If no prior log exists, say "Start fresh" and I'll initialize a clean slate."
 | N-1 | `Hybras` | The Reach | 🟡 Planned | 🔥🟡 📦🟡 | — |
 | N | `Magdalene's` | The Reach | 🟡 Planned | — | PROS-001 |
 | N+1 | `New Winchester` | The Reach | 🟡 Planned | 🔥🟢 📦🟢 | — |
+| N+... | `Hybras` | The Reach | 🟡 Planned | 🔥🟡 📦🟡 | — |
 
 ---
 
