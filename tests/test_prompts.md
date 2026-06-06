@@ -29,10 +29,10 @@ Verifies that when no prior JSON state is provided, the system successfully boot
 
 #### Report Text:
 
-> * **📅 Date:** 1 January 1905
-> * **👤 Current Lineage:** Sinclair
-> * **🗺 Current Region:** The Reach
-> * **🪙 Sovereigns:** 1000
+> * 1 January 1905 - New Winchester
+> * **👤  Sinclair**
+> * **🗺  The Reach**
+> * **🪙  1000**
 > * 🟢 Crew: 8/10 | 🟢 Hull: 30/30  
 > * 🟢 Terror: 0 | 🟢 Nightmares: 0> 
 

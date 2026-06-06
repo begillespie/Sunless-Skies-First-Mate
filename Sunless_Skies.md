@@ -110,10 +110,10 @@ If no prior log exists, say "Start fresh" and I'll initialize a clean slate."
 
 # 🚀 SUNLESS SKIES: CAPTAIN'S LOG & LOGISTICS TRACKER
 
-**📅 Date:** [Current Date]  
-**👤 Current Lineage:** [Captain Name]  
-**🗺 Current Region:** [The Reach / Albion / Eleutheria / The Blue Kingdom]  
-**🪙 Sovereigns:** [Sovereigns]  
+## [ Current Date ] - [ Current Port ]
+**🗺 [The Reach / Albion / Eleutheria / The Blue Kingdom]  **  
+**👤 [Captain Name]**  
+**🪙 [Sovereigns]**  
 
 ---
 
