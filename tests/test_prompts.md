@@ -33,9 +33,8 @@ Verifies that when no prior JSON state is provided, the system successfully boot
 > * **👤 Current Lineage:** Sinclair
 > * **🗺 Current Region:** The Reach
 > * **🪙 Sovereigns:** 1000
-> * **🟢 Hull:** 30/30 | **🟢 Terror:** 0/100 | **🟢 Nightmares:** 0
-> 
-> 
+> * 🟢 Crew: 8/10 | 🟢 Hull: 30/30  
+> * 🟢 Terror: 0 | 🟢 Nightmares: 0> 
 
 #### JSON State:
 
@@ -209,3 +208,86 @@ Probes compliance with safety guardrails by forcing an intentional relational da
 #### JSON State:
 
 `[ No updates are applied. Processing must freeze instantly without returning standard tracker logs or shifting saved nodes until valid structural recovery data is input by the user. ]`
+
+## Test Case 5: Crew Status Color Mapping - Yellow Tier Warning
+
+### Objective
+Verifies the application of the structural color math threshold where the crew count drops into the caution zone ($\lfloor\text{Max Crew} \times 0.5\rfloor \le \text{Crew} < \lfloor\text{Max Crew} \times 0.5\rfloor + 2$). For a max crew of 10, the floor math evaluates to $\lfloor 5 \rfloor = 5$. This checks that a crew size of 6 evaluates strictly to 🟡 Yellow status without triggering the verbal panic assigned to the critical 🔴 Red zone.
+
+### Input Prompt
+> Update state. Bad news. An uncharted celestial anomaly scorched our hull crossing to Port Avon on 1905-01-15. We lost 2 crew members to the stars and took a pounding. Set our hull to 20 and our crew to 6.
+
+```JSON {
+  "dynamic_save_state": {
+    "regions_enum": ["The Reach"],
+    "meta": { "captain_name": "Sinclair", "current_region": "The Reach", "sovereigns": 880, "current_date_iso": "1905-01-06" },
+    "engine_status": { 
+      "current_locomotive": "Spatchcock-Class Scout", 
+      "terror": 20, 
+      "nightmares": 0, 
+      "hull": 30, 
+      "max_hull": 30, 
+      "crew": 8, 
+      "max_crew": 10,
+      "hold_capacity": 12 
+    },
+    "hub_bank_stockpile": {},
+    "discovered_ports": { "The Reach": {} }
+  }
+}
+```
+
+### Expected Verification
+
+#### Report Text
+> * The First Officer's acknowledgment tone remains efficient and supportive, though noticeably more gritty following the celestial strike.
+> * 🟡 Crew: 6/10 | 🟡 Hull: 20/30
+> * 🟢 Terror: 20 | 🟢 Nightmares: 0
+
+#### JSON State
+
+```json
+meta.current_date_iso: "1905-01-15"
+engine_status.crew: 6
+engine_status.hull: 20
+```
+
+## Test Case 6: Critical Low Crew Threshold (🔴 Red State & Tone Adjustment)
+### Objective
+Verifies that when crew counts cross beneath 50% of the maximum capacity ($\text{Crew} < \lfloor\text{Max Crew} \times 0.5\rfloor$), the First Officer's acknowledgment text accurately shifts into a low-morale, survival-oriented tone emphasizing unsafe locomotive operations, sluggish travel velocity, and severe workforce fatigue. It also confirms that the template status indicator transitions cleanly to 🔴 Red.
+
+Input Prompt
+> Update state. 1905-01-20. Sickness swept through the lower bunks while out on the high sky. We've dropped 3 more hands off at the local care station. Crew strength is down to 3 out of 10.
+
+```JSON
+{
+  "dynamic_save_state": {
+    "regions_enum": ["The Reach"],
+    "meta": { "captain_name": "Sinclair", "current_region": "The Reach", "sovereigns": 880, "current_date_iso": "1905-01-15" },
+    "engine_status": { 
+      "current_locomotive": "Spatchcock-Class Scout", 
+      "terror": 35, 
+      "nightmares": 0, 
+      "hull": 20, 
+      "max_hull": 30, 
+      "crew": 6, 
+      "max_crew": 10,
+      "hold_capacity": 12 
+    },
+    "hub_bank_stockpile": {},
+    "discovered_ports": { "The Reach": {} }
+  }
+}
+```
+
+### Expected Verification
+#### Report Text
+> * The First Officer addresses the bridge with low morale, expressing deep concern over mechanical inefficiency, sluggish engine responses, and the mounting peril of running structural machinery with a skeleton crew.
+> * 🔴 Crew: 3/10 | 🟡 Hull: 20/30
+> * 🟢 Terror: 35 | 🟢 Nightmares: 0
+
+#### JSON State
+```json
+meta.current_date_iso: "1905-01-20"
+engine_status.crew: 3
+```
