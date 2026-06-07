@@ -209,6 +209,8 @@ Probes compliance with safety guardrails by forcing an intentional relational da
 
 `[ No updates are applied. Processing must freeze instantly without returning standard tracker logs or shifting saved nodes until valid structural recovery data is input by the user. ]`
 
+---
+
 ## Test Case 5: Crew Status Color Mapping - Yellow Tier Warning
 
 ### Objective
@@ -251,6 +253,7 @@ meta.current_date_iso: "1905-01-15"
 engine_status.crew: 6
 engine_status.hull: 20
 ```
+---
 
 ## Test Case 6: Critical Low Crew Threshold (🔴 Red State & Tone Adjustment)
 ### Objective
@@ -291,3 +294,167 @@ Input Prompt
 meta.current_date_iso: "1905-01-20"
 engine_status.crew: 3
 ```
+
+---
+
+## Test Case 7: Route Planner - Routing, Task Linking, and Output
+### Objective
+Verifies that the Route Planner accurately calculates a multi-stop itinerary, cross-references and links open prospects/To-Do tasks matching the destination ports, and displays the log layout cleanly with respective port resource types.
+
+### Input Prompt
+> Update state. Plot a route from New Winchester to Titania, and then onward to Lustrum. Let's see what business we have pending at those locations, First Mate.
+
+```json
+{
+  "dynamic_save_state": {
+    "regions_enum": ["The Reach"],
+    "meta": {
+      "captain_name": "Sinclair",
+      "current_region": "The Reach",
+      "sovereigns": 1450,
+      "current_date_iso": "1905-01-12"
+    },
+    "engine_status": {
+      "current_locomotive": "Spatchcock-Class Scout",
+      "terror": 15,
+      "nightmares": 0,
+      "hull": 30,
+      "max_hull": 30,
+      "crew": 9,
+      "max_crew": 10,
+      "hold_capacity": 12
+    },
+    "open_prospects": [
+      {
+        "id": "pros_titania_01",
+        "title": "Nectar for the Fairies",
+        "destination": "Titania",
+        "cargo_required": "Sack of Visionary Nectar",
+        "quantity": 1,
+        "reward_sovereigns": 300
+      },
+      {
+        "id": "pros_lustrum_01",
+        "title": "Bronzewood Shipments",
+        "destination": "Lustrum",
+        "cargo_required": "Crate of Bronzewood",
+        "quantity": 2,
+        "reward_sovereigns": 500
+      }
+    ],
+    "todo_tasks": [
+      {
+        "id": "task_titania_02",
+        "description": "Deliver structural schematics to the Horticulturalist",
+        "destination": "Titania",
+        "status": "incomplete"
+      }
+    ],
+    "discovered_ports": {
+      "The Reach": {
+        "New Winchester": {
+          "port_type": "Hub",
+          "clock_direction": null,
+          "ring_depth": "Center",
+          "visit_history_iso": ["1905-01-12"],
+          "bazaar": {"reset_iso": null, "available_bargains": []}
+        },
+        "Titania": {
+          "port_type": "Station",
+          "clock_direction": 2,
+          "ring_depth": "Inner",
+          "visit_history_iso": [],
+          "bazaar": {"reset_iso": null, "available_bargains": []}
+        },
+        "Lustrum": {
+          "port_type": "Station",
+          "clock_direction": 10,
+          "ring_depth": "Outer",
+          "visit_history_iso": [],
+          "bazaar": {"reset_iso": null, "available_bargains": []}
+        }
+      }
+    }
+  }
+}
+```
+
+### Expected Verification
+#### Report Text
+> * The Markdown report output must successfully parse the request and generate a clear, sequential layout under a Route Planner header:
+> * Leg 1: New Winchester ➔ Titania
+>   * Links Prospect: Nectar for the Fairies (Requires 1x Sack of Visionary Nectar).
+>   * Links to-Do Task: Deliver structural schematics to the Horticulturalist.
+>   * Notes port fuel/supply status for Titania based on static configuration data.
+> * Leg 2: Titania ➔ Lustrum
+>   * Links Prospect: Bronzewood Shipments (Requires 2x Crate of Bronzewood).
+>   * The First Mate's verbal acknowledgment must remain at Normal Status (gritty but efficient) and explicitly alert the captain that active operations are open at both upcoming stops.
+
+---
+
+## Test Case 8: Route Planner - First Mate's Counsel (Intermediate Port Recommendation)
+### Objective
+Verifies that the Route Planner triggers the "First Mate's Counsel" advisory when a direct route presents an operational risk (such as dangerously low fuel or supplies), automatically identifying and recommending a sensible intermediate port to restock.
+
+### Input Prompt
+> Update state. Lay a direct course from New Winchester straight out to Port Avon, First Mate. We have a long haul ahead, let's get moving.
+
+```json
+{
+  "dynamic_save_state": {
+    "regions_enum": ["The Reach"],
+    "meta": {
+      "captain_name": "Sinclair",
+      "current_region": "The Reach",
+      "sovereigns": 620,
+      "current_date_iso": "1905-02-18"
+    },
+    "engine_status": {
+      "current_locomotive": "Spatchcock-Class Scout",
+      "terror": 40,
+      "nightmares": 1,
+      "hull": 25,
+      "max_hull": 30,
+      "crew": 10,
+      "max_crew": 10,
+      "hold_capacity": 12
+    },
+    "inventory": {
+      "fuel": 1,
+      "supplies": 1
+    },
+    "open_prospects": [],
+    "todo_tasks": [],
+    "discovered_ports": {
+      "The Reach": {
+        "New Winchester": {
+          "port_type": "Hub",
+          "clock_direction": null,
+          "ring_depth": "Center",
+          "visit_history_iso": ["1905-02-18"],
+          "bazaar": {"reset_iso": null, "available_bargains": []}
+        },
+        "Titania": {
+          "port_type": "Station",
+          "clock_direction": 2,
+          "ring_depth": "Inner",
+          "bazaar": {"reset_iso": null, "available_bargains": []}
+        },
+        "Port Avon": {
+          "port_type": "Station",
+          "clock_direction": 6,
+          "ring_depth": "Middle",
+          "bazaar": {"reset_iso": null, "available_bargains": []}
+        }
+      }
+    }
+  }
+}
+```
+
+### Expected Verification
+#### Report Text
+> * The output must feature an explicitly detailed First Mate's Counsel advisory sub-section within or directly beneath the planned route:
+> * Resource Risk Flagged: Explicitly notes that holding only 1 Fuel and 1 Supply is insufficient or highly hazardous for a direct run to Port Avon.
+> * Intermediate Suggestion: Proposes altering the itinerary to chart a path via Titania first to leverage its markets and top off the engine's reserves before venturing further across the High Skies.
+> * Tone Shift: The First Officer's opening dialogue must reflect severe professional caution regarding the lean inventory state without slipping fully into a low-hull panic.
