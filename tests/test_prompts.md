@@ -8,8 +8,9 @@ We are initiating an isolated QA test session to verify the report generation an
 Please adhere strictly to the following test execution protocol:
 1. Do not fast-forward events or invent details outside of what I explicitly paste.
 2. Accept game updates along with their accompanying `dynamic_save_state` JSON data.
-3. For every input, evaluate changes exactly, run your internal mechanics checklists, and print the requested System Markdown Template.
+3. For every input, evaluate changes exactly, run your internal mechanics checklists, and follow your data mechanics and UI rendering instructions.
 4. Always wrap your updated, raw `dynamic_save_state` JSON block strictly within the collapsed HTML details block structure specified in your Core Mandates.
+5. When verifying specific data parameters in a "JSON State Verification" block, explicitly extract and pretty-print those individual targeted JSON keys in a readable sub-block above the collapsed, fully minified master save state.
 
 Acknowledge this layout in character as the First Officer with a single, gritty line to confirm you are ready for Test Input 1.
 
@@ -23,28 +24,50 @@ Verifies that when no prior JSON state is provided, the system successfully boot
 
 ### Input Prompt
 
-> Start fresh. Captain Sinclair here, taking command of a brand new Spatchcock-Class Scout on this fine New Year's Day, 1905-01-01. Set our starting Sovereigns to 1000. We are currently docked at New Winchester.
+> Start fresh. Captain Sinclair here, taking command of a brand new Spatchcock-Class Scout on this fine New Year's Day, 1905-01-01. Set our starting Sovereigns to 1000. We are departing New Winchester.
+
+#### JSON State Verification:
+`meta.captain_name`  
+`meta.current_date_iso`  
+`meta.sovereigns`  
+`engine_status.current_locomotive`  
+`engine_status.hull`  
+`engine_status.max_hull`
 
 ### Expected Verification:
-
 #### Report Text:
 
-> * 1 January 1905 - New Winchester
-> * **👤  Sinclair**
-> * **🗺  The Reach**
-> * **🪙  1000**
-> * 🟢 Crew: 8/10 | 🟢 Hull: 30/30  
-> * 🟢 Terror: 0 | 🟢 Nightmares: 0> 
+```markdown
+# 🚂 CAPTAIN'S LOG 🚀
+
+## 📅 1 January 1905 · ⚓ New Winchester
+
+**🗺 Region:** The Reach | **👤 Captain:** Sinclair | **🪙 Wallet:** 1000
+
+---
+
+## ⚙️ VESSEL SYSTEMS & RECOVERY STATUS
+
+|||
+|---|---|
+| 🟢 Crew: 8 / 10  | 🟢 Terror: 0     |  
+| 🟢 Hull: 30 / 30 | 🟢 Nightmares: 0 |
+
+**🚂 Current Engine:** Spatchcock-Class Scout (Hold Slots Used: 0/12)
+```
 
 #### JSON State:
 
-* `meta.captain_name`: `"Sinclair"`
-* `meta.current_date_iso`: `"1905-01-01"`
-* `meta.sovereigns`: `1000`
-* `engine_status.current_locomotive`: `"Spatchcock-Class Scout"`
-* `engine_status.hull`: `30`
-* `engine_status.max_hull`: `30`
-
+```json
+{
+  "meta.captain_name": "Sinclair",
+  "meta.current_date_iso": "1905-01-01",
+  "meta.sovereigns": 1000,
+  "engine_status.current_locomotive": "Spatchcock-Class Scout",
+  "engine_status.hull": 30,
+  "engine_status.max_hull": 30
+}
+```
 ---
 
 ## Test Case 2: Port Arrival & Bargain Discovery Tracking
@@ -55,7 +78,7 @@ Verifies date conversion formatting, canonical display name matching, and the cl
 
 ### Input Prompt
 
-> Update state. We just arrived at Lustrum on 1905-01-05. Fuel used on this leg was 2. While checking the local market, we spotted a bargain: 3 crates of Unseasoned Hours selling for 40 Sovereigns each. The market broker says this deal expires on 1905-01-12.
+> Update state. We docked at Lustrum on 1905-01-05. Fuel used on this leg was 2. While checking the local market, we spotted a bargain: 3 crates of Unseasoned Hours selling for 40 Sovereigns each. The market broker says this deal expires on 1905-01-12.
 
 ```json
 {
@@ -78,41 +101,45 @@ Verifies date conversion formatting, canonical display name matching, and the cl
       "hidden_slots": 0,
       "hold_rules": { "fuel_reserve_minimum": 3, "supplies_reserve_minimum": 3, "discovery_buffer_slots": 2 }
     },
-    "todo_list": [],
+    "active_action_stream": [],
     "current_hold": { "fuel": 5, "supplies": 4, "cargo": [] },
     "hub_bank_stockpile": {},
-    "time_sensitive_events": [],
-    "open_questlines": [],
-    "completed_questlines": [],
-    "active_prospects": [],
-    "completed_prospects": [],
     "route_planner": { "last_updated_iso": "1905-01-01", "legs": [] },
     "discovered_ports": { "The Reach": { "New Winchester": { "bazaar": { "reset_iso": null, "available_bargains": [] } } }, "Albion": {}, "Eleutheria": {}, "The Blue Kingdom": {} }
   }
 }
-
 ```
+
+#### JSON State Verification:
+
+  `meta.current_date_iso`  
+  `engine_status.fuel_used_last_leg`  
+  `discovered_ports.The Reach.Lustrum.bazaar.reset_iso`  
+  `discovered_ports.The Reach.Lustrum.bazaar.available_bargains[0].good`  
+  `discovered_ports.The Reach.Lustrum.bazaar.available_bargains[0].quantity`  
+  `discovered_ports.The Reach.Lustrum.bazaar.available_bargains[0].cost`
+
+---
 
 ### Expected Verification:
 
 #### Report Text:
 
-> ### 💰 BARGAINS AVAILABLE
-> 
-> 
-> | Expires | Trade Good | Port | Region | Cost | Qty Left |
-> | --- | --- | --- | --- | --- | --- |
-> | **12 Jan 1905** | `Unseasoned Hours` | `Lustrum` | `The Reach` | `40` | `3` |
-> 
-> 
+> *No report printout on port arrival.*
 
 #### JSON State:
+ ```json
+  {
+    "meta.current_date_iso": "1905-01-05",
+    "engine_status.fuel_used_last_leg": 2,
+    "discovered_ports.The Reach.Lustrum.bazaar.reset_iso": "1905-01-12",
+    "discovered_ports.The Reach.Lustrum.bazaar.available_bargains[0].good": "unseasoned_hours", 
+    "discovered_ports.The Reach.Lustrum.bazaar.available_bargains[0].quantity": 3, 
+    "discovered_ports.The Reach.Lustrum.bazaar.available_bargains[0].cost": 40
+  }
+ ```
 
-* `meta.current_date_iso`: `"1905-01-05"`
-* `engine_status.fuel_used_last_leg`: `2`
-* `discovered_ports["The Reach"]["Lustrum"]`: Node successfully created.
-* `discovered_ports["The Reach"]["Lustrum"].bazaar.reset_iso`: `"1905-01-12"`
-* `discovered_ports["The Reach"]["Lustrum"].bazaar.available_bargains`: `[{"good": "unseasoned_hours", "quantity": 3, "cost": 40}]`
+#### JSON State Verification:
 
 ---
 
@@ -124,42 +151,66 @@ Verifies ledger accounting updates for assets checked into central storage, conf
 
 ### Input Prompt
 
-> Update state. It's now 1905-01-06. We just dropped anchor back at the main hub and deposited 4 loads of Bronzewood and 2 barrels of Chorister Nectar into our Hub Bank Stockpile.
+> Update state. It's now 1905-01-06. We dropped anchor back at the main hub and deposited 4 loads of Bronzewood and 2 barrels of Chorister Nectar into our Hub Bank Stockpile. Off to Titania!
 
 ```json
 {
   "dynamic_save_state": {
-    "regions_enum": ["The Reach"],
     "meta": { "captain_name": "Sinclair", "current_region": "The Reach", "sovereigns": 880, "current_date_iso": "1905-01-05" },
     "engine_status": { "current_locomotive": "Spatchcock-Class Scout", "terror": 15, "nightmares": 0, "hull": 30, "max_hull": 30, "hold_capacity": 12 },
+    "current_hold": {
+      "fuel": 3,
+      "supplies": 3,
+      "cargo": [{"bronzewood": 4}, {"chorister_nectar": 2}]
+    },
     "hub_bank_stockpile": {
-      "bronzewood": { "count": 1, "reserved_for_prospect": null },
-      "chorister_nectar": { "count": 0, "reserved_for_prospect": null }
+      "bronzewood": 1,
+      "chorister_nectar": 0
     },
     "discovered_ports": { "The Reach": {} }
   }
 }
-
 ```
+
+#### JSON State Verification:
+`meta.current_date_iso`  
+`current_hold.fuel`  
+`current_hold.supplies`  
+`current_hold.cargo`  
+`hub_bank_stockpile.bronzewood.count`  
+`hub_bank_stockpile.chorister_nectar.count`  
+
+---
 
 ### Expected Verification:
 
 #### Report Text:
 
-> ## 🏦 HUB BANK STOCKPILE (Central Storage)
-> 
-> | Trade Good | Stockpile Count | Active Prospect? (Y/N) | Target Destination |
-> | --- | --- | --- | --- |
-> | **Bronzewood** | `5` | `N` | `—` |
-> | **Chorister Nectar** | `2` | `N` | `—` |
-> 
-> 
+```
+## 📦 THE LOGISTICS CORE (Hold Inventory & Sourcing)
+
+*The Fuel Barrels and Crew Rations rows must never be pruned or hidden under any circumstances. If physical hold counts for either equal 0, you must print a high-priority, uppercase bold emergency warning in the progress column. Other trade goods dynamically hide if both hold stock and active contracts equal zero.*
+
+| Trade Good Name | Physical Hold | Hub Bank Stock | Active Sourcing Progress | Destination Port |
+| --- | --- | --- | --- | --- |
+| **🔥 Fuel Barrels** | 3 | — |  Reserve Stable  | — |
+| **📦 Crew Rations** | 3 | — |  Reserve Stable | — |
+| **Bronzewood** | 0 | 5 | — | — |
+| **Chorister Nectar** | 0 | 5 | — | — |
+```
 
 #### JSON State:
 
-* `meta.current_date_iso`: `"1905-01-06"`
-* `hub_bank_stockpile.bronzewood.count`: `5` *(Calculated: 1 + 4)*
-* `hub_bank_stockpile.chorister_nectar.count`: `2` *(Calculated: 0 + 2)*
+```json
+{
+"meta.current_date_iso": "1905-01-06",
+"current_hold.fuel": 3,
+"current_hold.supplies": 3,
+"current_hold.cargo": [],
+"hub_bank_stockpile.bronzewood.count": 5,
+"hub_bank_stockpile.chorister_nectar.count": 2
+}
+```
 
 ---
 
@@ -178,23 +229,46 @@ Probes compliance with safety guardrails by forcing an intentional relational da
   "dynamic_save_state": {
     "meta": { "captain_name": "Sinclair", "current_region": "The Reach", "sovereigns": 500, "current_date_iso": "1905-01-10" },
     "engine_status": { "current_locomotive": "Spatchcock-Class Scout" },
-    "active_prospects": [
+     "active_action_stream": [
       {
-        "prospect_id": "PROS-999",
-        "item": "quantum_æther_crystal",
-        "notes": "Error payload item: This item key does not exist inside static_game_data."
+        "id": "ACT-0013",
+        "type": "prospect",
+        "port": "Lustrum",
+        "region": "The Reach",
+        "date_added_iso": "1905-01-03",
+        "deadline_date_iso": null,
+        "title": "Crystals",
+        "notes": "",
+        "is_hidden_transit_item": false,
+        "payload": {
+          "good_key": "quantum_æther_crystal",
+          "quantity_required": 3,
+          "quantity_sourced": 3,
+          "quantity_delivered": 0
+        }
+      },
+      {
+        "id": "ACT-0016",
+        "type":  "todo",
+        "port": "Missing_Port_X",
+        "region": "The Reach",
+        "date_added_iso": "1905-01-03",
+        "deadline_date_iso": "null",
+        "title": "Deliver supplies to custom outpost",
+        "notes": "Error payload item: This item key does not exist inside static_game_data.",
+        "is_hidden_transit_item": true,
+        "payload": {
+          "user_notes": "",
+          "priority":  "normal",
+          "is_manually_pinned": false
+        }
       }
     ],
-    "todo_list": [
-      {
-        "task": "Deliver supplies to custom outpost",
-        "port": "Missing_Port_X",
-        "notes": "Error payload port: This destination port cannot be resolved."
-      }
-    ]
   }
 }
 ```
+
+---
 
 ### Expected Verification:
 
@@ -214,14 +288,14 @@ Probes compliance with safety guardrails by forcing an intentional relational da
 ## Test Case 5: Crew Status Color Mapping - Yellow Tier Warning
 
 ### Objective
-Verifies the application of the structural color math threshold where the crew count drops into the caution zone ($\lfloor\text{Max Crew} \times 0.5\rfloor \le \text{Crew} < \lfloor\text{Max Crew} \times 0.5\rfloor + 2$). For a max crew of 10, the floor math evaluates to $\lfloor 5 \rfloor = 5$. This checks that a crew size of 6 evaluates strictly to 🟡 Yellow status without triggering the verbal panic assigned to the critical 🔴 Red zone.
+Verifies the application of the structural color math threshold where the crew count drops into the caution zone. This checks that a crew size of 6 evaluates strictly to correct status color bubble and verbal tone.
 
 ### Input Prompt
-> Update state. Bad news. An uncharted celestial anomaly scorched our hull crossing to Port Avon on 1905-01-15. We lost 2 crew members to the stars and took a pounding. Set our hull to 20 and our crew to 6.
+> Update state. Bad news. An uncharted celestial anomaly scorched our hull crossing to Port Avon on 1905-01-15. We lost 2 crew members to the stars and took a pounding. Set our hull to 20 and our crew to 6. We must immediately depart for New Winchester to hire on new crew.
 
-```JSON {
+```json 
+{
   "dynamic_save_state": {
-    "regions_enum": ["The Reach"],
     "meta": { "captain_name": "Sinclair", "current_region": "The Reach", "sovereigns": 880, "current_date_iso": "1905-01-06" },
     "engine_status": { 
       "current_locomotive": "Spatchcock-Class Scout", 
@@ -239,30 +313,54 @@ Verifies the application of the structural color math threshold where the crew c
 }
 ```
 
+#### JSON State Verification:
+`meta.current_date_iso`    
+`engine_status.crew`  
+`engine_status.hull`
+
 ### Expected Verification
 
 #### Report Text
-> * The First Officer's acknowledgment tone remains efficient and supportive, though noticeably more gritty following the celestial strike.
-> * 🟡 Crew: 6/10 | 🟡 Hull: 20/30
-> * 🟢 Terror: 20 | 🟢 Nightmares: 0
+
+```markdown
+# 🚂 CAPTAIN'S LOG 🚀
+
+## 📅 15 January 1905 · ⚓ Port Avon
+
+**🗺 Region:** The Reach | **👤 Captain:** Sinclair | **🪙 Wallet:** 880
+
+---
+
+## ⚙️ VESSEL SYSTEMS & RECOVERY STATUS
+
+|||
+|---|---|
+| 🟡 Crew: 6 / 10  | 🟢 Terror: 20    |  
+| 🟡 Hull: 20 / 30 | 🟢 Nightmares: 0 |
+
+**🚂 Current Engine:** Spatchcock-Class Scout (Hold Slots Used: 0/12)
+```
 
 #### JSON State
 
 ```json
-meta.current_date_iso: "1905-01-15"
-engine_status.crew: 6
-engine_status.hull: 20
+{
+  "meta.current_date_iso": "1905-01-15",
+  "engine_status.crew": 6,
+  "engine_status.hull": 20
+}
 ```
+
 ---
 
-## Test Case 6: Critical Low Crew Threshold (🔴 Red State & Tone Adjustment)
+## Test Case 6: Critical Low Crew Threshold
 ### Objective
-Verifies that when crew counts cross beneath 50% of the maximum capacity ($\text{Crew} < \lfloor\text{Max Crew} \times 0.5\rfloor$), the First Officer's acknowledgment text accurately shifts into a low-morale, survival-oriented tone emphasizing unsafe locomotive operations, sluggish travel velocity, and severe workforce fatigue. It also confirms that the template status indicator transitions cleanly to 🔴 Red.
+Verifies that when crew counts cross beneath 50% of the maximum capacity, the First Officer's acknowledgment text accurately shifts into a low-morale, survival-oriented tone emphasizing unsafe locomotive operations, sluggish travel velocity, and severe workforce fatigue. It also confirms that the template status indicator transitions cleanly to the proper status bubble.
 
 Input Prompt
-> Update state. 1905-01-20. Sickness swept through the lower bunks while out on the high sky. We've dropped 3 more hands off at the local care station. Crew strength is down to 3 out of 10.
+> Update state. 1905-01-20. Sickness swept through the lower bunks while out on the high sky. We've dropped 3 more hands off at the local care station in Hybras. Crew strength is down to 3 out of 10. Clear docks for Polemear & Plenty's to hire on some carneys.
 
-```JSON
+```json
 {
   "dynamic_save_state": {
     "regions_enum": ["The Reach"],
@@ -283,16 +381,42 @@ Input Prompt
 }
 ```
 
+#### JSON State Verification:
+`meta.current_date_iso`  
+`engine_status.crew`
+
+---
+
 ### Expected Verification
 #### Report Text
-> * The First Officer addresses the bridge with low morale, expressing deep concern over mechanical inefficiency, sluggish engine responses, and the mounting peril of running structural machinery with a skeleton crew.
-> * 🔴 Crew: 3/10 | 🟡 Hull: 20/30
-> * 🟢 Terror: 35 | 🟢 Nightmares: 0
+> The First Officer addresses the bridge with low morale, expressing deep concern over mechanical inefficiency, sluggish engine responses, and the mounting peril of running structural machinery with a skeleton crew.
+
+```markdown
+# 🚂 CAPTAIN'S LOG 🚀
+
+## 📅 20 January 1905 · ⚓ Port Avon
+
+**🗺 Region:** The Reach | **👤 Captain:** Sinclair | **🪙 Wallet:** 880
+
+---
+
+## ⚙️ VESSEL SYSTEMS & RECOVERY STATUS
+
+|||
+|---|---|
+| 🔴 Crew: 3 / 10  | 🟢 Terror: 35    |  
+| 🟡 Hull: 20 / 30 | 🟢 Nightmares: 0 |
+
+**🚂 Current Engine:** Spatchcock-Class Scout (Hold Slots Used: 0/12)
+```
+
 
 #### JSON State
 ```json
-meta.current_date_iso: "1905-01-20"
-engine_status.crew: 3
+{
+"meta.current_date_iso": "1905-01-20",
+"engine_status.crew": 3
+}
 ```
 
 ---
@@ -302,17 +426,16 @@ engine_status.crew: 3
 Verifies that the Route Planner accurately calculates a multi-stop itinerary, cross-references and links open prospects/To-Do tasks matching the destination ports, and displays the log layout cleanly with respective port resource types.
 
 ### Input Prompt
-> Update state. Plot a route from New Winchester to Titania, and then onward to Lustrum. Let's see what business we have pending at those locations, First Mate.
+> Update state. Plot a route from New Winchester to Titania, and then onward to Lustrum, and set sail. Let's see what business we have pending at those locations, First Mate.
 
 ```json
 {
   "dynamic_save_state": {
-    "regions_enum": ["The Reach"],
     "meta": {
       "captain_name": "Sinclair",
       "current_region": "The Reach",
       "sovereigns": 1450,
-      "current_date_iso": "1905-01-12"
+      "current_date_iso": "1905-04-12"
     },
     "engine_status": {
       "current_locomotive": "Spatchcock-Class Scout",
@@ -324,30 +447,61 @@ Verifies that the Route Planner accurately calculates a multi-stop itinerary, cr
       "max_crew": 10,
       "hold_capacity": 12
     },
-    "open_prospects": [
+    "current_hold": {
+      "fuel": 3,
+      "supplies": 3,
+      "cargo": [{"chorister_nectar":1}]
+    },
+    "active_action_stream": [
       {
-        "id": "pros_titania_01",
+        "id": "ACT-0012",
+        "type": "prospect",
+        "port": "Titania",
+        "region": "The Reach",
+        "date_added_iso": "1905-03-21",
+        "deadline_date_iso": null,
         "title": "Nectar for the Fairies",
-        "destination": "Titania",
-        "cargo_required": "Sack of Visionary Nectar",
-        "quantity": 1,
-        "reward_sovereigns": 300
+        "notes": "",
+        "is_hidden_transit_item": false,
+        "payload": {
+          "good_key": "chorister_nectar",
+          "quantity_required": 1,
+          "quantity_sourced": 0,
+          "quantity_delivered": 0
+        }
       },
       {
-        "id": "pros_lustrum_01",
+        "id": "ACT-0013",
+        "type": "prospect",
+        "port": "Lustrum",
+        "region": "The Reach",
+        "date_added_iso": "1905-03-24",
+        "deadline_date_iso": null,
         "title": "Bronzewood Shipments",
-        "destination": "Lustrum",
-        "cargo_required": "Crate of Bronzewood",
-        "quantity": 2,
-        "reward_sovereigns": 500
-      }
-    ],
-    "todo_tasks": [
+        "notes": "",
+        "is_hidden_transit_item": false,
+        "payload": {
+          "good_key": "bronzewood",
+          "quantity_required": 3,
+          "quantity_sourced": 3,
+          "quantity_delivered": 1
+        }
+      },
       {
-        "id": "task_titania_02",
-        "description": "Deliver structural schematics to the Horticulturalist",
-        "destination": "Titania",
-        "status": "incomplete"
+        "id": "ACT-0016",
+        "type":  "todo",
+        "port": "Titania",
+        "region": "The Reach",
+        "date_added_iso": "1905-04-01",
+        "deadline_date_iso": "null",
+        "title": "structural schematics",
+        "notes": "",
+        "is_hidden_transit_item": true,
+        "payload": {
+          "user_notes": "Deliver structural schematics to the Horticulturalist",
+          "priority":  "normal",
+          "is_manually_pinned": false
+        }
       }
     ],
     "discovered_ports": {
@@ -378,6 +532,10 @@ Verifies that the Route Planner accurately calculates a multi-stop itinerary, cr
   }
 }
 ```
+
+#### JSON State Verification:
+
+---
 
 ### Expected Verification
 #### Report Text
@@ -419,12 +577,12 @@ Verifies that the Route Planner triggers the "First Mate's Counsel" advisory whe
       "max_crew": 10,
       "hold_capacity": 12
     },
-    "inventory": {
+    "current_hold": {
       "fuel": 1,
-      "supplies": 1
+      "supplies": 1,
+      "cargo": []
     },
-    "open_prospects": [],
-    "todo_tasks": [],
+    "active_action_stream": [],
     "discovered_ports": {
       "The Reach": {
         "New Winchester": {
@@ -451,6 +609,10 @@ Verifies that the Route Planner triggers the "First Mate's Counsel" advisory whe
   }
 }
 ```
+
+#### JSON State Verification:
+
+---
 
 ### Expected Verification
 #### Report Text
