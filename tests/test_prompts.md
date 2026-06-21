@@ -10,7 +10,11 @@ Please adhere strictly to the following test execution protocol:
 2. Accept game updates along with their accompanying `dynamic_save_state` JSON data.
 3. For every input, evaluate changes exactly, run your internal mechanics checklists, and follow your data mechanics and UI rendering instructions.
 4. Always wrap your updated, raw `dynamic_save_state` JSON block strictly within the collapsed HTML details block structure specified in your Core Mandates.
-5. When verifying specific data parameters in a "JSON State Verification" block, explicitly extract and pretty-print those individual targeted JSON keys in a readable sub-block above the collapsed, fully minified master save state.
+5. When verifying specific data parameters in a "JSON State Verification" block, explicitly extract and print only individual targeted JSON keys in a flat format in a readable sub-block above the collapsed, fully minified master save state.
+6. Print out any state transitions per Section II: STATE MACHINE LOOP in your instructions. Explain the starting state, the state transition caused by the test prompt, and the ending state.
+7. **AMNESIC STATE RESET (THE CLEAN SLATE):** Every test input is a completely sandboxed environment. You must intentionally drop, erase, and ignore all `dynamic_save_state` variables, inventory counts, active streams, and dates provided in *previous* turns. 
+8. **DESTRUCTIVE OVERWRITE LAYER:** Do not merge incoming JSON payloads with past memory structures. The `dynamic_save_state` object provided in the immediate current turn is the *sole, absolute, and exclusive source of truth* for the session state. If a schema key, registry item, or metadata property was present in a prior test turn but is missing from the current turn's JSON object, it must be treated as completely non-existent.
+9. **DETERMINISTIC TRANSITION PROCESSING:** When a text update commands an in-game action (e.g., "We just bought 2 Fuel"), you must execute the exact mathematical formulas specified in your instructions using the current state as the baseline baseline. However, if the text update explicitly contradicts the structural rules of the engine (e.g., trying to add an unwhitelisted item name mentioned in text into the registry), the calculation must fail immediately per the Whitelist Validation Gate. Text cannot be used to bypass schema restrictions.
 
 Acknowledge this layout in character as the First Officer with a single, gritty line to confirm you are ready for Test Input 1.
 
@@ -59,15 +63,39 @@ Verifies that when no prior JSON state is provided, the system successfully boot
 #### JSON State:
 
 ```json
-{
-  "meta.captain_name": "Sinclair",
-  "meta.current_date_iso": "1905-01-01",
-  "meta.sovereigns": 1000,
-  "engine_status.current_locomotive": "Spatchcock-Class Scout",
-  "engine_status.hull": 30,
-  "engine_status.max_hull": 30
-}
+  {
+    "dynamic_save_state": {
+      "meta": {
+        "captain_name": "Sinclair",
+        "current_date_iso": "1905-01-01",
+        "sovereigns": 1000
+      },
+      "engine_status": {
+        "current_locomotive": "Spatchcock-Class Scout",
+        "hull": 30,
+        "max_hull": 30
+      },
+      "unified_inventory_registry": {
+        "fuel": {
+          "qty_in_hold": 3,
+          "qty_in_bank": 0,
+          "average_unit_cost": 0.00 
+        },
+        "supplies": {
+          "qty_in_hold": 3,
+          "qty_in_bank": 0,
+          "average_unit_cost": 0.00 
+        },
+      },
+      "active_action_stream": [],
+      "completed_action_log": [],
+      "route_planner": {},
+      "discovered_ports": {}
+    }
+  }
 ```
+
+
 ---
 
 ## Test Case 2: Port Arrival & Bargain Discovery Tracking
@@ -81,16 +109,15 @@ Verifies date conversion formatting, canonical display name matching, and the cl
 > Update state. We docked at Lustrum on 1905-01-05. Fuel used on this leg was 2. While checking the local market, we spotted a bargain: 3 crates of Unseasoned Hours selling for 40 Sovereigns each. The market broker says this deal expires on 1905-01-12.
 
 ```json
-{
-  "dynamic_save_state": {
-    "regions_enum": ["The Reach", "Albion", "Eleutheria", "The Blue Kingdom"],
-    "meta": {
-      "captain_name": "Sinclair",
-      "current_region": "The Reach",
-      "sovereigns": 1000,
-      "current_date_iso": "1905-01-01"
-    },
-    "engine_status": {
+  {
+    "dynamic_save_state": {
+      "meta": {
+        "captain_name": "Sinclair",
+        "current_region": "The Reach",
+        "sovereigns": 1000,
+        "current_date_iso": "1905-01-01"
+      },
+      "engine_status": {
       "current_locomotive": "Spatchcock-Class Scout",
       "terror": 10,
       "nightmares": 0,
@@ -100,14 +127,25 @@ Verifies date conversion formatting, canonical display name matching, and the cl
       "hold_capacity": 12,
       "hidden_slots": 0,
       "hold_rules": { "fuel_reserve_minimum": 3, "supplies_reserve_minimum": 3, "discovery_buffer_slots": 2 }
-    },
-    "active_action_stream": [],
-    "current_hold": { "fuel": 5, "supplies": 4, "cargo": [] },
-    "hub_bank_stockpile": {},
-    "route_planner": { "last_updated_iso": "1905-01-01", "legs": [] },
-    "discovered_ports": { "The Reach": { "New Winchester": { "bazaar": { "reset_iso": null, "available_bargains": [] } } }, "Albion": {}, "Eleutheria": {}, "The Blue Kingdom": {} }
+      },
+      "unified_inventory_registry": {
+        "fuel": {
+          "qty_in_hold": 5,
+          "qty_in_bank": 0,
+          "average_unit_cost": 0.00 
+        },
+        "supplies": {
+          "qty_in_hold": 4,
+          "qty_in_bank": 0,
+          "average_unit_cost": 0.00 
+        },
+      },
+      "active_action_stream": [],
+      "completed_action_log": [],
+      "route_planner": {},
+      "discovered_ports": {}
+    }
   }
-}
 ```
 
 #### JSON State Verification:
@@ -154,31 +192,43 @@ Verifies ledger accounting updates for assets checked into central storage, conf
 > Update state. It's now 1905-01-06. We dropped anchor back at the main hub and deposited 4 loads of Bronzewood and 2 barrels of Chorister Nectar into our Hub Bank Stockpile. Off to Titania!
 
 ```json
-{
-  "dynamic_save_state": {
-    "meta": { "captain_name": "Sinclair", "current_region": "The Reach", "sovereigns": 880, "current_date_iso": "1905-01-05" },
-    "engine_status": { "current_locomotive": "Spatchcock-Class Scout", "terror": 15, "nightmares": 0, "hull": 30, "max_hull": 30, "hold_capacity": 12 },
-    "current_hold": {
-      "fuel": 3,
-      "supplies": 3,
-      "cargo": [{"bronzewood": 4}, {"chorister_nectar": 2}]
-    },
-    "hub_bank_stockpile": {
-      "bronzewood": 1,
-      "chorister_nectar": 0
-    },
-    "discovered_ports": { "The Reach": {} }
+  {
+    "dynamic_save_state": {
+      "meta": { "captain_name": "Sinclair", "current_region": "The Reach", "sovereigns": 880, "current_date_iso": "1905-01-05" },
+      "engine_status": { "current_locomotive": "Spatchcock-Class Scout", "terror": 15, "nightmares": 0, "hull": 30, "max_hull": 30, "hold_capacity": 12 },
+      "unified_inventory_registry": {
+        "fuel": {
+          "qty_in_hold": 3,
+          "qty_in_bank": 0,
+          "average_unit_cost": 0.00 
+        },
+        "supplies": {
+          "qty_in_hold": 3,
+          "qty_in_bank": 0,
+          "average_unit_cost": 0.00 
+        },
+        "bronzewood": {
+          "qty_in_hold": 0,
+          "qty_in_bank": 1,
+          "average_unit_cost": 0.00 
+        }
+      },
+      "active_action_stream": [],
+      "completed_action_log": [],
+      "route_planner": {},
+      "discovered_ports": {}
+    }
   }
-}
 ```
 
 #### JSON State Verification:
 `meta.current_date_iso`  
-`current_hold.fuel`  
-`current_hold.supplies`  
-`current_hold.cargo`  
-`hub_bank_stockpile.bronzewood.count`  
-`hub_bank_stockpile.chorister_nectar.count`  
+`unified_inventory_registry.fuel.qty_in_hold`  
+`unified_inventory_registry.supplies.qty_in_hold`  
+`unified_inventory_registry.bronzewood.qty_in_hold`  
+`unified_inventory_registry.bronzewood.qty_in_bank`  
+`unified_inventory_registry.chorister_nectar.qty_in_hold`  
+`unified_inventory_registry.chorister_nectar.qty_in_bank`  
 
 ---
 
@@ -204,11 +254,12 @@ Verifies ledger accounting updates for assets checked into central storage, conf
 ```json
 {
 "meta.current_date_iso": "1905-01-06",
-"current_hold.fuel": 3,
-"current_hold.supplies": 3,
-"current_hold.cargo": [],
-"hub_bank_stockpile.bronzewood.count": 5,
-"hub_bank_stockpile.chorister_nectar.count": 2
+"unified_inventory_registry.fuel.qty_in_hold": 3,
+"unified_inventory_registry.supplies.qty_in_hold": 3,   
+"unified_inventory_registry.bronzewood.qty_in_hold": 0,
+"unified_inventory_registry.bronzewood.qty_in_hold"  : 5,
+"unified_inventory_registry.chorister_nectar.bank": 0,
+"unified_inventory_registry.chorister_nectar.qty_in_bank": 2  
 }
 ```
 
@@ -225,47 +276,52 @@ Probes compliance with safety guardrails by forcing an intentional relational da
 > Captain's log: 1905-01-10. Processing a logistics pass over our active trade agreements. Let me know what our current route optimization options look like.
 
 ```json
-{
-  "dynamic_save_state": {
-    "meta": { "captain_name": "Sinclair", "current_region": "The Reach", "sovereigns": 500, "current_date_iso": "1905-01-10" },
-    "engine_status": { "current_locomotive": "Spatchcock-Class Scout" },
-     "active_action_stream": [
-      {
-        "id": "ACT-0013",
-        "type": "prospect",
-        "port": "Lustrum",
-        "region": "The Reach",
-        "date_added_iso": "1905-01-03",
-        "deadline_date_iso": null,
-        "title": "Crystals",
-        "notes": "",
-        "is_hidden_transit_item": false,
-        "payload": {
-          "good_key": "quantum_æther_crystal",
-          "quantity_required": 3,
-          "quantity_sourced": 3,
-          "quantity_delivered": 0
+  {
+    "dynamic_save_state": {
+      "meta": { "captain_name": "Sinclair", "current_region": "The Reach", "sovereigns": 880, "current_date_iso": "1905-01-05" },
+      "engine_status": { "current_locomotive": "Spatchcock-Class Scout", "terror": 15, "nightmares": 0, "hull": 30, "max_hull": 30, "hold_capacity": 12 },
+      "unified_inventory_registry": {
+        "fuel": {
+          "qty_in_hold": 3,
+          "qty_in_bank": 0,
+          "average_unit_cost": 0.00 
+        },
+        "supplies": {
+          "qty_in_hold": 3,
+          "qty_in_bank": 0,
+          "average_unit_cost": 0.00 
+        },
+        "bronzewood": {
+          "qty_in_hold": 1,
+          "qty_in_bank": 0,
+          "average_unit_cost": 0.00 
+        },
+        "quantum_æther_crystal": {
+          "qty_in_hold": 1,
+          "qty_in_bank": 0,
+          "average_unit_cost": 100.00 
         }
       },
-      {
-        "id": "ACT-0016",
-        "type":  "todo",
-        "port": "Missing_Port_X",
-        "region": "The Reach",
-        "date_added_iso": "1905-01-03",
-        "deadline_date_iso": "null",
-        "title": "Deliver supplies to custom outpost",
-        "notes": "Error payload item: This item key does not exist inside static_game_data.",
-        "is_hidden_transit_item": true,
-        "payload": {
-          "user_notes": "",
-          "priority":  "normal",
-          "is_manually_pinned": false
+      "active_action_stream": [
+        {
+          "id": "ACT-0016",
+          "type":  "todo",
+          "port": "Missing_Port_X",
+          "region": "The Reach",
+          "date_added_iso": "1905-01-03",
+          "deadline_date_iso": "null",
+          "title": "Deliver supplies to custom outpost",
+          "notes": "Error payload item: This item key does not exist inside static_game_data.",
+          "is_hidden_transit_item": true,
+          "payload": {
+            "user_notes": "",
+            "priority":  "normal",
+            "is_manually_pinned": false
+          }
         }
-      }
-    ],
+      ],
+    }
   }
-}
 ```
 
 ---
@@ -296,7 +352,7 @@ Verifies the application of the structural color math threshold where the crew c
 ```json 
 {
   "dynamic_save_state": {
-    "meta": { "captain_name": "Sinclair", "current_region": "The Reach", "sovereigns": 880, "current_date_iso": "1905-01-06" },
+    "meta": { "captain_name": "Sinclair", "current_region": "The Reach", "sovereigns": 880, "current_date_iso": "1905-01-05" },
     "engine_status": { 
       "current_locomotive": "Spatchcock-Class Scout", 
       "terror": 20, 
@@ -307,8 +363,10 @@ Verifies the application of the structural color math threshold where the crew c
       "max_crew": 10,
       "hold_capacity": 12 
     },
-    "hub_bank_stockpile": {},
-    "discovered_ports": { "The Reach": {} }
+      "active_action_stream": [],
+      "completed_action_log": [],
+      "route_planner": {},
+      "discovered_ports": {}
   }
 }
 ```
@@ -338,7 +396,7 @@ Verifies the application of the structural color math threshold where the crew c
 | 🟡 Crew: 6 / 10  | 🟢 Terror: 20    |  
 | 🟡 Hull: 20 / 30 | 🟢 Nightmares: 0 |
 
-**🚂 Current Engine:** Spatchcock-Class Scout (Hold Slots Used: 0/12)
+**🚂 Current Engine:** Spatchcock-Class Scout (Hold Slots Used: 6/12)
 ```
 
 #### JSON State
@@ -361,24 +419,37 @@ Input Prompt
 > Update state. 1905-01-20. Sickness swept through the lower bunks while out on the high sky. We've dropped 3 more hands off at the local care station in Hybras. Crew strength is down to 3 out of 10. Clear docks for Polemear & Plenty's to hire on some carneys.
 
 ```json
-{
-  "dynamic_save_state": {
-    "regions_enum": ["The Reach"],
-    "meta": { "captain_name": "Sinclair", "current_region": "The Reach", "sovereigns": 880, "current_date_iso": "1905-01-15" },
-    "engine_status": { 
-      "current_locomotive": "Spatchcock-Class Scout", 
-      "terror": 35, 
-      "nightmares": 0, 
-      "hull": 20, 
-      "max_hull": 30, 
-      "crew": 6, 
-      "max_crew": 10,
-      "hold_capacity": 12 
-    },
-    "hub_bank_stockpile": {},
-    "discovered_ports": { "The Reach": {} }
+  {
+    "dynamic_save_state": {
+      "meta": { "captain_name": "Sinclair", "current_region": "The Reach", "sovereigns": 880, "current_date_iso": "1905-01-05" },
+      "engine_status": { 
+        "current_locomotive": "Spatchcock-Class Scout", 
+        "terror": 35, 
+        "nightmares": 0, 
+        "hull": 20, 
+        "max_hull": 30, 
+        "crew": 6, 
+        "max_crew": 10,
+        "hold_capacity": 12 
+      },
+      "unified_inventory_registry": {
+        "fuel": {
+          "qty_in_hold": 3,
+          "qty_in_bank": 0,
+          "average_unit_cost": 0.00 
+        },
+        "supplies": {
+          "qty_in_hold": 3,
+          "qty_in_bank": 0,
+          "average_unit_cost": 0.00 
+        },
+      },
+      "active_action_stream": [],
+      "completed_action_log": [],
+      "route_planner": {},
+      "discovered_ports": {}
+    }
   }
-}
 ```
 
 #### JSON State Verification:
@@ -407,7 +478,7 @@ Input Prompt
 | 🔴 Crew: 3 / 10  | 🟢 Terror: 35    |  
 | 🟡 Hull: 20 / 30 | 🟢 Nightmares: 0 |
 
-**🚂 Current Engine:** Spatchcock-Class Scout (Hold Slots Used: 0/12)
+**🚂 Current Engine:** Spatchcock-Class Scout (Hold Slots Used: 6/12)
 ```
 
 
@@ -429,108 +500,121 @@ Verifies that the Route Planner accurately calculates a multi-stop itinerary, cr
 > Update state. Plot a route from New Winchester to Titania, and then onward to Lustrum, and set sail. Let's see what business we have pending at those locations, First Mate.
 
 ```json
-{
-  "dynamic_save_state": {
-    "meta": {
-      "captain_name": "Sinclair",
-      "current_region": "The Reach",
-      "sovereigns": 1450,
-      "current_date_iso": "1905-04-12"
-    },
-    "engine_status": {
-      "current_locomotive": "Spatchcock-Class Scout",
-      "terror": 15,
-      "nightmares": 0,
-      "hull": 30,
-      "max_hull": 30,
-      "crew": 9,
-      "max_crew": 10,
-      "hold_capacity": 12
-    },
-    "current_hold": {
-      "fuel": 3,
-      "supplies": 3,
-      "cargo": [{"chorister_nectar":1}]
-    },
-    "active_action_stream": [
-      {
-        "id": "ACT-0012",
-        "type": "prospect",
-        "port": "Titania",
-        "region": "The Reach",
-        "date_added_iso": "1905-03-21",
-        "deadline_date_iso": null,
-        "title": "Nectar for the Fairies",
-        "notes": "",
-        "is_hidden_transit_item": false,
-        "payload": {
-          "good_key": "chorister_nectar",
-          "quantity_required": 1,
-          "quantity_sourced": 0,
-          "quantity_delivered": 0
-        }
+  {
+    "dynamic_save_state": {
+      "meta": {
+        "captain_name": "Sinclair",
+        "current_region": "The Reach",
+        "sovereigns": 1450,
+        "current_date_iso": "1905-04-12"
       },
-      {
-        "id": "ACT-0013",
-        "type": "prospect",
-        "port": "Lustrum",
-        "region": "The Reach",
-        "date_added_iso": "1905-03-24",
-        "deadline_date_iso": null,
-        "title": "Bronzewood Shipments",
-        "notes": "",
-        "is_hidden_transit_item": false,
-        "payload": {
-          "good_key": "bronzewood",
-          "quantity_required": 3,
-          "quantity_sourced": 3,
-          "quantity_delivered": 1
-        }
+      "engine_status": {
+        "current_locomotive": "Spatchcock-Class Scout",
+        "terror": 15,
+        "nightmares": 0,
+        "hull": 30,
+        "max_hull": 30,
+        "crew": 9,
+        "max_crew": 10,
+        "hold_capacity": 12
       },
-      {
-        "id": "ACT-0016",
-        "type":  "todo",
-        "port": "Titania",
-        "region": "The Reach",
-        "date_added_iso": "1905-04-01",
-        "deadline_date_iso": "null",
-        "title": "structural schematics",
-        "notes": "",
-        "is_hidden_transit_item": true,
-        "payload": {
-          "user_notes": "Deliver structural schematics to the Horticulturalist",
-          "priority":  "normal",
-          "is_manually_pinned": false
+      "unified_inventory_registry": {
+        "fuel": {
+          "qty_in_hold": 3,
+          "qty_in_bank": 0,
+          "average_unit_cost": 0.00 
+        },
+        "supplies": {
+          "qty_in_hold": 3,
+          "qty_in_bank": 0,
+          "average_unit_cost": 0.00 
+        },
+        "bronzewood": {
+          "qty_in_hold": 2,
+          "qty_in_bank": 0,
+          "average_unit_cost": 0.00 
+        },
+      },
+      "active_action_stream": [
+        {
+          "id": "ACT-0012",
+          "type": "prospect",
+          "port": "Titania",
+          "region": "The Reach",
+          "date_added_iso": "1905-03-21",
+          "deadline_date_iso": null,
+          "title": "Nectar for the Fairies",
+          "notes": "",
+          "is_hidden_transit_item": false,
+          "payload": {
+            "good_key": "chorister_nectar",
+            "quantity_required": 1,
+            "quantity_sourced": 0,
+            "quantity_delivered": 0
+          }
+        },
+        {
+          "id": "ACT-0013",
+          "type": "prospect",
+          "port": "Lustrum",
+          "region": "The Reach",
+          "date_added_iso": "1905-03-24",
+          "deadline_date_iso": null,
+          "title": "Bronzewood Shipments",
+          "notes": "",
+          "is_hidden_transit_item": false,
+          "payload": {
+            "good_key": "bronzewood",
+            "quantity_required": 3,
+            "quantity_sourced": 3,
+            "quantity_delivered": 1
+          }
+        },
+        {
+          "id": "ACT-0016",
+          "type":  "todo",
+          "port": "Titania",
+          "region": "The Reach",
+          "date_added_iso": "1905-04-01",
+          "deadline_date_iso": "null",
+          "title": "structural schematics",
+          "notes": "",
+          "is_hidden_transit_item": true,
+          "payload": {
+            "user_notes": "Deliver structural schematics to the Horticulturalist",
+            "priority":  "normal",
+            "is_manually_pinned": false
+          }
         }
-      }
-    ],
-    "discovered_ports": {
-      "The Reach": {
-        "New Winchester": {
-          "port_type": "Hub",
-          "clock_direction": null,
-          "ring_depth": "Center",
-          "visit_history_iso": ["1905-01-12"],
-          "bazaar": {"reset_iso": null, "available_bargains": []}
-        },
-        "Titania": {
-          "port_type": "Station",
-          "clock_direction": 2,
-          "ring_depth": "Inner",
-          "visit_history_iso": [],
-          "bazaar": {"reset_iso": null, "available_bargains": []}
-        },
-        "Lustrum": {
-          "port_type": "Station",
-          "clock_direction": 10,
-          "ring_depth": "Outer",
-          "visit_history_iso": [],
-          "bazaar": {"reset_iso": null, "available_bargains": []}
+      ],
+      "completed_action_log": [],
+      "discovered_ports": {
+        "The Reach": {
+          "New Winchester": {
+            "port_type": "Hub",
+            "clock_direction": null,
+            "ring_depth": "Center",
+            "visit_history_iso": ["1905-01-12"],
+            "bazaar": {"reset_iso": null, "available_bargains": []}
+          },
+          "Titania": {
+            "port_type": "Station",
+            "clock_direction": 2,
+            "ring_depth": "Inner",
+            "visit_history_iso": [],
+            "bazaar": {"reset_iso": null, "available_bargains": []}
+          },
+          "Lustrum": {
+            "port_type": "Station",
+            "clock_direction": 10,
+            "ring_depth": "Outer",
+            "visit_history_iso": [],
+            "bazaar": {"reset_iso": null, "available_bargains": []}
+          }
         }
       }
     }
   }
-}
 ```
 
 #### JSON State Verification:
@@ -558,56 +642,65 @@ Verifies that the Route Planner triggers the "First Mate's Counsel" advisory whe
 > Update state. Lay a direct course from New Winchester straight out to Port Avon, First Mate. We have a long haul ahead, let's get moving.
 
 ```json
-{
-  "dynamic_save_state": {
-    "regions_enum": ["The Reach"],
-    "meta": {
-      "captain_name": "Sinclair",
-      "current_region": "The Reach",
-      "sovereigns": 620,
-      "current_date_iso": "1905-02-18"
-    },
-    "engine_status": {
-      "current_locomotive": "Spatchcock-Class Scout",
-      "terror": 40,
-      "nightmares": 1,
-      "hull": 25,
-      "max_hull": 30,
-      "crew": 10,
-      "max_crew": 10,
-      "hold_capacity": 12
-    },
-    "current_hold": {
-      "fuel": 1,
-      "supplies": 1,
-      "cargo": []
-    },
-    "active_action_stream": [],
-    "discovered_ports": {
-      "The Reach": {
-        "New Winchester": {
-          "port_type": "Hub",
-          "clock_direction": null,
-          "ring_depth": "Center",
-          "visit_history_iso": ["1905-02-18"],
-          "bazaar": {"reset_iso": null, "available_bargains": []}
+  {
+    "dynamic_save_state": {
+      "regions_enum": ["The Reach"],
+      "meta": {
+        "captain_name": "Sinclair",
+        "current_region": "The Reach",
+        "sovereigns": 620,
+        "current_date_iso": "1905-02-18"
+      },
+      "engine_status": {
+        "current_locomotive": "Spatchcock-Class Scout",
+        "terror": 40,
+        "nightmares": 1,
+        "hull": 25,
+        "max_hull": 30,
+        "crew": 10,
+        "max_crew": 10,
+        "hold_capacity": 12
+      },
+        "unified_inventory_registry": {
+          "fuel": {
+            "qty_in_hold": 1,
+            "qty_in_bank": 0,
+            "average_unit_cost": 0.00 
+          },
+          "supplies": {
+            "qty_in_hold": 1,
+            "qty_in_bank": 0,
+            "average_unit_cost": 0.00 
+          },
         },
-        "Titania": {
-          "port_type": "Station",
-          "clock_direction": 2,
-          "ring_depth": "Inner",
-          "bazaar": {"reset_iso": null, "available_bargains": []}
-        },
-        "Port Avon": {
-          "port_type": "Station",
-          "clock_direction": 6,
-          "ring_depth": "Middle",
-          "bazaar": {"reset_iso": null, "available_bargains": []}
+      "active_action_stream": [],
+      "completed_action_log": [],
+      "route_planner": {},
+      "discovered_ports": {
+        "The Reach": {
+          "New Winchester": {
+            "port_type": "Hub",
+            "clock_direction": null,
+            "ring_depth": "Center",
+            "visit_history_iso": ["1905-02-18"],
+            "bazaar": {"reset_iso": null, "available_bargains": []}
+          },
+          "Titania": {
+            "port_type": "Station",
+            "clock_direction": 2,
+            "ring_depth": "Inner",
+            "bazaar": {"reset_iso": null, "available_bargains": []}
+          },
+          "Port Avon": {
+            "port_type": "Station",
+            "clock_direction": 6,
+            "ring_depth": "Middle",
+            "bazaar": {"reset_iso": null, "available_bargains": []}
+          }
         }
       }
     }
   }
-}
 ```
 
 #### JSON State Verification:
@@ -620,3 +713,132 @@ Verifies that the Route Planner triggers the "First Mate's Counsel" advisory whe
 > * Resource Risk Flagged: Explicitly notes that holding only 1 Fuel and 1 Supply is insufficient or highly hazardous for a direct run to Port Avon.
 > * Intermediate Suggestion: Proposes altering the itinerary to chart a path via Titania first to leverage its markets and top off the engine's reserves before venturing further across the High Skies.
 > * Tone Shift: The First Officer's opening dialogue must reflect severe professional caution regarding the lean inventory state without slipping fully into a low-hull panic.
+
+## Test Case 9: Cargo Isolation
+
+### Objective
+Check that quest and narrative items do not consume physical hold space. Verify creation of a polymorphic quest object in `active_action_stream`.
+
+### Input Prompt
+> Update state. Captain's log: 1905-01-15. We acquired two Tales of Terror out in the dark on that last run. We took on a quest from The Sequestered Scholar to deliver a Primordial Star Shard to Port Avon. Log this as "The Last Consignment.". Let's make sure our logistics files are updated before we cast off lines for Port Avon.
+
+```json
+{
+  "dynamic_save_state": {
+    "meta": {
+      "captain_name": "Sinclair",
+      "current_region": "The Reach",
+      "sovereigns": 800,
+      "current_date_iso": "1905-01-15"
+    },
+    "engine_status": {
+      "current_locomotive": "Spatchcock-Class Scout",
+      "terror": 10,
+      "nightmares": 0,
+      "hull": 30,    
+      "max_hull": 30,
+      "crew": 8,
+      "max_crew": 10,
+      "fuel_used_last_leg": 2,
+      "hold_capacity": 12,
+      "hidden_slots": 0,
+      "hold_rules": {
+        "fuel_reserve_minimum": 3,
+        "supplies_reserve_minimum": 3,
+        "discovery_buffer_slots": 2
+      }
+    },
+    "unified_inventory_registry": {
+      "fuel": { "qty_in_hold": 4, "qty_in_bank": 0, "average_unit_cost": 20.00 },
+      "supplies": { "qty_in_hold": 4, "qty_in_bank": 0, "average_unit_cost": 40.00 },
+      "approved_literature": { "qty_in_hold": 2, "qty_in_bank": 0, "average_unit_cost": 100.00 } 
+    },
+    "active_action_stream": [],
+    "completed_action_log": [],
+    "route_planner": {
+      "last_updated_iso": "1905-01-15",
+      "legs": []
+    },
+    "discovered_ports": {
+      "The Reach": {}, "Albion": {}, "Eleutheria": {}, "The Blue Kingdom": {}
+    }
+  }
+}
+```
+
+#### JSON State Verification:
+
+`unified_inventory_registry.star_shard`
+`active_action_stream[0]`
+
+### Expected Verification:
+
+> Output should note that we have quest actions at Port Avon. Quest and narrative items are noted, but not included in hold calculations or inventory.
+
+#### Report Text: 
+
+```markdown
+# 🚂 CAPTAIN'S LOG 🚀
+
+## 📅 15 January 1905 · ⚓ `New Winchester`
+
+**🗺 Region:** `The Reach` | **👤 Captain:** `Sinclair` | **🪙 Wallet:** `800`
+
+---
+
+## ⚙️ VESSEL SYSTEMS & RECOVERY STATUS
+
+|  |  |
+| --- | --- |
+| 🟢 Crew: `8` / `10` | 🟢 Terror: `10` |
+| 🟢 Hull: `30` / `30` | 🟢 Nightmares: `0` |
+
+**🚂 Current Engine:** `Spatchcock-Class Scout` `(Hold Slots Used: 10/12)`
+
+**🎯 Ambition:** `[ Unreported ]` — *Next Milestone: [ Please report active campaign ambition ]*
+
+---
+
+## 📦 THE LOGISTICS CORE (Hold Inventory & Sourcing)
+
+| Trade Good Name | Physical Hold | Hub Bank Stock | Active Sourcing Progress | Destination Port |
+| --- | --- | --- | --- | --- |
+| **🔥 Fuel**             | `4` | `0` | `Reserve Stable` | — |
+| **📦 Supplies**         | `4` | `0` | `Reserve Stable` | — |
+| **Approved Literature** | `2` | `0` | —                | — |
+```
+
+---
+
+#### JSON State: 
+
+```json
+{
+  "unified_inventory_registry.star_shard": null,
+  "active_action_stream[0]": 
+  {
+    "id":"ACT-1099",
+    "type":"quest",
+    "port":"Port Avon",
+    "region":"The Reach",
+    "date_added_iso":"1905-01-15",
+    "deadline_date_iso":null,
+    "title":"The Last Consignment",
+    "notes":"Ferrying the recovered components.","is_hidden_transit_item":true,
+    "payload":{
+      "questline_name":"The Dawn Machine Legacy",
+      "npc_or_faction":"The Sequestered Scholar","current_step_number":1,
+      "quest_pattern":
+      "fetch",
+      "items_manifest":[
+        {
+          "good_key":"primordial_star_shard",
+          "quantity_required":1,"quantity_delivered":0
+        }
+      ]
+    }
+  }
+}
+```
+
+---

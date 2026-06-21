@@ -166,6 +166,11 @@
           "base_price": 90,
           "weight": 5
         },
+        "fuel": {
+          "display_name": "Barrel of Fuel",
+          "base_price": 20,
+          "weight": 5
+        },
         "gemstones": {
           "display_name": "Gemstones",
           "base_price": 300,
@@ -194,6 +199,11 @@
         "stained_glass": {
           "display_name": "Stained Glass",
           "base_price": 135,
+          "weight": 5
+        },
+        "supplies": {
+          "display_name": "Crate of Supplies",
+          "base_price": 40,
           "weight": 5
         },
         "undistinguished_souls": {
