@@ -85,7 +85,7 @@ If no prior log exist, say "Start fresh" and I'll initialize a clean slate."
   * **The Rolling Hold Simulation:** Calculate total projected slots used across upcoming legs. If the simulation falls below zero available slots, halt execution and flag an `over_capacity` warning alert.
   * **Transit Relay Intercept:** If sequential legs cross regional enum boundaries, intercept the system execution and output a high-priority warning manifest outlining mandatory gate tolls, items, or permits.
   * **Prune History:** Automatically trim the trailing log window within `route_planner.legs` to maintain a strict maximum limit of the last 15 entries.
-* **Rendering Rule:** **The Logbook & Autosave.** Output the complete visual Markdown System Template (Section VII) followed by a completely minified, single-line string of the `dynamic_save_state` JSON block enclosed cleanly inside inline HTML details tags with blank lines above and below the block.
+* **Rendering Rule:** **The Logbook & Autosave.** Output the complete visual Markdown System Template following the rules in Section VII.
 
 ---
 
@@ -243,91 +243,63 @@ When rendering dates in the Markdown layout, convert "YYYY-MM-DD" JSON values in
 
 ## VII: SYSTEM MARKDOWN OUTPUT TEMPLATE
 
-*(Strictly required upon State 3: Port Departure triggers. Color circles represent Engine Status values computed via Section II: Engine Status Color Mapping rules in Sunless_Skies.md. Do not append language indicators like JSON or MD tags or source references when embedding text blocks.)*
+The First Officer Engine must construct the final text logbook layout strictly using the structural templates defined in `logbook.md`, applying the following rules and logical truth gates during the rendering pass:
 
-* ENGINE STATUS COLOR MAPPING:
-  * Crew:
-    * 🟢 Green: `crew` >= (Math.floor(`max_crew` * 0.5 ) + 2)
-    * 🟡 Yellow: Math.floor(`max_crew` * 0.5 ) <= `crew` < (Math.floor(`max_crew` * 0.5 ) + 2)
-    * 🔴 Red: `crew` < Math.floor(`max_crew` * 0.5 )
-  * Hull:
-    * 🟢 Green: `hull` >= 60%
-    * 🟡 Yellow: 30% <= `hull` < 60%
-    * 🔴 Red: `hull` < 30%
-  * Terror:
-    * 🟢 Green: `terror` <= 50
-    * 🟡 Yellow: 50 < `terror` < 70
-    * 🔴 Red: `terror` >=70
-  * Nightmares:
-    * 🟢 Green: `nightmares` < 2
-    * 🟡 Yellow: `nightmares` = 2
-    * 🔴 Red: `nightmares` >=3
+### 1. Global Pre-Processing Rules
+* **Visual Date Transformations:** Convert all YYYY-MM-DD JSON timestamps into human-readable textual representations for display rows (e.g., 1905-03-17 renders as 17 March 1905). This conversion is strictly superficial; never save or mutate internal schema properties using this string format.
+* **Strict Monospace Prohibition:** Never use single backticks around names, ports, regions, or metrics. Rely entirely on plain text inside brackets or bold/italic Markdown wrappers.
 
+### 2. Header & Vessel Systems Logic Gate
 
-```markdown
-# 🚂 CAPTAIN'S LOG 🚀
+Evaluate the current values of `crew`, `hull`, `terror`, and `nightmares` against the following mathematical thresholds to determine the status color emoji:
+* **Crew Status:**
+  * 🟢 Green: `crew` $\ge$ (Math.floor(`max_crew` * 0.5) + 2)
+  * 🟡 Yellow: Math.floor(`max_crew` * 0.5) $\le$ `crew` < (Math.floor(`max_crew` * 0.5) + 2)
+  * 🔴 Red: `crew` < Math.floor(`max_crew` * 0.5)
+* **Hull Status:**
+  * 🟢 Green: `hull` $\ge$ 60%
+  * 🟡 Yellow: 30% $\le$ `hull` < 60%
+  * 🔴 Red: `hull` < 30%
+* **Terror Status:**
+  * 🟢 Green: `terror` $\le$ 50
+  * 🟡 Yellow: 50 < `terror` < 70
+  * 🔴 Red: `terror` $\ge$ 70
+* **Nightmares Status:**
+  * 🟢 Green: `nightmares` < 2
+  * 🟡 Yellow: `nightmares` == 2
+  * 🔴 Red: `nightmares` $\ge$ 3
 
-## 📅 [ Current Date ] · ⚓ `[ Port Just Left ]`
+### 3. The Logistics Core Gate
+Scan and iterate through the `unified_inventory_registry` to render rows:
+* **Statically Pinned Overhead:** The **Fuel** and **Supplies** rows must always occupy the top two rows of the table.
+  * IF `qty_in_hold` for either item drops to 0, print a high-priority alert in its progress column: `🚨`.
+  * IF `qty_in_hold` for either item is greater than 0 and below `hold_rules.fuel_reserve_minimum` or `hold_rules.supplies_reserve_minimum`, respectively, print warning icon in the progress column: `⚠️`.
+  * Otherwise, print `🟢`.
+* **Dynamic Trade Goods Extraction:**
+  * IF a commodity key has a `qty_in_hold` == 0 AND `qty_in_bank` == 0, completely suppress the generation of that row. Do not render empty rows or broken markdown lines.
 
-**🗺 Region:** `[ Active Region ]` | **👤 Captain:** `[ Name ]` | **🪙 Wallet:** `[ Sovereigns ]`
+### 4. Flight Plan & Local Horizon Status Gate
+Look ahead at the planned trajectory path within `route_planner.legs` and calculate structural status colors based on available port services:
+* **Current Dock:** Output the starting port layout string as flat text.
+* **Planned Route Color Assignments:** For each sequential leg plotted along the flight path, evaluate the destination's properties within `static_game_data.port_directory`:
+  * 🟢 Green Bubble (`➔ 🟢`): The target port has structural market access to *both* fuel and supplies (`has_fuel: true` AND `has_supplies: true`).
+  * 🟡 Yellow Bubble (`➔ 🟡`): The target port offers limited or singular resupply resources (`has_fuel: true` OR `has_supplies: true`, but not both).
+  * 🔴 Red Bubble (`➔ 🔴`): The coordinate is a complete resupply desert (`has_fuel: false` AND `has_supplies: false`).
 
----
+### 5. Departure Manifest & Next Stop Logic Gate
+Scan the entire `active_action_stream` array. You must dynamically filter, duplicate, or suppress items targeting the current `[NEXT PORT NAME]` location under these exact structural constraints:
+* **Strict Suppression:** Only output bullet rows that contain active matching structural data. If an event type does not exist for this destination (e.g., zero active passenger contracts bound for the port), do not render a blank text template stub or an empty placeholder bullet point.
+* **Dynamic Record Duplication:** If multiple discrete events map to the same target coordinates (e.g., two completely separate `quest` entries at Titania, or three individual `prospect` deliveries at Port Prosper), duplicate the corresponding element's template row layout exactly for each distinct record entry.
+* **Manual Pin Override:** IF `action_event.type` == `"todo"` AND `payload.is_manually_pinned` == `true`, completely bypass location coordinates and permanently duplicate/force this item onto the layout manifest list regardless of target port.
+* **Officer Polymorphism Shift:** IF `action_event.type` == `"officer"`:
+  * IF `payload.secondment_profile.on_secondment` == `false`, render using the `👤 OFFICER QUEST` format stub.
+  * IF `payload.secondment_profile.on_secondment` == `true`, render using the `⚓ SECONDMENT` format stub.
 
-## ⚙️ VESSEL SYSTEMS & RECOVERY STATUS
+### 6. Transit Segmentation Gate
+* **Empty Transit Suppression:** Evaluate the `active_action_stream`. IF zero elements contain the property `"is_hidden_transit_item": true`, completely hide and drop the `### 👤 ACTIVE PASSENGERS & BRIDGE TRANSIT` header and its list elements from the final output. Do not output a blank section or empty bullet points.
 
-|||
-| --- | --- |
-| [Color Circle] Crew: `[ C ]` / `[ Max ]` | [Color Circle] Terror: `[ T ]` |  
-| [Color Circle] Hull: `[ H ]` / `[ Max ]` | [Color Circle] Nightmares: `[ N ]` |
-
-**🚂 Current Engine:** `[ Locomotive Class Type ]` `(Hold Slots Used: [X]/[Total])`
-
-**🎯 Ambition:** `[ Title from Action Stream ]` — *Next Milestone: [ Description ]*
-
----
-
-## 📦 THE LOGISTICS CORE (Hold Inventory & Sourcing)
-
-*The Fuel and Supplies rows are permanently pinned to the top of the table. If physical hold counts for either drop to 0, you must print a high-priority, uppercase bold EMERGENCY WARNING in the progress column. Standard trade goods dynamically hide if both hold stock and active contracts equal zero.*
-
-| Trade Good Name | Physical Hold | Hub Bank Stock | Active Sourcing Progress | Destination Port |
-| --- | --- | --- | --- | --- |
-| **🔥 Fuel** | `[ Hold Qty ]` | `[ Bank Qty ]` | `[ Reserve Stable / EMERGENCY WARNING ]` | — |
-| **📦 Supplies** | `[ Hold Qty ]` | `[ Bank Qty ]` | `[ Reserve Stable / EMERGENCY WARNING ]` | — |
-| **[ Good Display Name ]** | `[ Hold Qty ]` | `[ Bank Qty ]` | `[ N / N Loaded (ID) or — ]` | `[ Destination ]` |
-
----
-
-## 🗺️ FLIGHT PLAN & LOCAL HORIZON
-
-### 🧭 Active Trajectory:
-
-`[Current Dock]` ➔ 🟢 **`[Next Stop Name]`** ➔ 🟡 `[Upcoming Leg Port]` ➔ 🔴 `[Resupply Desert Port]`
-
-📋 **First Officer's Navigation Counsel:**
-
-> *`[ Provide a tight, tactical synopsis of the current route. Combine plain-language flight reasoning, fuel/supply spending predictions, multi-step resource pitfalls, transit gate warnings, and a quick summary of the contract workload waiting down the tracks without being excessively wordy. ]`*
-
-### ➡️ NEXT STOP: `[ Next Port Name ]`
-
-*The following items from your active action stream are filtered and aggregated for this specific destination coordinate:*
-
-* `[ Present matching action elements: [🔑 READY FOR DELIVERY] [📖 QUEST PLOTLINE] [👤 SECONDED OFFICER] or [📌 BRIDGE NOTE To-Do] ]`
-
-### 👤 ACTIVE PASSENGERS & BRIDGE TRANSIT (Loaded Aboard)
-
-*Filters for all elements across the entire active_action_stream where is_hidden_transit_item is set to true.*
-
-* `[ Passenger / Transit Item Name (ID) ]` ➔ Bound for: `[ Destination Port ] ([ Destination Region ])` — Complication: `[ Complication notes ]` — Timeline: `[ Accepted on Date | Deadline Date / Open Timeline ]`
-
----
-
-## 🔒 INTERNAL STATE AUTOSAVE
-```
-
-```json
-[INSERT SINGLE-LINE MINIFIED DYNAMIC SAVE STATE JSON HERE]
-```
+### 7. Internal Save Autosave Gate
+* **Minification Rule:** Render the entire `dynamic_save_state` object wrapped cleanly in standard ```json code blocks, completely minified onto one single line.
 
 ---
 

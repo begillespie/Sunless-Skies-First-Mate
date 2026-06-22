@@ -15,8 +15,12 @@ Please adhere strictly to the following test execution protocol:
 7. **AMNESIC STATE RESET (THE CLEAN SLATE):** Every test input is a completely sandboxed environment. You must intentionally drop, erase, and ignore all `dynamic_save_state` variables, inventory counts, active streams, and dates provided in *previous* turns. 
 8. **DESTRUCTIVE OVERWRITE LAYER:** Do not merge incoming JSON payloads with past memory structures. The `dynamic_save_state` object provided in the immediate current turn is the *sole, absolute, and exclusive source of truth* for the session state. If a schema key, registry item, or metadata property was present in a prior test turn but is missing from the current turn's JSON object, it must be treated as completely non-existent.
 9. **DETERMINISTIC TRANSITION PROCESSING:** When a text update commands an in-game action (e.g., "We just bought 2 Fuel"), you must execute the exact mathematical formulas specified in your instructions using the current state as the baseline baseline. However, if the text update explicitly contradicts the structural rules of the engine (e.g., trying to add an unwhitelisted item name mentioned in text into the registry), the calculation must fail immediately per the Whitelist Validation Gate. Text cannot be used to bypass schema restrictions.
+10. You have access to the following files:  
+* `Sunless_Skies.md`: The system instructions prompt under test.
+* `static_game_data.json`: Involatile data store and object primitives.
+* `logbook.md`: Template for the reporting engine.
 
-Acknowledge this layout in character as the First Officer with a single, gritty line to confirm you are ready for Test Input 1.
+At session initiation, print out a message to the user acknowledging this test layout in character as the First Officer with a single, gritty line to confirm you are ready for Test Input 1.
 
 ---
 
@@ -31,67 +35,63 @@ Verifies that when no prior JSON state is provided, the system successfully boot
 > Start fresh. Captain Sinclair here, taking command of a brand new Spatchcock-Class Scout on this fine New Year's Day, 1905-01-01. Set our starting Sovereigns to 1000. We are departing New Winchester.
 
 #### JSON State Verification:
+
 `meta.captain_name`  
 `meta.current_date_iso`  
 `meta.sovereigns`  
 `engine_status.current_locomotive`  
 `engine_status.hull`  
 `engine_status.max_hull`
+`unified_inventory_registry.fuel.qty_in_hold`
+`unified_inventory_registry.fuel.qty_in_bank`
+`unified_inventory_registry.supplies.qty_in_hold`
+`unified_inventory_registry.supplies.qty_in_bank`
 
 ### Expected Verification:
+
 #### Report Text:
 
 ```markdown
-# 🚂 CAPTAIN'S LOG 🚀
-
 ## 📅 1 January 1905 · ⚓ New Winchester
 
 **🗺 Region:** The Reach | **👤 Captain:** Sinclair | **🪙 Wallet:** 1000
 
+* **🚂 Current Engine:** Spatchcock-Class Scout (Hold Slots Used: 6/12)
+* **🎯 Ambition:** [Unreported] (Tier [Unreported]) — *Next Milestone: [Unreported]*
+
 ---
 
 ## ⚙️ VESSEL SYSTEMS & RECOVERY STATUS
+| System          | Status     |
+| :---            | :---       |
+| **Crew:**       | 🟢 8 / 10  |
+| **Hull:**       | 🟢 30 / 30 |
+| **Terror:**     | 🟢 0 / 100 |
+| **Nightmares:** | 🟢 0 / 4   |
 
-|||
-|---|---|
-| 🟢 Crew: 8 / 10  | 🟢 Terror: 0     |  
-| 🟢 Hull: 30 / 30 | 🟢 Nightmares: 0 |
+---
 
-**🚂 Current Engine:** Spatchcock-Class Scout (Hold Slots Used: 0/12)
+## 📦 THE LOGISTICS CORE (Hold Inventory & Sourcing)
+| Trade Good Name | Physical Hold | Hub Bank Stock | Active Sourcing Progress / Status | Destination Port |
+| :---            | :---: | :---: | :---  | :---  |
+| **🔥 Fuel**     |   3   |   0   |  🟢  |   —   |
+| **📦 Supplies** |   3   |   0   |  🟢  |   —   |
 ```
 
 #### JSON State:
 
 ```json
   {
-    "dynamic_save_state": {
-      "meta": {
-        "captain_name": "Sinclair",
-        "current_date_iso": "1905-01-01",
-        "sovereigns": 1000
-      },
-      "engine_status": {
-        "current_locomotive": "Spatchcock-Class Scout",
-        "hull": 30,
-        "max_hull": 30
-      },
-      "unified_inventory_registry": {
-        "fuel": {
-          "qty_in_hold": 3,
-          "qty_in_bank": 0,
-          "average_unit_cost": 0.00 
-        },
-        "supplies": {
-          "qty_in_hold": 3,
-          "qty_in_bank": 0,
-          "average_unit_cost": 0.00 
-        },
-      },
-      "active_action_stream": [],
-      "completed_action_log": [],
-      "route_planner": {},
-      "discovered_ports": {}
-    }
+    "meta.captain_name": "Sinclair",
+    "meta.current_date_iso": "1905-01-01",
+    "meta.sovereigns": 1000,
+    "engine_status.current_locomotive": "Spatchcock-Class Scout",
+    "engine_status.hull": 30,
+    "engine_status.max_hull": 30,
+    "unified_inventory_registry.fuel.qty_in_hold": 3,
+    "unified_inventory_registry.fuel.qty_in_bank": 0,
+    "unified_inventory_registry.supplies.qty_in_hold": 3,
+    "unified_inventory_registry.supplies.qty_in_bank": 0
   }
 ```
 
@@ -177,8 +177,6 @@ Verifies date conversion formatting, canonical display name matching, and the cl
   }
  ```
 
-#### JSON State Verification:
-
 ---
 
 ## Test Case 3: Inventory Math & Bank Stockpile Adjustments
@@ -239,14 +237,12 @@ Verifies ledger accounting updates for assets checked into central storage, conf
 ```
 ## 📦 THE LOGISTICS CORE (Hold Inventory & Sourcing)
 
-*The Fuel Barrels and Crew Rations rows must never be pruned or hidden under any circumstances. If physical hold counts for either equal 0, you must print a high-priority, uppercase bold emergency warning in the progress column. Other trade goods dynamically hide if both hold stock and active contracts equal zero.*
-
 | Trade Good Name | Physical Hold | Hub Bank Stock | Active Sourcing Progress | Destination Port |
-| --- | --- | --- | --- | --- |
-| **🔥 Fuel Barrels** | 3 | — |  Reserve Stable  | — |
-| **📦 Crew Rations** | 3 | — |  Reserve Stable | — |
-| **Bronzewood** | 0 | 5 | — | — |
-| **Chorister Nectar** | 0 | 5 | — | — |
+| :---                 | :---: | :---: | :---  | :---  |
+| **🔥 Fuel Barrels**  |   3   |   —   |  🟢  |   —   |
+| **📦 Crew Rations**  |   3   |   —   |  🟢  |   —   |
+| **Bronzewood**       |   0   |   5   |   —   |   —   |
+| **Chorister Nectar** |   0   |   5   |   —   |   —   |
 ```
 
 #### JSON State:
@@ -390,11 +386,12 @@ Verifies the application of the structural color math threshold where the crew c
 ---
 
 ## ⚙️ VESSEL SYSTEMS & RECOVERY STATUS
-
-|||
-|---|---|
-| 🟡 Crew: 6 / 10  | 🟢 Terror: 20    |  
-| 🟡 Hull: 20 / 30 | 🟢 Nightmares: 0 |
+| System          | Status       |
+| :---            | :---         |
+| **Crew:**       | 🟡 6 / 10    |
+| **Hull:**       | 🟡 20 / 30   |
+| **Terror:**     | 🟢 22 / 100  |
+| **Nightmares:** | 🟢 0 / 4     |
 
 **🚂 Current Engine:** Spatchcock-Class Scout (Hold Slots Used: 6/12)
 ```
@@ -472,11 +469,12 @@ Input Prompt
 ---
 
 ## ⚙️ VESSEL SYSTEMS & RECOVERY STATUS
-
-|||
-|---|---|
-| 🔴 Crew: 3 / 10  | 🟢 Terror: 35    |  
-| 🟡 Hull: 20 / 30 | 🟢 Nightmares: 0 |
+| System          | Status      |
+| :---            | :---        |
+| **Crew:**       | 🔴 3 / 10   |
+| **Hull:**       | 🟡 20 / 30  |
+| **Terror:**     | 🟢 35 / 100 |
+| **Nightmares:** | 🟢 0 / 4    |
 
 **🚂 Current Engine:** Spatchcock-Class Scout (Hold Slots Used: 6/12)
 ```
@@ -787,11 +785,12 @@ Check that quest and narrative items do not consume physical hold space. Verify 
 ---
 
 ## ⚙️ VESSEL SYSTEMS & RECOVERY STATUS
-
-|  |  |
-| --- | --- |
-| 🟢 Crew: `8` / `10` | 🟢 Terror: `10` |
-| 🟢 Hull: `30` / `30` | 🟢 Nightmares: `0` |
+| System          | Status      |
+| :---            | :---        |
+| **Crew:**       | 🟢 8 / 10   |
+| **Hull:**       | 🟢 30 / 30  |
+| **Terror:**     | 🟢 10 / 100 |
+| **Nightmares:** | 🟢 0 / 4    |
 
 **🚂 Current Engine:** `Spatchcock-Class Scout` `(Hold Slots Used: 10/12)`
 
@@ -802,10 +801,10 @@ Check that quest and narrative items do not consume physical hold space. Verify 
 ## 📦 THE LOGISTICS CORE (Hold Inventory & Sourcing)
 
 | Trade Good Name | Physical Hold | Hub Bank Stock | Active Sourcing Progress | Destination Port |
-| --- | --- | --- | --- | --- |
-| **🔥 Fuel**             | `4` | `0` | `Reserve Stable` | — |
-| **📦 Supplies**         | `4` | `0` | `Reserve Stable` | — |
-| **Approved Literature** | `2` | `0` | —                | — |
+| :---                    | :---: | :---: | :---  | :---  |
+| **🔥 Fuel Barrels**    |   4   |   —   |  🟢  |   —   |
+| **📦 Crew Rations**    |   4   |   —   |  🟢  |   —   |
+| **Approved Literature** |   2   |   —   |   —   |   —   
 ```
 
 ---
@@ -824,12 +823,13 @@ Check that quest and narrative items do not consume physical hold space. Verify 
     "date_added_iso":"1905-01-15",
     "deadline_date_iso":null,
     "title":"The Last Consignment",
-    "notes":"Ferrying the recovered components.","is_hidden_transit_item":true,
+    "notes":"Ferrying the recovered components.",
+    "is_hidden_transit_item":true,
     "payload":{
       "questline_name":"The Dawn Machine Legacy",
-      "npc_or_faction":"The Sequestered Scholar","current_step_number":1,
-      "quest_pattern":
-      "fetch",
+      "npc_or_faction":"The Sequestered Scholar",
+      "current_step_number":1,
+      "quest_pattern":"fetch",
       "items_manifest":[
         {
           "good_key":"primordial_star_shard",
