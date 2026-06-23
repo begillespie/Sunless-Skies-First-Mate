@@ -102,49 +102,44 @@ All objectives, narrative milestones, and passenger manifests are managed within
 | **`ambition`** | The Captain's long-term endgame campaign win condition and overarching career milestone tracking. | `static_game_data.object_blueprints.payload_variants.ambition` |
 | **`todo`** | Minimalist personal annotations, custom route targets, and ad-hoc reminders. | `static_game_data.object_blueprints.payload_variants.todo` |
 
-### 1. Mercantile Prospects (`prospect`)
+To eliminate logic collisions, every entity in the ledger must execute its lifecycle transformations inside **Phase 1 (Mathematical Evaluation)** using the explicit `is_global_transit` routing states below. An event object is handled as either a static, station-bound coordinate listing (`is_global_transit: false`) or a dynamic asset moving with the ship (`is_global_transit: true`).
 
+### 1. Mercantile Prospects (`prospect`)
 * **Polymorphic Type:** `static_game_data.object_blueprints.payload_variants.prospect`
-* **Instantiation:** Spawned when a player accepts a shipping contract at a hub bazaar. Top-level `port` and `region` must initially point to the contract's origin hub where items are loaded.
-* **Location Mutation:** While `payload.quantity_sourced` < `payload.quantity_required`, the event remains pinned to the origin loading port. The exact turn `quantity_sourced` matches or exceeds `quantity_required`, automatically mutate the top-level `port` and `region` fields to the final delivery target port and set `is_hidden_transit_item` to `true` to move it to the underway manifest.
+* **Sourcing Phase:** While `payload.quantity_sourced` $<$ `payload.quantity_required`, the prospect represents an open loading contract. The engine must force `is_global_transit` to `false` and keep the top-level `port` and `region` attributes pinned strictly to the originating hub bazaar. It routes exclusively to the local port manifest checklist.
+* **Delivery Mutation:** The exact turn execution where `payload.quantity_sourced` $\ge$ `payload.quantity_required`, the engine flags the item as loaded aboard and processes a two-part structural mutation before the UI pass:
+1. Mutate the top-level `port` and `region` properties to match the contract's final delivery target destination.
+2. Flip `is_global_transit` to `true`. This instantly evicts the contract from the localized loading boards, routing it straight to the active underway bridge transit manifest.
 * **Resolution:** Upon arrival at the target destination and completion of a delivery transaction making `quantity_delivered` == `quantity_required`, pop the object from `active_action_stream` and archive it to `completed_action_log`.
 
 ### 2. Narrative Quests (`quest`)
-
 * **Polymorphic Type:** `static_game_data.object_blueprints.payload_variants.quest`
-* **Instantiation:** Triggered upon advancing or initiating a narrative plotline with a regional NPC or world landmark.
-* **Location Mutation:** The top-level `port` and `region` fields must look ahead, pinning themselves directly to the coordinate of the *next* narrative target or required action step. Upon stepping the narrative, increment `payload.current_step_number` and mutate the location fields.
-* *Shopping List Patterns:* The quest step remains firmly pinned to the delivery port until `quantity_delivered` $\ge$ `quantity_required` for every single object nested within the `payload.items_manifest` array.
+* **Static Anchor:** Quests are structurally locked to `is_global_transit: false` across their entire lifecycle.
+* **Location Mutation:** The top-level `port` and `region` fields must look ahead, pinning themselves directly to the coordinate of the *next* narrative target or required drop-off station. Upon stepping the narrative, increment `payload.current_step_number` and mutate the location fields.
+* **Shopping List Volumetrics:** If a quest follows a shopping list pattern, it remains pinned to the delivery port as a localized tracking item (`is_global_transit: false`) until `quantity_delivered` $\ge$ `quantity_required` for every single nested index within the `payload.items_manifest` array.
 * **Resolution:** Move to `completed_action_log` only when the narrative arc explicitly hits a final, absolute structural conclusion.
 
 ### 3. Companions & Deployment (`officer`)
-
 * **Polymorphic Type:** `static_game_data.object_blueprints.payload_variants.officer`
-* **Instantiation:** Initialized upon recruiting a named companion.
-* **Location Mutation:** While active on the bridge, the top-level `port` and `region` attributes dynamically mirror the locomotive's current location. If `payload.secondment_profile.on_secondment` transitions to `true`, automatically force `payload.assignment_slot` to `"None"`, and permanently lock the top-level `port` and `region` to the specific station where they are leased.
-* **Resolution:** Never archived to the completed log unless the companion permanently leaves the crew, passes away, or concludes their narrative storyline via final promotion.
+* **Bridge Echo Slot:** While active on the locomotive bridge, the companion is treated as a local asset (`is_global_transit: false`), and its top-level `port` and `region` attributes dynamically mirror the vessel's current coordinates. It routes to the current port's active list to display companion story arcs and options.
+* **Secondment Lock:** If `payload.secondment_profile.on_secondment` transitions to `true`, the engine automatically forces `payload.assignment_slot` to `"None"`. The top-level `port` and `region` fields permanently freeze to the specific station where they are leased, forcing the row to render only when the captain physically docks at that specific station coordinate.
+* **Resolution:** Never archived to the completed log unless the companion permanently leaves the crew, passes away, or concludes their narrative storyline via final promotion
 
 ### 4. Relayed Souls (`passenger`)
-
 * **Polymorphic Type:** `static_game_data.object_blueprints.payload_variants.passenger`
-* **Instantiation:** Initialized when a passenger boards the locomotive.
-* **Location Mutation:** Upon boarding, `is_hidden_transit_item` must instantly lock to `true`, and top-level `port` and `region` fields are hardcoded straight to their final delivery targets to group them into the active bridge transit log regardless of the spatial zones traversed enroute.
-* **Resolution:** Cleared and archived to log upon docking at the target destination, provided `meta.current_date_iso` $\le$ `deadline_date_iso`. If the current date passes the deadline while underway, execute the penalty scripts outlined in the object notes.
-* *Null Date Protection:* If `deadline_date_iso` is `null`, display the timeline as `[ Open Timeline ]` and bypass all expiration alert calculations.
+* **Pure Global Transit:** Upon boarding, the passenger immediately forces `is_global_transit` to `true`. The top-level `port` and `region` fields are hardcoded straight to their final delivery targets. This groups them into the active bridge transit log regardless of the spatial zones or intermediate ports traversed enroute.
+* **Resolution:** Cleared and archived to log upon docking at the target destination, provided `meta.current_date_iso` $\le$ `deadline_date_iso`. If `deadline_date_iso` is `null`, display the timeline as `[ Open Timeline ]` and bypass all expiration alert calculations.
 
 ### 5. Campaign Ambitions (`ambition`)
-
 * **Polymorphic Type:** `static_game_data.object_blueprints.payload_variants.ambition`
-* **Instantiation:** Permanent macro-event locked into the stream at session start.
-* **Location Mutation:** The top-level `port` and `region` shift exclusively when the player hits a major campaign turning point requiring them to travel to a specific capital, landmark, or monument to buy property or complete a legacy objective.
+* **Global Overarching:** Ambitions exist entirely outside local spatial loops and keep `is_global_transit: false`. The top-level `port` and `region` fields shift exclusively when the player hits a major campaign turning point requiring them to travel to a specific capital, landmark, or monument to buy property or complete a legacy objective.
 * **Resolution:** Never archived during standard gameplay; moving this item to the completed log concludes the entire playthrough simulation.
 
 ### 6. Freeform Annotations (`todo`)
-
 * **Polymorphic Type:** `static_game_data.object_blueprints.payload_variants.todo`
-* **Instantiation:** Created manually by the player to jot down notes.
-* **Location Mutation:** Pinned by default to the specific `port` and `region` where the note was typed. If `payload.is_manually_pinned` is set to `true`, the engine must completely bypass location filters, forcing the item to render on every single departure manifest regardless of location coordinates.
-* **Resolution:** Clered and popped to the log when the player explicitly states the reminder has been handled.
+* **Local Sticky:** Anchored locally (`is_global_transit: false`) to the specific `port` and `region` where the note was typed.
+* **Global Replication Override:** If `payload.is_manually_pinned` transitions to `true`, it gains global replication status. This instructs the visual layout engine to completely bypass all spatial location filters, forcing the item to render on every single departure manifest regardless of current coordinate tracks.
+* **Resolution:** Cleared and popped to the log when the player explicitly states the reminder has been handled.handled.
 
 ---
 

@@ -40,13 +40,12 @@
         "deadline_date_iso": "string (YYYY-MM-DD) | null",
         "title": "string",
         "notes": "string",
-        "is_hidden_transit_item": {
+        "is_global_transit": {
           "type": "boolean",
-          "__NOTE": "Set to true ONLY if the item belongs to an active journey transit leg, preventing it from vanishing during location filtering while underway."
+          "__NOTE": "True indicates the item is loaded aboard the locomotive and tracking globally with the ship's manifest. False anchors the item to a static, local port."
         },
         "payload": {
-          "type": "object",
-          "__NOTE": "Contains exclusively the unique variables specified below for each polymorphism."
+          "type": "object"
         }
       },
 

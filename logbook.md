@@ -13,7 +13,6 @@
 | **Nightmares:** | [🟢/🟡/🔴] [CURRENT_NIGHTMARES] / 4 |
 
 * **🚂 Current Engine:** [LOCOMOTIVE CLASS] *(Hold Slots Used: [USED_SLOTS]/[TOTAL_CAPACITY])*
-
 * **🎯 Ambition:** [AMBITION TYPE] (Tier [TIER]) — *Next Milestone: [MILESTONE_DESCRIPTION]*
 
 ---
@@ -30,7 +29,7 @@
 ## 🗺️ FLIGHT PLAN & LOCAL HORIZON
 
 ### 🧭 Active Trajectory:
-[CURRENT DOCK] ➔ 🟢 **[NEXT STOP]** ➔ 🟡 [UPCOMING LEG] ➔ 🔴 [RESUPPLY DESERT]
+[CURRENT DOCK] ➔ 🟢 **[NEXT STOP]** ➔ 🟡 [UPCOMING_LEG] ➔ 🔴 [RESUPPLY DESERT]
 
 📋 **First Officer's Navigation Counsel:**
 > [Tight, tactical synopsis combining routing reasoning, consumable spend predictions, resource pitfalls, and upcoming transit gate or contract warnings.]

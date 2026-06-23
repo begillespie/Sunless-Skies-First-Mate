@@ -1,10 +1,10 @@
 ## Test Case #: Test Title
 
 ### Objective
-`[ State objective ]`
+[ State objective ]
 
 ### Input Prompt
-> Update state. `[ Input prompt text ]`
+> Update state. [ Input prompt text ]
 
 ```json
 {
@@ -45,19 +45,22 @@
 }
 ```
 
-
 #### JSON State Verification:
 
-`[ List the keys to print out for verification ]`
+[ List the keys to print out for verification ]
+`path.to.example.key`
 
 ### Expected Verification:
+
+#### JSON State: 
+```json
+{
+  "__NOTE":"list verification keys here in a flat json object (dot notation, not nested)"
+}
+```
 
 #### Report Text: 
 
 > [ Relevant report output ]
 
-#### JSON State: 
-`[ List expected new values for changed keys ]`
-
 ---
-

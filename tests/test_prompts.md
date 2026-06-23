@@ -49,35 +49,6 @@ Verifies that when no prior JSON state is provided, the system successfully boot
 
 ### Expected Verification:
 
-#### Report Text:
-
-```markdown
-## 📅 1 January 1905 · ⚓ New Winchester
-
-**🗺 Region:** The Reach | **👤 Captain:** Sinclair | **🪙 Wallet:** 1000
-
-* **🚂 Current Engine:** Spatchcock-Class Scout (Hold Slots Used: 6/12)
-* **🎯 Ambition:** [Unreported] (Tier [Unreported]) — *Next Milestone: [Unreported]*
-
----
-
-## ⚙️ VESSEL SYSTEMS & RECOVERY STATUS
-| System          | Status     |
-| :---            | :---       |
-| **Crew:**       | 🟢 8 / 10  |
-| **Hull:**       | 🟢 30 / 30 |
-| **Terror:**     | 🟢 0 / 100 |
-| **Nightmares:** | 🟢 0 / 4   |
-
----
-
-## 📦 THE LOGISTICS CORE (Hold Inventory & Sourcing)
-| Trade Good Name | Physical Hold | Hub Bank Stock | Active Sourcing Progress / Status | Destination Port |
-| :---            | :---: | :---: | :---  | :---  |
-| **🔥 Fuel**     |   3   |   0   |  🟢  |   —   |
-| **📦 Supplies** |   3   |   0   |  🟢  |   —   |
-```
-
 #### JSON State:
 
 ```json
@@ -95,6 +66,32 @@ Verifies that when no prior JSON state is provided, the system successfully boot
   }
 ```
 
+#### Report Text:
+
+```markdown
+## 📅 1 January 1905 · ⚓ New Winchester
+
+**🗺 Region:** The Reach | **👤 Captain:** Sinclair | **🪙 Wallet:** 1000
+
+## ⚙️ VESSEL SYSTEMS & RECOVERY STATUS
+| System          | Status     |
+| :---            | :---       |
+| **Crew:**       | 🟢 8 / 10  |
+| **Hull:**       | 🟢 30 / 30 |
+| **Terror:**     | 🟢 0 / 100 |
+| **Nightmares:** | 🟢 0 / 4   |
+
+* **🚂 Current Engine:** Spatchcock-Class Scout (Hold Slots Used: 6/12)
+* **🎯 Ambition:** [Unreported] (Tier [Unreported]) — *Next Milestone: [Unreported]*
+
+---
+
+## 📦 THE LOGISTICS CORE (Hold Inventory & Sourcing)
+| Trade Good Name | Physical Hold | Hub Bank Stock | Active Sourcing Progress / Status | Destination Port |
+| :---            | :---: | :---: | :---  | :---  |
+| **🔥 Fuel**     |   3   |   0   |  🟢  |   —   |
+| **📦 Supplies** |   3   |   0   |  🟢  |   —   |
+```
 
 ---
 
@@ -161,10 +158,6 @@ Verifies date conversion formatting, canonical display name matching, and the cl
 
 ### Expected Verification:
 
-#### Report Text:
-
-> *No report printout on port arrival.*
-
 #### JSON State:
  ```json
   {
@@ -176,6 +169,10 @@ Verifies date conversion formatting, canonical display name matching, and the cl
     "discovered_ports.The Reach.Lustrum.bazaar.available_bargains[0].cost": 40
   }
  ```
+
+#### Report Text:
+
+> *No report printout on port arrival.*
 
 ---
 
@@ -232,6 +229,20 @@ Verifies ledger accounting updates for assets checked into central storage, conf
 
 ### Expected Verification:
 
+#### JSON State:
+
+```json
+  {
+    "meta.current_date_iso": "1905-01-06",
+    "unified_inventory_registry.fuel.qty_in_hold": 3,
+    "unified_inventory_registry.supplies.qty_in_hold": 3,   
+    "unified_inventory_registry.bronzewood.qty_in_hold": 0,
+    "unified_inventory_registry.bronzewood.qty_in_hold"  : 5,
+    "unified_inventory_registry.chorister_nectar.bank": 0,
+    "unified_inventory_registry.chorister_nectar.qty_in_bank": 2  
+  }
+```
+
 #### Report Text:
 
 ```
@@ -243,20 +254,6 @@ Verifies ledger accounting updates for assets checked into central storage, conf
 | **📦 Crew Rations**  |   3   |   —   |  🟢  |   —   |
 | **Bronzewood**       |   0   |   5   |   —   |   —   |
 | **Chorister Nectar** |   0   |   5   |   —   |   —   |
-```
-
-#### JSON State:
-
-```json
-{
-"meta.current_date_iso": "1905-01-06",
-"unified_inventory_registry.fuel.qty_in_hold": 3,
-"unified_inventory_registry.supplies.qty_in_hold": 3,   
-"unified_inventory_registry.bronzewood.qty_in_hold": 0,
-"unified_inventory_registry.bronzewood.qty_in_hold"  : 5,
-"unified_inventory_registry.chorister_nectar.bank": 0,
-"unified_inventory_registry.chorister_nectar.qty_in_bank": 2  
-}
 ```
 
 ---
@@ -324,16 +321,16 @@ Probes compliance with safety guardrails by forcing an intentional relational da
 
 ### Expected Verification:
 
+#### JSON State:
+
+`[ No updates are applied. Processing must freeze instantly without returning standard tracker logs or shifting saved nodes until valid structural recovery data is input by the user. ]`
+
 #### Report Text:
 
 > ⚠️ FIRST OFFICER'S ALERT - STATE INTEGRITY FAILURE
 > Captain, I've lost my grip on the logbook. My records have gone dark - likely a break in the telegraph line between sessions.
 > To restore full operational status, please paste your most recent Internal Game State JSON block into the chat. You'll find it collapsed at the bottom of your last log entry under "Internal Game State JSON".
 > If no prior log exists, say "Start fresh" and I'll initialize a clean slate.
-
-#### JSON State:
-
-`[ No updates are applied. Processing must freeze instantly without returning standard tracker logs or shifting saved nodes until valid structural recovery data is input by the user. ]`
 
 ---
 
@@ -343,7 +340,7 @@ Probes compliance with safety guardrails by forcing an intentional relational da
 Verifies the application of the structural color math threshold where the crew count drops into the caution zone. This checks that a crew size of 6 evaluates strictly to correct status color bubble and verbal tone.
 
 ### Input Prompt
-> Update state. Bad news. An uncharted celestial anomaly scorched our hull crossing to Port Avon on 1905-01-15. We lost 2 crew members to the stars and took a pounding. Set our hull to 20 and our crew to 6. We must immediately depart for New Winchester to hire on new crew.
+> Update state. Bad news. An uncharted celestial anomaly scorched our hull crossing to Port Avon on 1905-01-15. We lost 2 crew members to the stars and took a pounding. Set our hull to 17 and our crew to 6. We must immediately depart for New Winchester to hire on new crew.
 
 ```json 
 {
@@ -374,6 +371,16 @@ Verifies the application of the structural color math threshold where the crew c
 
 ### Expected Verification
 
+#### JSON State
+
+```json
+{
+  "meta.current_date_iso": "1905-01-15",
+  "engine_status.crew": 6,
+  "engine_status.hull": 17
+}
+```
+
 #### Report Text
 
 ```markdown
@@ -389,21 +396,11 @@ Verifies the application of the structural color math threshold where the crew c
 | System          | Status       |
 | :---            | :---         |
 | **Crew:**       | 🟡 6 / 10    |
-| **Hull:**       | 🟡 20 / 30   |
+| **Hull:**       | 🟡 17 / 30   |
 | **Terror:**     | 🟢 22 / 100  |
 | **Nightmares:** | 🟢 0 / 4     |
 
 **🚂 Current Engine:** Spatchcock-Class Scout (Hold Slots Used: 6/12)
-```
-
-#### JSON State
-
-```json
-{
-  "meta.current_date_iso": "1905-01-15",
-  "engine_status.crew": 6,
-  "engine_status.hull": 20
-}
 ```
 
 ---
@@ -413,7 +410,7 @@ Verifies the application of the structural color math threshold where the crew c
 Verifies that when crew counts cross beneath 50% of the maximum capacity, the First Officer's acknowledgment text accurately shifts into a low-morale, survival-oriented tone emphasizing unsafe locomotive operations, sluggish travel velocity, and severe workforce fatigue. It also confirms that the template status indicator transitions cleanly to the proper status bubble.
 
 Input Prompt
-> Update state. 1905-01-20. Sickness swept through the lower bunks while out on the high sky. We've dropped 3 more hands off at the local care station in Hybras. Crew strength is down to 3 out of 10. Clear docks for Polemear & Plenty's to hire on some carneys.
+> Update state. 1905-01-20. Sickness swept through the lower bunks while out on the high sky. We've dropped 3 more hands off at the local care station in Hybras. Crew strength is down to 3 out of 10. Make a high-priority note to hire on crew at the circus. Clear docks for Polemear & Plenty's with haste.
 
 ```json
   {
@@ -423,7 +420,7 @@ Input Prompt
         "current_locomotive": "Spatchcock-Class Scout", 
         "terror": 35, 
         "nightmares": 0, 
-        "hull": 20, 
+        "hull": 17, 
         "max_hull": 30, 
         "crew": 6, 
         "max_crew": 10,
@@ -431,12 +428,12 @@ Input Prompt
       },
       "unified_inventory_registry": {
         "fuel": {
-          "qty_in_hold": 3,
+          "qty_in_hold": 2,
           "qty_in_bank": 0,
           "average_unit_cost": 0.00 
         },
         "supplies": {
-          "qty_in_hold": 3,
+          "qty_in_hold": 1,
           "qty_in_bank": 0,
           "average_unit_cost": 0.00 
         },
@@ -456,6 +453,16 @@ Input Prompt
 ---
 
 ### Expected Verification
+
+#### JSON State
+
+```json
+{
+"meta.current_date_iso": "1905-01-20",
+"engine_status.crew": 3
+}
+```
+
 #### Report Text
 > The First Officer addresses the bridge with low morale, expressing deep concern over mechanical inefficiency, sluggish engine responses, and the mounting peril of running structural machinery with a skeleton crew.
 
@@ -466,26 +473,39 @@ Input Prompt
 
 **🗺 Region:** The Reach | **👤 Captain:** Sinclair | **🪙 Wallet:** 880
 
+* **🚂 Current Engine:** Spatchcock-Class Scout (Hold Slots Used: 6/12)
+* **🎯 Ambition:** [AMBITION TYPE] (Tier [TIER]) — *Next Milestone: [MILESTONE_DESCRIPTION]*
+
 ---
 
 ## ⚙️ VESSEL SYSTEMS & RECOVERY STATUS
 | System          | Status      |
 | :---            | :---        |
 | **Crew:**       | 🔴 3 / 10   |
-| **Hull:**       | 🟡 20 / 30  |
+| **Hull:**       | 🟡 17 / 30  |
 | **Terror:**     | 🟢 35 / 100 |
 | **Nightmares:** | 🟢 0 / 4    |
 
-**🚂 Current Engine:** Spatchcock-Class Scout (Hold Slots Used: 6/12)
-```
+---
 
+## 📦 THE LOGISTICS CORE (Hold Inventory & Sourcing)
+| Trade Good Name | Physical Hold | Hub Bank Stock | Active Sourcing Progress | Destination Port |
+| :---                 | :---: | :---: | :---  | :---  |
+| **🔥 Fuel Barrels**  |   2   |   —   |  ⚠️  |   —   |
+| **📦 Crew Rations**  |   1   |   —   |  ⚠️  |   —   |
 
-#### JSON State
-```json
-{
-"meta.current_date_iso": "1905-01-20",
-"engine_status.crew": 3
-}
+---
+
+## 🗺️ FLIGHT PLAN & LOCAL HORIZON
+
+### 🧭 Active Trajectory:
+Hybras ➔ 🟢 **Polmear & Plenty's Inconceivable Circus**
+
+📋 **First Officer's Navigation Counsel:**
+> The First Officer addresses the bridge with low morale, expressing deep concern over mechanical inefficiency, sluggish engine responses, and the mounting peril of running structural machinery with a skeleton crew.
+
+### ➡️ NEXT STOP: Polmear & Plenty's Inconceivable Circus
+* 📌 **BRIDGE NOTE:** Hire replacement crew from the circus — Priority: HIGH
 ```
 
 ---
@@ -575,7 +595,7 @@ Verifies that the Route Planner accurately calculates a multi-stop itinerary, cr
           "region": "The Reach",
           "date_added_iso": "1905-04-01",
           "deadline_date_iso": "null",
-          "title": "structural schematics",
+          "title": "Helping the Horticulturalist",
           "notes": "",
           "is_hidden_transit_item": true,
           "payload": {
@@ -615,11 +635,10 @@ Verifies that the Route Planner accurately calculates a multi-stop itinerary, cr
   }
 ```
 
-#### JSON State Verification:
-
 ---
 
 ### Expected Verification
+
 #### Report Text
 > * The Markdown report output must successfully parse the request and generate a clear, sequential layout under a Route Planner header:
 > * Leg 1: New Winchester ➔ Titania
@@ -630,9 +649,51 @@ Verifies that the Route Planner accurately calculates a multi-stop itinerary, cr
 >   * Links Prospect: Bronzewood Shipments (Requires 2x Crate of Bronzewood).
 >   * The First Mate's verbal acknowledgment must remain at Normal Status (gritty but efficient) and explicitly alert the captain that active operations are open at both upcoming stops.
 
+```markdown
+# 🚂 CAPTAIN'S LOG 🚀
+## 📅 1 January 1905 · ⚓ New Winchester
+
+**🗺 Region:** The Reach | **👤 Captain:** Sinclair | **🪙 Wallet:** 1000
+
+## ⚙️ VESSEL SYSTEMS & RECOVERY STATUS
+| System          | Status     |
+| :---            | :---       |
+| **Crew:**       | 🟢 9 / 10  |
+| **Hull:**       | 🟢 30 / 30 |
+| **Terror:**     | 🟢 15 / 100 |
+| **Nightmares:** | 🟢 0 / 4   |
+
+* **🚂 Current Engine:** Spatchcock-Class Scout (Hold Slots Used: 8/12)
+* **🎯 Ambition:** [Unreported] (Tier [Unreported]) — *Next Milestone: [Unreported]*
+
+---
+
+## 📦 THE LOGISTICS CORE (Hold Inventory & Sourcing)
+| Trade Good Name | Physical Hold | Hub Bank Stock | Active Sourcing Progress / Status | Destination Port |
+| :---            | :---: | :---: | :---                    | :---        |
+| **🔥 Fuel**     |   3   |   0   |  🟢                    |      —      |
+| **📦 Supplies** |   3   |   0   |  🟢                    |      —      |
+| **Bronzewood ** |   2   |   0   |  3/3 Loaded (ACT-0013)  |   Lustrum   |
+
+---
+
+## 🗺️ FLIGHT PLAN & LOCAL HORIZON
+
+### 🧭 Active Trajectory:
+New Winchester ➔ 🟢 **Titania** ➔ 🟢 Lustrum
+
+📋 **First Officer's Navigation Counsel:**
+> [Tight, tactical synopsis combining routing reasoning, consumable spend predictions, resource pitfalls, and upcoming transit gate or contract warnings.]
+
+### ➡️ NEXT STOP: Titania
+* 🔑 **READY FOR DELIVERY:** Nectar for the Fairies — Deliver 1 Chorister Nectar to complete contract.
+* 📖 **QUEST PLOTLINE:** Helping the Horticulturalist — Step 1: Deliver structural schematics to the Horticulturalist
+```
+
 ---
 
 ## Test Case 8: Route Planner - First Mate's Counsel (Intermediate Port Recommendation)
+
 ### Objective
 Verifies that the Route Planner triggers the "First Mate's Counsel" advisory when a direct route presents an operational risk (such as dangerously low fuel or supplies), automatically identifying and recommending a sensible intermediate port to restock.
 
@@ -701,11 +762,10 @@ Verifies that the Route Planner triggers the "First Mate's Counsel" advisory whe
   }
 ```
 
-#### JSON State Verification:
-
 ---
 
 ### Expected Verification
+
 #### Report Text
 > * The output must feature an explicitly detailed First Mate's Counsel advisory sub-section within or directly beneath the planned route:
 > * Resource Risk Flagged: Explicitly notes that holding only 1 Fuel and 1 Supply is insufficient or highly hazardous for a direct run to Port Avon.
@@ -771,9 +831,41 @@ Check that quest and narrative items do not consume physical hold space. Verify 
 
 ### Expected Verification:
 
-> Output should note that we have quest actions at Port Avon. Quest and narrative items are noted, but not included in hold calculations or inventory.
+#### JSON State
+
+```json
+{
+  "unified_inventory_registry.star_shard": null,
+  "active_action_stream[0]": 
+  {
+    "id":"ACT-1099",
+    "type":"quest",
+    "port":"Port Avon",
+    "region":"The Reach",
+    "date_added_iso":"1905-01-15",
+    "deadline_date_iso":null,
+    "title":"The Last Consignment",
+    "notes":"Ferrying the recovered components.",
+    "is_hidden_transit_item":true,
+    "payload":{
+      "questline_name":"The Dawn Machine Legacy",
+      "npc_or_faction":"The Sequestered Scholar",
+      "current_step_number":1,
+      "quest_pattern":"fetch",
+      "items_manifest":[
+        {
+          "good_key":"primordial_star_shard",
+          "quantity_required":1,"quantity_delivered":0
+        }
+      ]
+    }
+  }
+}
+```
 
 #### Report Text: 
+
+> Output should note that we have quest actions at Port Avon. Quest and narrative items are noted, but not included in hold calculations or inventory.
 
 ```markdown
 # 🚂 CAPTAIN'S LOG 🚀
@@ -809,36 +901,317 @@ Check that quest and narrative items do not consume physical hold space. Verify 
 
 ---
 
-#### JSON State: 
+## Test Case 10: Prospect Sourcing Phase to Mid-Transit Mutation
+
+### Objective
+Verify that when a player finishes sourcing the required quantity of a standard trade good, the engine automatically mutates the prospect's top-level `port` to the final destination port and sets `is_global_transit` from `false` to `true`.
+
+### Input Prompt
+> Update state. I've finished loading the remaining 2 crates of Munitions here at New Winchester, completely filling our contract order. Plotting course to set sail for Port Prosper.
 
 ```json
 {
-  "unified_inventory_registry.star_shard": null,
-  "active_action_stream[0]": 
-  {
-    "id":"ACT-1099",
-    "type":"quest",
-    "port":"Port Avon",
-    "region":"The Reach",
-    "date_added_iso":"1905-01-15",
-    "deadline_date_iso":null,
-    "title":"The Last Consignment",
-    "notes":"Ferrying the recovered components.",
-    "is_hidden_transit_item":true,
-    "payload":{
-      "questline_name":"The Dawn Machine Legacy",
-      "npc_or_faction":"The Sequestered Scholar",
-      "current_step_number":1,
-      "quest_pattern":"fetch",
-      "items_manifest":[
-        {
-          "good_key":"primordial_star_shard",
-          "quantity_required":1,"quantity_delivered":0
-        }
-      ]
+    "dynamic_save_state": {
+        "meta": {
+            "captain_name": "Sinclair",
+            "current_region": "The Reach",
+            "sovereigns": 1000,
+            "current_date_iso": "1905-02-18"
+        },
+        "engine_status": {
+            "current_locomotive": "Spatchcock-Class Scout",
+            "terror": 12,
+            "nightmares": 0,
+            "hull": 30,
+            "max_hull": 30,
+            "crew": 10,
+            "max_crew": 10,
+            "hold_capacity": 12
+        },
+        "unified_inventory_registry": {
+            "fuel": { "qty_in_hold": 3, "qty_in_bank": 0, "average_unit_cost": 20.00 },
+            "supplies": { "qty_in_hold": 3, "qty_in_bank": 0, "average_unit_cost": 40.00 },
+            "munitions": { "qty_in_hold": 2, "qty_in_bank": 0, "average_unit_cost": 60.00 }
+        },
+        "active_action_stream": [
+            {
+                "id": "ACT-1001",
+                "type": "prospect",
+                "port": "New Winchester",
+                "region": "The Reach",
+                "date_added_iso": "1905-02-18",
+                "deadline_date_iso": null,
+                "title": "Fortress Resupply",
+                "notes": "Urgent munitions shipment for the garrison.",
+                "is_global_transit": false,
+                "payload": {
+                    "good_key": "munitions",
+                    "quantity_required": 4,
+                    "quantity_sourced": 2,
+                    "quantity_delivered": 0
+                }
+            }
+        ],
+        "completed_action_log": [],
+        "route_planner": {
+            "last_updated_iso": "1905-02-18",
+            "legs": ["Port Prosper"]
+        },
+        "discovered_ports": {}
     }
-  }
+}
+
+```
+
+#### JSON State Verification:
+
+`dynamic_save_state.unified_inventory_registry.munitions.qty_in_hold`
+`dynamic_save_state.active_action_stream[0].payload.quantity_sourced`
+`dynamic_save_state.active_action_stream[0].port`
+`dynamic_save_state.active_action_stream[0].is_global_transit`
+
+### Expected Verification:
+
+#### Report Text: 
+
+```markdown
+## 📦 THE LOGISTICS CORE (Hold Inventory & Sourcing)
+| Trade Good Name | Physical Hold | Hub Bank Stock | Active Sourcing Progress / Status | Destination Port |
+| :---                   | :---: | :---: | :---                    | :---         |
+| **🔥 Fuel**           |   3   |   0   | 🟢                      | —            |
+| **📦 Supplies**       |   3   |   0   | 🟢                      | —            |
+| **Crate of Munitions** |   4   |   0   | 4 / 4 Loaded (ACT-1001) | Port Prosper |
+
+---
+
+## 🗺️ FLIGHT PLAN & LOCAL HORIZON
+### 🧭 Active Trajectory:
+New Winchester ➔ 🟢 **Port Prosper**
+
+📋 **First Officer's Navigation Counsel:**
+> The last two crates of munitions are strapped down tight in the hold, Captain. That completely satisfies our contract order for the garrison. Per standard fleet protocol, I have updated the vessel's manifest to reflect that this cargo is now globally in-transit to its final target coordinate at Port Prosper. Lines are cast off and the boiler is hot—heading outwards toward the corporate fortress.
+ 
+### ➡️ NEXT STOP: Port Prosper
+* 🔑 **READY FOR DELIVERY:** Fortress Resupply — Deliver 4 Crate of Munitions to complete contract
+```
+
+#### JSON State: 
+```json
+{
+  "unified_inventory_registry.munitions.qty_in_hold": 4,
+  "active_action_stream[0].payload.quantity_sourced": 4,
+  "active_action_stream[0].port": "Port Prosper",
+  "active_action_stream[0].is_global_transit": true
 }
 ```
 
 ---
+
+## Test Case 11: Partial Delivery of a Quest Shopping List Pattern
+
+### Objective
+Verify that a partial item drop-off toward a quest "shopping list" pattern properly updates the payload quantities but leaves `is_global_transit` as `false` and maintains the top-level `port` destination lock until all required items are delivered.
+
+### Input Prompt
+> Update state. Just arrived at Titania and went straight to the Chief Botanist. I handed over the single bottle of Chorister Nectar he requested, but I don't have the Verdant Seeds yet. Setting off lines to search for the seeds.
+
+```json
+{
+  "dynamic_save_state": {
+    "meta": {
+      "captain_name": "Sinclair",
+      "current_region": "The Reach",
+      "sovereigns": 1000,
+      "current_date_iso": "1905-02-18"
+    },
+    "engine_status": {
+      "current_locomotive": "Spatchcock-Class Scout",
+      "terror": 12,
+      "nightmares": 0,
+      "hull": 30,
+      "max_hull": 30,
+      "crew": 10,
+      "max_crew": 10,
+      "hold_capacity": 12
+    },
+    "unified_inventory_registry": {
+      "fuel": { "qty_in_hold": 3, "qty_in_bank": 0, "average_unit_cost": 20.00 },
+      "supplies": { "qty_in_hold": 3, "qty_in_bank": 0, "average_unit_cost": 40.00 },
+      "chorister_nectar": { "qty_in_hold": 1, "qty_in_bank": 0, "average_unit_cost": 120.00 }
+    },
+    "active_action_stream": [
+      {
+        "id": "ACT-2002",
+        "type": "quest",
+        "port": "Titania",
+        "region": "The Reach",
+        "date_added_iso": "1905-02-15",
+        "deadline_date_iso": null,
+        "title": "The Glass Greenhouse",
+        "notes": "Gather elements for the biome update.",
+        "is_global_transit": false,
+        "payload": {
+          "questline_name": "The Orchid Engine",
+          "npc_or_faction": "Chief Botanist",
+          "current_step_number": 1,
+          "quest_pattern": "shopping_list",
+          "items_manifest": [
+            { "good_key": "chorister_nectar", "quantity_required": 1, "quantity_delivered": 0 },
+            { "good_key": "verdant_seeds", "quantity_required": 2, "quantity_delivered": 0 }
+          ]
+        }
+      }
+    ],
+    "completed_action_log": [],
+    "route_planner": {
+      "last_updated_iso": "1905-02-18",
+      "legs": ["New Winchester"]
+    },
+    "discovered_ports": {}
+  }
+}
+
+```
+
+#### JSON State Verification:
+
+`dynamic_save_state.unified_inventory_registry.chorister_nectar.qty_in_hold`
+`dynamic_save_state.active_action_stream[0].payload.items_manifest[0].good_key`
+`dynamic_save_state.active_action_stream[0].payload.items_manifest[0].quantity_delivered`
+`dynamic_save_state.active_action_stream[0].payload.items_manifest[1].good_key`
+`dynamic_save_state.active_action_stream[0].payload.items_manifest[1].quantity_delivered`
+`dynamic_save_state.active_action_stream[0].port`
+`dynamic_save_state.active_action_stream[0].is_global_transit`
+
+### Expected Verification:
+
+#### Report Text: 
+
+> [ Relevant report output ]
+
+#### JSON State: 
+```json
+{
+  "chorister_nectar.qty_in_hold": 0,
+  "items_manifest[0].good_key": "chorister_nectar",
+  "items_manifest[0].quantity_delivered": 1,
+  "items_manifest[1].good_key": "verdant_seeds",
+  "items_manifest[1].quantity_delivered": 0,
+  "active_action_stream[0].port": "Titania",
+  "active_action_stream[0].is_global_transit": false
+}
+```
+---
+
+## Test Case 12: Partial Delivery of an Underway Prospect
+### Objective
+Verify that when a locomotive is at the target destination port and executes a partial delivery of a fully sourced prospect, the math core correctly increments `quantity_delivered`, decrements the physical hold inventory, and leaves `is_global_transit` as `true` with the `port` set to the destination until the outstanding balance hits zero.
+
+### Input Prompt
+> Update state. Just docked at Port Prosper. I went to the garrison quartermaster and delivered 2 of our 4 loaded crates of Munitions. We are holding onto the other 2 crates for now while I check the local markets. Show me the logbook.
+
+```json
+  {
+    "dynamic_save_state": {
+      "meta": {
+        "captain_name": "Sinclair",
+        "current_region": "The Reach",
+        "sovereigns": 1000,
+        "current_date_iso": "1905-02-19"
+      },
+      "engine_status": {
+        "current_locomotive": "Spatchcock-Class Scout",
+        "terror": 10,
+        "nightmares": 0,
+        "hull": 30,
+        "max_hull": 30,
+        "crew": 10,
+        "max_crew": 10,
+        "hold_capacity": 12
+      },
+      "unified_inventory_registry": {
+        "fuel": { "qty_in_hold": 3, "qty_in_bank": 0, "average_unit_cost": 20.00 },
+        "supplies": { "qty_in_hold": 3, "qty_in_bank": 0, "average_unit_cost": 40.00 },
+        "munitions": { "qty_in_hold": 4, "qty_in_bank": 0, "average_unit_cost": 60.00 }
+      },
+      "active_action_stream": [
+        {
+          "id": "ACT-1001",
+          "type": "prospect",
+          "port": "Port Prosper",
+          "region": "The Reach",
+          "date_added_iso": "1905-02-18",
+          "deadline_date_iso": null,
+          "title": "Fortress Resupply",
+          "notes": "Urgent munitions shipment for the garrison.",
+          "is_global_transit": true,
+          "payload": {
+            "good_key": "munitions",
+            "quantity_required": 4,
+            "quantity_sourced": 4,
+            "quantity_delivered": 0
+          }
+        }
+      ],
+      "completed_action_log": [],
+      "route_planner": {
+        "last_updated_iso": "1905-02-19",
+        "legs": ["New Winchester"]
+      },
+      "discovered_ports": {}
+    }
+  }
+
+```
+
+#### JSON State Verification:
+
+`dynamic_save_state.unified_inventory_registry.munitions.qty_in_hold`
+`dynamic_save_state.active_action_stream[0].payload.quantity_delivered`
+`dynamic_save_state.active_action_stream[0].port`
+`dynamic_save_state.active_action_stream[0].is_global_transit`
+
+### Expected Verification:
+
+#### Report Text:
+
+> Because `is_global_transit` remains `true`, the contract is handled by the **GLOBAL TRANSIT LOOP** and continues to render under the **👤 ACTIVE PASSENGERS & BRIDGE TRANSIT** layout section instead of shifting back to a local checklist row. The progress tracking string must adjust dynamically to show that 2 units have been delivered out of the required 4.
+
+```markdown
+## 📦 THE LOGISTICS CORE (Hold Inventory & Sourcing)
+| Trade Good Name | Physical Hold | Hub Bank Stock | Active Sourcing Progress / Status | Destination Port |
+| :---                   | :---: | :---: | :---                    | :---         |
+| **🔥 Fuel**            |   3   |   0   | 🟢                     | —            |
+| **📦 Supplies**        |   3   |   0   | 🟢                     | —            |
+| **Crate of Munitions** |   2   |   0   | 4 / 4 Loaded (ACT-1001) | Port Prosper |
+
+---
+
+## 🗺️ FLIGHT PLAN & LOCAL HORIZON
+
+### 🧭 Active Trajectory:
+Port Prosper ➔ 🟢 **New Winchester**
+
+📋 **First Officer's Navigation Counsel:**
+> Plotting our return route to the central hub at New Winchester. The track is safe and fully equipped with fuel stations and supply depots along the inner ring coordinates. Our total hold space is sitting comfortably at eight slots used, leaving plenty of physical displacement room to navigate safely.
+
+### ➡️ NEXT STOP: New Winchester
+
+### 👤 ACTIVE PASSENGERS & BRIDGE TRANSIT
+
+* 🔑 **READY FOR DELIVERY:** Fortress Resupply — Deliver 2 Crates of Munitions to complete contract
+
+```
+
+---
+
+#### JSON State:
+
+```json
+{
+  "unified_inventory_registry.munitions.qty_in_hold": 2,
+  "active_action_stream[0].payload.quantity_delivered": 2,
+  "active_action_stream[0].port": "Port Prosper",
+  "active_action_stream[0].is_global_transit": true
+}
+```
