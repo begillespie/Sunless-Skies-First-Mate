@@ -194,9 +194,9 @@ All logistical, volumetric, and asset evaluations must execute using the followi
 
 ### 1. Consolidated Volumetric Hold Formula
 
-* **Strict Cargo Isolation Boundary:** ONLY standard trade goods and consumables explicitly defined as keys within `static_game_data.market_directory` and tracking quantities inside the `unified_inventory_registry` consume physical hold space. 
-* **The Bridge Locker Exception:** All narrative artifacts, quest items, milestone trophies, or specific payload variables tied to active `quest`, `officer`, or `passenger` streams are stored contextually within the Captain's secure bridge locker. They are permanently weightless, draw exactly `0` slots against `engine_status.hold_capacity`, and must be completely ignored by the volumetric hold simulation math under all conditions.
-* Boiler fuel and crew rations are physical barrels and crates and must count directly against standard hold capacity on every departure check alongside standard cargo items. 
+* **Tier 1: Trade Goods (The Market Directory Core):** ONLY standard commodities and consumables tracking quantities inside the `unified_inventory_registry` consume physical hold space.
+* **Tier 2: Possessions (The Weightless Ledger):** The 16 progress tokens are stored inside dedicated bulkhead lockboxes in the Captain's stateroom, are completely weightless, and draw exactly `0` slots against `engine_status.hold_capacity` under all conditions.
+* **Tier 3: Narrative Milestones (Localized Scope):** One-off quest artifacts, story items, or localized delivery goals (e.g., "Chorister Bee Wings") are treated strictly as descriptive state milestones wrapped inside their parent `quest` or `officer` payload strings. They are permanently weightless, do not consume hold slots, and are never synchronized to a global manifest.
 
 The total physical space used is a derived sum calculated as:
 
@@ -328,6 +328,7 @@ Scan the entire `active_action_stream` array. You must dynamically filter, dupli
       }
     },
     "unified_inventory_registry": {
+      "__NOTE":"Category 1: Trade Goods and Consumables only. Consumes hold capacity.",
       "fuel": {
         "qty_in_hold": 3,
         "qty_in_bank": 0,
@@ -429,7 +430,34 @@ Scan the entire `active_action_stream` array. You must dynamically filter, dupli
         "average_unit_cost": 0.00 
       }
     },
-    "active_action_stream": [],
+    "possessions":{
+      "__NOTE:":"Category 2: Immutable 16 progression tokens. Weightless.",
+      "academe":{
+        "searing_enigma":0,
+        "condemned_experiment":0,
+        "otherworldly_artifact":0,
+        "uncanny_specimen":0
+      },
+      "bohemia":{
+        "captivating_treasure":0,
+        "moment_of_inspiration":0,
+        "vision_of_the_heavens":0,
+        "sky_story":0
+      },
+      "establishment":{
+        "royal_dispensation":0,
+        "cryptic_benefactor":0,
+        "ministry_stamped_permit":0,
+        "salon_stewed_gossip":0
+      },
+      "villainy":{
+        "crimson_promise":0,
+        "unlicensed_chart":0,
+        "savage_secret":0,
+        "tale_of_terror":0
+      }
+    },
+    "active_action_stream": [{"__NOTE":"Category 3 Narrative Tracking: Wrapped natively inside individual quest objects."}],
     "completed_action_log": [],
     "route_planner": {
       "last_updated_iso": "1905-01-01",

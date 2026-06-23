@@ -826,8 +826,8 @@ Check that quest and narrative items do not consume physical hold space. Verify 
 
 #### JSON State Verification:
 
-`unified_inventory_registry.star_shard`
-`active_action_stream[0]`
+`possessions.villainy.tale_of_terror`
+`active_action_stream[0].items_manifest_narrative.items[0].narrative_item_name`
 
 ### Expected Verification:
 
@@ -835,31 +835,8 @@ Check that quest and narrative items do not consume physical hold space. Verify 
 
 ```json
 {
-  "unified_inventory_registry.star_shard": null,
-  "active_action_stream[0]": 
-  {
-    "id":"ACT-1099",
-    "type":"quest",
-    "port":"Port Avon",
-    "region":"The Reach",
-    "date_added_iso":"1905-01-15",
-    "deadline_date_iso":null,
-    "title":"The Last Consignment",
-    "notes":"Ferrying the recovered components.",
-    "is_hidden_transit_item":true,
-    "payload":{
-      "questline_name":"The Dawn Machine Legacy",
-      "npc_or_faction":"The Sequestered Scholar",
-      "current_step_number":1,
-      "quest_pattern":"fetch",
-      "items_manifest":[
-        {
-          "good_key":"primordial_star_shard",
-          "quantity_required":1,"quantity_delivered":0
-        }
-      ]
-    }
-  }
+  "possessions.villainy.tale_of_terror":2,
+  "active_action_stream[0].items_manifest_narrative.items[0].narrative_item_name":"Primordal Star Shard"
 }
 ```
 
@@ -1055,7 +1032,8 @@ Verify that a partial item drop-off toward a quest "shopping list" pattern prope
           "npc_or_faction": "Chief Botanist",
           "current_step_number": 1,
           "quest_pattern": "shopping_list",
-          "items_manifest": [
+          "items_manifest": 
+            "goods": [
             { "good_key": "chorister_nectar", "quantity_required": 1, "quantity_delivered": 0 },
             { "good_key": "verdant_seeds", "quantity_required": 2, "quantity_delivered": 0 }
           ]
@@ -1076,10 +1054,10 @@ Verify that a partial item drop-off toward a quest "shopping list" pattern prope
 #### JSON State Verification:
 
 `dynamic_save_state.unified_inventory_registry.chorister_nectar.qty_in_hold`
-`dynamic_save_state.active_action_stream[0].payload.items_manifest[0].good_key`
-`dynamic_save_state.active_action_stream[0].payload.items_manifest[0].quantity_delivered`
-`dynamic_save_state.active_action_stream[0].payload.items_manifest[1].good_key`
-`dynamic_save_state.active_action_stream[0].payload.items_manifest[1].quantity_delivered`
+`dynamic_save_state.active_action_stream[0].payload.items_manifest[0].goods.good_key`
+`dynamic_save_state.active_action_stream[0].payload.items_manifest[0].goods.quantity_delivered`
+`dynamic_save_state.active_action_stream[0].payload.items_manifest[1].goods.good_key`
+`dynamic_save_state.active_action_stream[0].payload.items_manifest[1].goods.quantity_delivered`
 `dynamic_save_state.active_action_stream[0].port`
 `dynamic_save_state.active_action_stream[0].is_global_transit`
 

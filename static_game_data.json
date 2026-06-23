@@ -65,13 +65,29 @@
             "type": "string",
             "__ENUM": ["fetch", "sequential", "hub_and_spoke", "shopping_list"]
           },
-          "items_manifest": [
-            {
-              "good_key": "string (ref: static_game_data.market_directory)",
-              "quantity_required": "integer",
-              "quantity_delivered": "integer"
-            }
-          ]
+          "items_manifest":{
+            "goods": [
+              {
+                "good_key": "string (ref: static_game_data.market_directory)",
+                "quantity_required": "integer",
+                "quantity_delivered": "integer"
+              }
+            ],
+            "possessions_": [
+              {
+                "possession_key": "string (ref: static_game_data.possessions_directory)",
+                "quantity_required": "integer",
+                "quantity_delivered": "integer"
+              }
+            ],
+            "narrative_items": [
+              {
+                "narrative_item_name": "string",
+                "quantity_required": "integer",
+                "quantity_delivered": "integer"
+              }
+            ]
+          }
         },
 
         "officer": {
@@ -82,7 +98,29 @@
           },
           "is_promoted": "boolean",
           "milestone_trigger_notes": "string",
-          "required_officer_item": "string | null",
+          "items_manifest":{
+            "goods": [
+              {
+                "good_key": "string (ref: static_game_data.market_directory)",
+                "quantity_required": "integer",
+                "quantity_delivered": "integer"
+              }
+            ],
+            "possessions_": [
+              {
+                "possession_key": "string (ref: static_game_data.possessions_directory)",
+                "quantity_required": "integer",
+                "quantity_delivered": "integer"
+              }
+            ],
+            "narrative_items": [
+              {
+                "narrative_item_name": "string",
+                "quantity_required": "integer",
+                "quantity_delivered": "integer"
+              }
+            ]
+          },
           "secondment_profile": {
             "on_secondment": "boolean",
             "station_name": "string | null",
@@ -117,7 +155,29 @@
           "current_tier": "integer",
           "milestone_description": "string",
           "sovereigns_required_for_next_tier": "integer",
-          "items_required_for_next_tier": "array_of_objects (keys: item_key, quantity) | null"
+          "items_manifest":{
+            "goods": [
+              {
+                "good_key": "string (ref: static_game_data.market_directory)",
+                "quantity_required": "integer",
+                "quantity_delivered": "integer"
+              }
+            ],
+            "possessions_": [
+              {
+                "possession_key": "string (ref: static_game_data.possessions_directory)",
+                "quantity_required": "integer",
+                "quantity_delivered": "integer"
+              }
+            ],
+            "narrative_items": [
+              {
+                "narrative_item_name": "string",
+                "quantity_required": "integer",
+                "quantity_delivered": "integer"
+              }
+            ]
+          }
         },
 
         "todo": {
@@ -234,6 +294,33 @@
           "display_name": "Starshine",
           "base_price": 180
         }
+      }
+    },
+    "possessions_directory":{
+      "__NOTE:":"Category 2: Immutable 16 progression tokens. Weightless.",
+      "academe":{
+        "searing_enigma":{ "display_name":"Searing Enigma"},
+        "condemned_experiment":{ "display_name":"Condemned Experiment"},
+        "otherworldly_artifact":{ "display_name":"Otherworldly Artifact"},
+        "uncanny_specimen":{ "display_name":"Uncanny Specimen"}
+      },
+      "bohemia":{
+        "captivating_treasure":{ "display_name":"Captivating Treasure"},
+        "moment_of_inspiration":{ "display_name":"Moment of Inspiration"},
+        "vision_of_the_heavens":{ "display_name":"Vision of the Heavens"},
+        "sky_story":{ "display_name":"Sky Story"}
+      },
+      "establishment":{
+        "royal_dispensation":{ "display_name":"Royal Dispensation"},
+        "cryptic_benefactor":{ "display_name":"Cryptic Benefactor"},
+        "ministry_stamped_permit":{ "display_name":"Ministry Stamped Permit"},
+        "salon_stewed_gossip":{ "display_name":"Salon Stewed Gossip"}
+      },
+      "villainy":{
+        "crimson_promise":{ "display_name":"Crimson Promise"},
+        "unlicensed_chart":{ "display_name":"Unlicensed Chart"},
+        "savage_secret":{ "display_name":"Savage Secret"},
+        "tale_of_terror":{ "display_name":"Tale of Terror"}
       }
     },
     "port_directory": {
