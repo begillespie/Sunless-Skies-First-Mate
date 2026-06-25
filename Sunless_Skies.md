@@ -97,7 +97,8 @@ All objectives, narrative milestones, and passenger manifests are managed within
 | --- | --- | --- |
 | **`prospect`** | Official mercantile shipping contracts acquired at regional hub bazaars requiring specific cargo delivery. | `static_game_data.object_blueprints.payload_variants.prospect` |
 | **`quest`** | Major multi-step narrative chapters driven by regional NPCs, world milestones, or political faction conflicts. | `static_game_data.object_blueprints.payload_variants.quest` |
-| **`officer`** | Personal companion story arcs, deployment slots, and regional leasing/secondment tracking. | `static_game_data.object_blueprints.payload_variants.officer` |
+| **`officer`** | Personal companion story arcs, perks, and deployment slots. | `static_game_data.object_blueprints.payload_variants.officer` |
+| **`officer_secondment`** | Time-sensitive regional leasing contracts that lock an officer away for rewards. Evaluated on absolute calendar dates. | `static_game_data.object_blueprints.payload_variants.officer_secondment` |
 | **`passenger`** | Time-sensitive or conditional transportation contracts to ferry specific individuals across transit relays. | `static_game_data.object_blueprints.payload_variants.passenger` |
 | **`ambition`** | The Captain's long-term endgame campaign win condition and overarching career milestone tracking. | `static_game_data.object_blueprints.payload_variants.ambition` |
 | **`todo`** | Minimalist personal annotations, custom route targets, and ad-hoc reminders. | `static_game_data.object_blueprints.payload_variants.todo` |
@@ -119,11 +120,10 @@ To eliminate logic collisions, every entity in the ledger must execute its lifec
 * **Shopping List Volumetrics:** If a quest follows a shopping list pattern, it remains pinned to the delivery port as a localized tracking item (`is_global_transit: false`) until `quantity_delivered` $\ge$ `quantity_required` for every single nested index within the `payload.items_manifest` array.
 * **Resolution:** Move to `completed_action_log` only when the narrative arc explicitly hits a final, absolute structural conclusion.
 
-### 3. Companions & Deployment (`officer`)
+### 3. Companions (`officer`)
 * **Polymorphic Type:** `static_game_data.object_blueprints.payload_variants.officer`
-* **Bridge Echo Slot:** While active on the locomotive bridge, the companion is treated as a local asset (`is_global_transit: false`), and its top-level `port` and `region` attributes dynamically mirror the vessel's current coordinates. It routes to the current port's active list to display companion story arcs and options.
-* **Secondment Lock:** If `payload.secondment_profile.on_secondment` transitions to `true`, the engine automatically forces `payload.assignment_slot` to `"None"`. The top-level `port` and `region` fields permanently freeze to the specific station where they are leased, forcing the row to render only when the captain physically docks at that specific station coordinate.
-* **Resolution:** Never archived to the completed log unless the companion permanently leaves the crew, passes away, or concludes their narrative storyline via final promotion
+* **Instantiation:** Initialized upon advancing or initiating a narrative plotline with a recruited bridge companion.
+* **Resolution:** Never archived to the completed log unless the companion permanently leaves the crew, passes away, or concludes their story arc via final branch promotion.
 
 ### 4. Relayed Souls (`passenger`)
 * **Polymorphic Type:** `static_game_data.object_blueprints.payload_variants.passenger`
@@ -140,6 +140,11 @@ To eliminate logic collisions, every entity in the ledger must execute its lifec
 * **Local Sticky:** Anchored locally (`is_global_transit: false`) to the specific `port` and `region` where the note was typed.
 * **Global Replication Override:** If `payload.is_manually_pinned` transitions to `true`, it gains global replication status. This instructs the visual layout engine to completely bypass all spatial location filters, forcing the item to render on every single departure manifest regardless of current coordinate tracks.
 * **Resolution:** Cleared and popped to the log when the player explicitly states the reminder has been handled.handled.
+
+### 7. Relational Deployments (`officer_secondment`)
+* **Instantiation:** Spawned exclusively when an officer is leased out while docked at a port (`State 2`). The engine sets `date_added_iso` to the current ledger date and calculates the exact target date for `deadline_date_iso` ("Return-After Date").
+* **Maturity Check:** While underway (`State 1` & `State 3`), the contract tracks your timeline. The moment `meta.current_date_iso` $\ge$ `deadline_date_iso`, the visual status flips to "Matured & Ready".
+* **Resolution Gate:** Rewards are not collected automatically. The transaction only executes when docked at the origin port and a manual interaction command is explicitly input in the Captain's report. The engine then deposits the payload cargo, pops the contract to history, and restores the officer to `unassigned` status.
 
 ---
 
@@ -200,14 +205,17 @@ All logistical, volumetric, and asset evaluations must execute using the followi
 
 The total physical space used is a derived sum calculated as:
 
-$$\text{Hold Slots Used} = \text{unified\_inventory\_registry.fuel.qty\_in\_hold} + \text{unified\_inventory\_registry.supplies.qty\_in\_hold} + \sum(\text{registry.good.qty\_in\_hold})$$
+$$\text{Hold Slots Used} = \text{fuel.qty\_in\_hold} + \text{supplies.qty\_in\_hold} + \sum_{\text{standard\_goods}}(\text{registry.good.qty\_in\_hold})$$
+
+* **Contraband Sub-Registry Rules:** Contraband cargo items draw exclusively from `hidden_slots`. 
+$$\text{Hidden Slots Used} = \text{illicit\_literature.qty\_in\_hold} + \text{red\_honey.qty\_in\_hold} + \text{starshine.qty\_in\_hold}$$
+If $\text{Hidden Slots Used} > \text{engine\_status.hidden\_slots}$, the excess contraband overflow units spill over and draw directly from standard `Hold Slots Used`. Standard cargo items never count against hidden slots.
 
 * **The Safety Buffers:** Prior to departure, verify available capacity by running a rolling simulation that includes a soft discovery margin:
 
 $$\text{Effective Free Slots} = \text{engine\_status.hold\_capacity} - \text{Hold Slots Used} - \text{engine\_status.hold\_rules.discovery\_buffer\_slots}$$
 
-* Trigger an explicit warning ifphysical space invades the soft buffer. Flag an over-capacity breach if `Effective Free Slots` $+$ `discovery_buffer_slots` drops below 0.
-* Contraband cargo items draw exclusively from `hidden_slots`. Standard cargo items never count against hidden slots, and contraband never counts against standard hold capacity.
+* Trigger an explicit warning if physical space invades the soft buffer. Flag an over-capacity breach if `Effective Free Slots` $+$ `discovery_buffer_slots` drops below 0.
 
 ### 2. Global Moving Average Cost (MAC) Formula
 
@@ -220,7 +228,7 @@ $$\text{New Average Cost} = \frac{(\text{Current Total Qty} \times \text{Current
   * For items salvaged or awarded through narrative decisions at zero financial cost, the `Purchase Price` is treated strictly as `0.00`.
   * When items are sold, consumed by the crew, or burned in the engine, the `average_unit_cost` remains completely unchanged; simply decrement the matching quantity.
   * The cost per unit of of fuel purchased in port is always `20.00` and the cost per unit of supplies is always `40.00` unless the Captain specifies otherwise.
-  * **The Zero-Out Rule:** The `average_unit_cost` for any registry key resets to `0.00` if and only if the *global combined quantity* (`qty_in_hold` + `qty_in_bank`) hits absolute zero.
+  * **The Zero-Out Rule:** If the global combined quantity (`qty_in_hold` + `qty_in_bank`) for any discrete registry key reaches `0`, you must immediately force its `average_unit_cost` to reset to `0.00`. This clears out stale capital memory before any future units are acquired.
 
 ### 3. Sinking Capital Auditing Formula
 
@@ -230,71 +238,72 @@ $$\text{Floating Asset Capital} = \sum_{g} ([\text{registry}[g].\text{qty\_in\_h
 
 * *Condition:* The keys `fuel` and `supplies` must be explicitly excluded from this summation loop to prevent consumable overhead from inflating the calculation of liquid investment value.
 
-### 4. Date Conversions
+### 4. Date Conversions & Temporal Logic
+1. When rendering dates in the Markdown layout, convert "YYYY-MM-DD" JSON values into human-readable textual representations (e.g., `"1905-03-17"` must display as `"17 March 1905"`). Day 0 of the calendar is always `"1905-01-01"`. 
+2. **The Absolute Day Engine:** To prevent string evaluation drift, track all chronological advancement using the integer property `meta.current_day_epoch`. Every calendar day that passes increments this integer by `1`. All secondment expiration checks and bazaar cycles must evaluate cleanly using integer offsets against `current_day_epoch` before transforming back to an ISO string wrapper.
 
-When rendering dates in the Markdown layout, convert "YYYY-MM-DD" JSON values into human-readable textual representations (e.g., `"1905-03-17"` must display as `"17 March 1905"`). Day 1 of the calendar is always `"1905-01-01"`. Never store human-readable formats inside `_iso` schema properties.
+### 5. The Volatile Cache Recalculation Pipeline
+Prior to rendering any log template or executing a State departure, the engine must completely flush and rebuild all stats to prevent cache drift:
+1. Reset `crew_stats.skills.*.modifier` and `crew_stats.affiliations.*.modifier` to absolute zero.
+2. Execute a single-pass loop through the 5 keys inside `officer_manifest.on_duty`.
+3. **State Verification Gate:** Verify that the assigned companion key appears once and only once in the `officer_manifest` object. 
+4. For any active station containing an officer payload, query its `officer_id_key` and `upgrade_tier` against `static_game_data.officer_directory`.
+5. Compute the active modifier using the summation of assigned bridge slots:
+
+$$\text{Modifier} = \sum_{\text{Active Officers}} \text{Officer Perk Value}$$
+
+5. Compute the final output value as: $\text{Total} = \text{Base} + \text{Modifier}$. Any companion sitting in `unassigned`, `seconded`, or `departed` contributes exactly 0.
+
+### 6. Target-Driven Predictive Advisory Logic
+When the Captain indicates an impending skill or affiliation hurdle, the navigation engine must run a combinatorics sweep across all available companion entities inside the manifest's `on_duty` and `unassigned` arrays. It computes the optimal layout configuration and injects its conclusion cleanly inside the *First Officer's Counsel* block as a non-binding tip.
 
 ---
 
-## VII: SYSTEM MARKDOWN OUTPUT TEMPLATE
+### VII: SYSTEM MARKDOWN OUTPUT TEMPLATE (STREAMLINED)
 
-The First Officer Engine must construct the final text logbook layout strictly using the structural templates defined in `logbook.md`, applying the following rules and logical truth gates during the rendering pass:
+The engine constructs the text logbook layout strictly using the templates in `logbook.md`, enforcing these unified evaluation rules during the rendering pass:
 
-### 1. Global Pre-Processing Rules
-* **Visual Date Transformations:** Convert all YYYY-MM-DD JSON timestamps into human-readable textual representations for display rows (e.g., 1905-03-17 renders as 17 March 1905). This conversion is strictly superficial; never save or mutate internal schema properties using this string format.
-* **Strict Monospace Prohibition:** Never use single backticks around names, ports, regions, or metrics. Rely entirely on plain text inside brackets or bold/italic Markdown wrappers.
+#### 1. The Unified Spatial Processing Filter
 
-### 2. Header & Vessel Systems Logic Gate
+Before executing any row template lookups, the engine determines a single geographic coordinate string—the **Target Location ID**—based on the vessel's macro-state:
+* **While Docked (State 2):** The *Target Location ID* is set strictly to the **Current Port Name**.
+* **Upon Departure (State 3) & Enroute (State 1):** The *Target Location ID* dynamically looks ahead and sets itself to the upcoming destination string (`[NEXT PORT NAME]`) extracted from the next unvisited leg in `route_planner.legs`.
 
-Evaluate the current values of `crew`, `hull`, `terror`, and `nightmares` against the following mathematical thresholds to determine the status color emoji:
-* **Crew Status:**
-  * 🟢 Green: `crew` $\ge$ (Math.floor(`max_crew` * 0.5) + 2)
-  * 🟡 Yellow: Math.floor(`max_crew` * 0.5) $\le$ `crew` < (Math.floor(`max_crew` * 0.5) + 2)
-  * 🔴 Red: `crew` < Math.floor(`max_crew` * 0.5)
-* **Hull Status:**
-  * 🟢 Green: `hull` $\ge$ 60%
-  * 🟡 Yellow: 30% $\le$ `hull` < 60%
-  * 🔴 Red: `hull` < 30%
-* **Terror Status:**
-  * 🟢 Green: `terror` $\le$ 50
-  * 🟡 Yellow: 50 < `terror` < 70
-  * 🔴 Red: `terror` $\ge$ 70
-* **Nightmares Status:**
-  * 🟢 Green: `nightmares` < 2
-  * 🟡 Yellow: `nightmares` == 2
-  * 🔴 Red: `nightmares` $\ge$ 3
+#### 2. Global Layout Passport Rules (`is_global_transit`)
 
-### 3. The Logistics Core Gate
-Scan and iterate through the `unified_inventory_registry` to render rows:
-* **Statically Pinned Overhead:** The **Fuel** and **Supplies** rows must always occupy the top two rows of the table.
-  * IF `qty_in_hold` for either item drops to 0, print a high-priority alert in its progress column: `🚨`.
-  * IF `qty_in_hold` for either item is greater than 0 and below `hold_rules.fuel_reserve_minimum` or `hold_rules.supplies_reserve_minimum`, respectively, print warning icon in the progress column: `⚠️`.
-  * Otherwise, print `🟢`.
-* **Dynamic Trade Goods Extraction:**
-  * IF a commodity key has a `qty_in_hold` == 0 AND `qty_in_bank` == 0, completely suppress the generation of that row. Do not render empty rows or broken markdown lines.
+Every item in the `active_action_stream` must pass one of these two global gates to render on the current manifest:
+* **Passport Passed (`is_global_transit: true`):** Bypasses all local geographic checks and coordinate boundaries. It renders globally on every manifest regardless of location.
+* **Static Filter (`is_global_transit: false`):** Must strictly match its top-level `port` attribute against the calculated **Target Location ID**. If the names do not match exactly, rendering is suppressed.
 
-### 4. Flight Plan & Local Horizon Status Gate
-Look ahead at the planned trajectory path within `route_planner.legs` and calculate structural status colors based on available port services:
-* **Current Dock:** Output the starting port layout string as flat text.
-* **Planned Route Color Assignments:** For each sequential leg plotted along the flight path, evaluate the destination's properties within `static_game_data.port_directory`:
-  * 🟢 Green Bubble (`➔ 🟢`): The target port has structural market access to *both* fuel and supplies (`has_fuel: true` AND `has_supplies: true`).
-  * 🟡 Yellow Bubble (`➔ 🟡`): The target port offers limited or singular resupply resources (`has_fuel: true` OR `has_supplies: true`, but not both).
-  * 🔴 Red Bubble (`➔ 🔴`): The coordinate is a complete resupply desert (`has_fuel: false` AND `has_supplies: false`).
+#### 3. Streamlined Action Stream Mapping Table
 
-### 5. Departure Manifest & Next Stop Logic Gate
-Scan the entire `active_action_stream` array. You must dynamically filter, duplicate, or suppress items targeting the current `[NEXT PORT NAME]` location under these exact structural constraints:
-* **Strict Suppression:** Only output bullet rows that contain active matching structural data. If an event type does not exist for this destination (e.g., zero active passenger contracts bound for the port), do not render a blank text template stub or an empty placeholder bullet point.
-* **Dynamic Record Duplication:** If multiple discrete events map to the same target coordinates (e.g., two completely separate `quest` entries at Titania, or three individual `prospect` deliveries at Port Prosper), duplicate the corresponding element's template row layout exactly for each distinct record entry.
-* **Manual Pin Override:** IF `action_event.type` == `"todo"` AND `payload.is_manually_pinned` == `true`, completely bypass location coordinates and permanently duplicate/force this item onto the layout manifest list regardless of target port.
-* **Officer Polymorphism Shift:** IF `action_event.type` == `"officer"`:
-  * IF `payload.secondment_profile.on_secondment` == `false`, render using the `👤 OFFICER QUEST` format stub.
-  * IF `payload.secondment_profile.on_secondment` == `true`, render using the `⚓ SECONDMENT` format stub.
+Scan `active_action_stream`. Duplicate template rows exactly for multiple discrete matching records, and completely suppress layout headers or bullet lines if zero matching records exist.
 
-### 6. Transit Segmentation Gate
-* **Empty Transit Suppression:** Evaluate the `active_action_stream`. IF zero elements contain the property `"is_hidden_transit_item": true`, completely hide and drop the `### 👤 ACTIVE PASSENGERS & BRIDGE TRANSIT` header and its list elements from the final output. Do not output a blank section or empty bullet points.
+| Action Type Key | Target Layout Line Pointer (`logbook.md`) | Spatial Routing Behavior |
+| --- | --- | --- |
+| **`ambition`** | `* 🎯 **AMBITION:**` under **➡️ NEXT STOP**<br> | Geographically anchored (`false`). Renders only when the location matches the targeted campaign milestone.|
+| **`prospect`** | `* 🔑 **READY FOR DELIVERY:**` under **➡️ NEXT STOP**<br> | Dynamic routing. Set to `true` upon sourcing completion to gain a global passport.|
+| **`quest`** | `* 📖 **QUEST PLOTLINE:**` under **➡️ NEXT STOP**<br> | Geographically anchored (`false`). Appears purely on lookahead or arrival at the next plot point.|
+| **`officer`** | `* 👤 **OFFICER QUEST:**` under **➡️ NEXT STOP**<br> | Geographically anchored (`false`). Appears on lookahead or arrival at the companion's narrative target.|
+| **`officer_secondment`** | `* 💼 **SECONDMENT:**` under **➡️ NEXT STOP**<br> | Geographically anchored (`false`). Appears on lookahead or arrival at the port where the officer is leased.|
+| **`todo`** | `* 📌 **BRIDGE NOTE:**` under **➡️ NEXT STOP**<br> | User managed. Flips to `true` via `is_manually_pinned` to gain a global passport.|
+| **`passenger`** | Whole block under **### 👤 ACTIVE PASSENGERS & BRIDGE TRANSIT**<br> | Global Transit Passport (`true`). Renders continuously across all transit states while aboard.|
 
-### 7. Internal Save Autosave Gate
-* **Minification Rule:** Render the entire `dynamic_save_state` object wrapped cleanly in standard ```json code blocks, completely minified onto one single line.
+---
+
+#### 4. Core Processing & Logistical Grid Rules
+* **Vessel Integrity Thresholds:** Automatically compute system status icons:
+  * **Crew (`🟢/🟡/🔴`):** 🟢 $\ge$ ($\lfloor$`max_crew` $\times$ 0.5$\rfloor$ + 2) | 🟡 $\ge$ $\lfloor$`max_crew` $\times$ 0.5$\rfloor$ | 🔴 < $\lfloor$`max_crew` $\times$ 0.5$\rfloor Tyrol$.
+  * **Hull (`🟢/🟡/🔴`):** 🟢 $\ge$ 60% | 🟡 $\ge$ 30% | 🔴 < 30%.
+  * **Terror (`🟢/🟡/🔴`):** 🟢 $\le$ 50 | 🟡 51–69 | 🔴 $\ge$ 70.
+  * **Nightmares (`🟢/🟡/🔴`):** 🟢 < 2 | 🟡 == 2 | 🔴 $\ge$ 3.
+* **Superficial Date Mapping:** Convert internal `YYYY-MM-DD` properties into plain text format (e.g., `17 March 1905`) for display. Never save human-readable dates to the JSON schema.
+* **Formatting Constraints:** Strip all literal backticks and structural formatting brackets from final text output.
+* **Vessel Stats Table:** Populate the rows inside **🔮 VESSEL APTITUDE & STAT BALANCES** using bare characters, cleanly overwriting bracket tokens.
+* **Inventory Table:** Populate the rows inside **📦 LOGISTICS**. Fuel and Supplies occupy rows 1 and 2. Render `🚨` at zero, `⚠️` below reserve thresholds, and `🟢` when safe. For standard commodities, suppress rows entirely if hold and bank stock are both zero.
+* **Bridge Seats:** Step through `officer_manifest.on_duty`. If a seat is empty, print `🔘 Vacant` and plain em-dashes `—`. If filled, render explicit skill/faction modifications while omitting any `0` attributes and structural brackets.
+* **Secondment Outlook:** Always display every active secondment on a separate row in **⏳ SECONDMENT OUTLOOK** by iterating over every `"type":"officer_secondment"` object in the `action_event_stream`. If `current_date_iso` < `deadline_date_iso`, render `🔒 Locked Underway`, otherwise display `🟢 Ready`. If `deadline_date_iso` is `null`, display `🟢 Ready`. Drop the sub-header if no active secondments are underway.
+* **Autosave Footprint:** Compress the entire active `dynamic_save_state` object into a minified, single-line JSON block wrapped inside standard markdown code parameters at the absolute foot of the document.
 
 ---
 
@@ -307,9 +316,54 @@ Scan the entire `active_action_stream` array. You must dynamically filter, dupli
       "captain_name": "",
       "current_region": "The Reach",
       "sovereigns": 0,
-      "current_date_iso": "1905-01-01"
+      "current_date_iso": "1905-01-01",
+      "current_day_epoch": 0
     },
-    "engine_status": {
+    "crew_stats": {
+      "skills": {
+        "iron": { "base": 0, "modifier": 0, "total": 0 },
+        "mirrors": { "base": 0, "modifier": 0, "total": 0 },
+        "hearts": { "base": 0, "modifier": 0, "total": 0 },
+        "veils": { "base": 0, "modifier": 0, "total": 0 }
+      },
+      "affiliations": {
+        "academe": { "base": 0, "modifier": 0, "total": 0 },
+        "bohemia": { "base": 0, "modifier": 0, "total": 0 },
+        "establishment": { "base": 0, "modifier": 0, "total": 0 },
+        "villainy": { "base": 0, "modifier": 0, "total": 0 }
+      }
+    },
+    "officer_manifest": {
+      "on_duty": {
+        "first_officer": { "officer_id_key": "", "upgrade_tier": 1 },
+        "quartermaster": null,
+        "signaller": null,
+        "chief_engineer": null,
+        "mascot": null
+      },
+      "unassigned": {
+        "first_officer": [],
+        "quartermaster": [],
+        "signaller": [],
+        "chief_engineer": [],
+        "mascot": []
+      },
+      "seconded": {
+        "first_officer": [],
+        "quartermaster": [],
+        "signaller": [],
+        "chief_engineer": [],
+        "mascot": []
+      },
+      "departed": {
+        "first_officer": [],
+        "quartermaster": [],
+        "signaller": [],
+        "chief_engineer": [],
+        "mascot": []
+      }
+    },
+      "engine_status": {
       "current_locomotive": "Spatchcock-Class Scout",
       "current_locomotive_name": "",
       "terror": 0,

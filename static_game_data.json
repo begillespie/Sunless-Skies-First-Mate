@@ -29,7 +29,7 @@
         "id": "string (pattern: ACT-XXXX)",
         "type": {
           "type": "string",
-          "__ENUM": ["prospect", "quest", "officer", "passenger", "ambition", "todo"]
+          "__ENUM": ["prospect", "quest", "officer", "officer_secondment", "passenger", "ambition", "todo"]
         },
         "port": "string",
         "region": {
@@ -58,7 +58,6 @@
         },
 
         "quest": {
-          "questline_name": "string",
           "npc_or_faction": "string",
           "current_step_number": "integer",
           "quest_pattern": {
@@ -91,13 +90,8 @@
         },
 
         "officer": {
-          "officer_name": "string",
-          "assignment_slot": {
-            "type": "string",
-            "__ENUM": ["First Officer", "Chief Engineer", "Signaller", "Quartermaster", "Mascot", "None"]
-          },
-          "is_promoted": "boolean",
-          "milestone_trigger_notes": "string",
+          "officer_id_key": "string",
+          "current_step_number": "integer",
           "items_manifest":{
             "goods": [
               {
@@ -120,26 +114,17 @@
                 "quantity_delivered": "integer"
               }
             ]
-          },
-          "secondment_profile": {
-            "on_secondment": "boolean",
-            "station_name": "string | null",
-            "region": {
-              "type": "string | null",
-              "__ENUM": ["The Reach", "Albion", "Eleutheria", "The Blue Kingdom", null]
-            },
-            "contribution_effect": "string | null",
-            "return_condition": "string | null"
           }
         },
 
+        "officer_secondment": {
+          "officer_id_key": "string",
+          "contribution_effect": "string | null",
+          "return_condition": "string | null"
+        },
+
         "passenger": {
-          "passenger_count": "integer",
-          "destination_port": "string",
-          "destination_region": {
-            "type": "string",
-            "__ENUM": ["The Reach", "Albion", "Eleutheria", "The Blue Kingdom"]
-          },
+          "passenger_name": "string",
           "complication_type": {
             "type": "string",
             "__ENUM": ["none", "terror_modifier", "crew_hazard", "contraband_risk"]
@@ -181,7 +166,6 @@
         },
 
         "todo": {
-          "user_notes": "string",
           "priority": {
             "type": "string",
             "__ENUM": ["low", "normal", "high"]
@@ -193,6 +177,402 @@
         }
       }
     },
+
+    "officer_directory": {
+      "first_officer": { 
+        "conductor": {
+          "recruited": ["London", "The Brabazon Workworld"],
+          "tiers": {
+            "1": {
+              "lexical_name": "Clay Conductor",
+              "perks": {
+                "skills": { "iron": 2, "mirrors": 0, "hearts": 6, "veils": 0 },
+                "affiliations": { "academe": 1, "bohemia": 0, "establishment": 0, "villainy": 0 }
+              }
+            },
+            "2_a": {
+              "lexical_name": "Caring Conductor",
+              "perks": {
+                "skills": { "iron": 0, "mirrors": 0, "hearts": 10, "veils": 0 },
+                "affiliations": { "academe": 2, "bohemia": 0, "establishment": 0, "villainy": 0 }
+              }
+            },            
+            "2_b": {
+              "lexical_name": "Clay Conductor and Copper Companion",
+              "perks": {
+                "skills":  {"iron": 0, "mirrors": 10, "hearts": 0, "veils": 0 },
+                "affiliations": { "academe": 2, "bohemia": 0, "establishment": 0, "villainy": 0 }
+              }
+            }
+          }
+        },
+        "princess": {
+          "recruited": ["Port Prosper", "New Winchester"],
+          "tiers": {
+            "1": {
+              "lexical_name": "Incognito Princess",
+              "perks": {
+                "skills": { "iron": 0, "mirrors": 6, "hearts": 2, "veils": 0 },
+                "affiliations": { "academe": 0, "bohemia": 1, "establishment": 0, "villainy": 0 }
+              }
+            },
+            "2": {
+              "lexical_name": "The Shed Skin of the Incognito Princess",
+              "perks": {
+                "skills": {"iron": 0, "mirrors": 0, "hearts": 0, "veils": 0 },
+                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy": 0 }
+              }
+            },            
+            "3_a": {
+              "lexical_name": "Analytical Princess",
+              "perks": {
+                "skills": { "iron": 0, "mirrors": 10, "hearts": 0, "veils": 0 },
+                "affiliations": { "academe": 2, "bohemia": 0, "establishment": 0, "villainy": 0 }
+              }
+            },            
+            "3_b": {
+              "lexical_name": "Political Princess",
+              "perks": {
+                "skills": { "iron": 0, "mirrors": 10, "hearts": 0, "veils": 0 },
+                "affiliations": { "academe": 0, "bohemia": 2, "establishment": 0, "villainy": 0 }
+              }
+            }
+          }
+        },
+        "navigator": {
+          "recruited": ["Lustrum"],
+          "tiers": {
+            "1": {
+              "lexical_name": "Fortunate Navigator",
+              "perks": {
+                "skills": { "iron": 6, "mirrors": 0, "hearts": 0, "veils": 2 },
+                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 1, "villainy": 0 }
+              }
+            },
+            "2": {
+              "lexical_name": "Stalwart Navigator",
+              "perks": {
+                "skills": { "iron": 10, "mirrors": 0, "hearts": 0, "veils": 0 },
+                "affiliations": { "academe": 0, "bohemia": 1, "establishment": 1, "villainy": 0 }
+              }
+            }
+          }
+        },
+        "old_friend": {
+          "recruited": ["New Winchester"],
+          "tiers": {
+            "1": {
+              "lexical_name": "Old Friend",
+              "perks": {
+                "skills": { "iron": 2, "mirrors": 2, "hearts": 2, "veils": 2 },
+                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy": 0 }
+              }
+            }
+          }
+        },
+        "portrait_queen": {
+          "recruited": ["London"],
+          "tiers": {
+            "1_a": {
+              "lexical_name": "The Portrait of the Unseen Queen",
+              "perks": {
+                "skills": { "iron": 0, "mirrors": 0, "hearts": 3, "veils": 2 },
+                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy": 0 }
+              }
+            },
+            "1_b": {
+              "lexical_name": "The Unseen Queen, depicted with the Martyr-King's Cup",
+              "perks": {
+                "skills": { "iron": 0, "mirrors": 0, "hearts": 3, "veils": 2 },
+                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy": 0 }
+              }
+            }
+          }
+        }
+      },
+      
+      "quartermaster": {
+        "aunt": {
+          "recruited": ["London", "Perdurance"],
+          "tiers": {
+            "1": {
+              "lexical_name": "Inconvenient Aunt",
+              "perks": {
+                "skills": { "iron": 6, "mirrors": 2, "hearts": 0, "veils": 0 },
+                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 1, "villainy": 0 }
+              }
+            },
+            "2_a": {
+              "lexical_name": "Your Spymaster Aunt",
+              "perks": {
+                "skills": { "iron": 10, "mirrors": 0, "hearts": 0, "veils": 0 },
+                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 2, "villainy": 0 }
+              }
+            },            
+            "2_b": {
+              "lexical_name": "Your Revolutionary Aunt",
+              "perks": {
+                "skills": { "iron": 0, "mirrors": 0, "hearts": 0, "veils": 10 },
+                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy": 2 }
+              }
+            }
+          }
+        },
+        "hoarder": {
+          "recruited": ["London"],
+          "tiers": {
+            "1": {
+              "lexical_name": "Chiropterous Hoarder",
+              "perks": {
+                "skills": { "iron": 0, "mirrors": 2, "hearts": 0, "veils": 6 },
+                "affiliations": { "academe": 0, "bohemia": 1, "establishment": 0, "villainy": 0 }
+              }
+            },
+            "2_a": {
+              "lexical_name": "Multiplicitous Hoarder",
+              "perks": {
+                "skills": { "iron": 10, "mirrors": 0, "hearts": 0, "veils": 0 },
+                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 2, "villainy": 0 }
+              }
+            },            
+            "2_b": {
+              "lexical_name": "Immutable Hoarder",
+              "perks": {
+                "skills": { "iron": 0, "mirrors": 0, "hearts": 0, "veils": 10 },
+                "affiliations": { "academe": 0, "bohemia": 2, "establishment": 0, "villainy": 0 }
+              }
+            }
+          }
+        },
+        "forged_companion": {
+          "recruited": ["The Forge of Souls"],
+          "tiers": {
+            "1_a": {
+              "lexical_name": "Illusive Forged Companion",
+              "perks": {
+                "skills": { "iron": 0, "mirrors": 0, "hearts": 0, "veils": 10 },
+                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy": 0 }
+              }
+            },
+            "1_b": {
+              "lexical_name": "Poetic Forged Companion",
+              "perks": {
+                "skills": { "iron": 0, "mirrors": 0, "hearts": 10, "veils": 0 },
+                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy": 0 }
+              }
+            },            
+            "1_c": {
+              "lexical_name": "Pugilistic Forged Companion",
+              "perks": {
+                "skills": { "iron": 10, "mirrors": 0, "hearts": 0, "veils": 0 },
+                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy": 0 }
+              }
+            },
+            "1_d": {
+              "lexical_name": "Studious Forged Companion",
+              "perks": {
+                "skills": { "iron": 0, "mirrors": 10, "hearts": 0, "veils": 0 },
+                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy": 0 }
+              }
+            }
+          }
+        }
+      },
+
+      "signaller": {
+        "signalman": {
+          "recruited": ["An Abandoned Signal Box"],
+          "tiers": {
+            "1": {
+              "lexical_name": "Fatalistic Signalman",
+              "perks": {
+                "skills": { "iron": 0, "mirrors": 6, "hearts": 0, "veils": 2 },
+                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy":  1}
+              }
+            },
+            "2": {
+              "lexical_name": "Signs and Signals of the High Wilderness: An Omnibus",
+              "perks": {
+                "skills": { "iron": 0, "mirrors": 10, "hearts": 0, "veils": 0 },
+                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy": 2 }
+              }
+            }
+          }
+        },
+        "devil": {
+          "recruited": ["Port Avon"],
+          "tiers": {
+            "1": {
+              "lexical_name": "Repentant Devil",
+              "perks": {
+                "skills": { "iron": 2, "mirrors": 0, "hearts": 0, "veils": 6 },
+                "affiliations": { "academe": 1, "bohemia": 0, "establishment": 0, "villainy": 0 }
+              }
+            },
+            "2": {
+              "lexical_name": "Defiant Devil",
+              "perks": {
+                "skills": { "iron": 0, "mirrors": 0, "hearts": 0, "veils": 10 },
+                "affiliations": { "academe": 2, "bohemia": 0, "establishment": 0, "villainy": 0 }
+              }
+            }
+          }
+        },
+        "vagabond": {
+          "recruited": ["Polmear & Plenty's Inconceviable Circus"],
+          "tiers": {
+            "1": {
+              "lexical_name": "Amiable Vagabond",
+              "perks": {
+                "skills": { "iron": 0, "mirrors": 0, "hearts": 4, "veils": 4 },
+                "affiliations": {"academe": 0, "bohemia": 1, "establishment": 0, "villainy": 0 }
+              }
+            },
+            "2_a": {
+              "lexical_name": "Dendrified Vagabond",
+              "perks": {
+                "skills": { "iron": 0, "mirrors": 0, "hearts": 10, "veils": 0 },
+                "affiliations": { "academe": 0, "bohemia": 2, "establishment": 0, "villainy": 0 }
+              }
+            },            
+            "2_b": {
+              "lexical_name": "Incorrigible Vagabond",
+              "perks": {
+                "skills": { "iron": 0, "mirrors": 0, "hearts": 0, "veils": 10 },
+                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy": 2 }
+              }
+            }
+          }
+        }
+      },
+
+      "chief_engineer": {
+        "driver": {
+          "recruited": ["New Winchester", "Traitor's Wood"],
+          "tiers": {
+            "1": {
+              "lexical_name": "Incautious Driver",
+              "perks": {
+                "skills": { "iron": 6, "mirrors": 0, "hearts": 2, "veils": 0 },
+                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 1, "villainy": 0 }
+              }
+            },
+            "2_a": {
+              "lexical_name": "Judicious Driver",
+              "perks": {
+                "skills": { "iron": 10, "mirrors": 0, "hearts": 0, "veils": 0 },
+                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 2, "villainy": 0 }
+              }
+            },            
+            "2_b": {
+              "lexical_name": "Reckless Driver",
+              "perks": {
+                "skills": { "iron": 10, "mirrors": 0, "hearts": 0, "veils": 0 },
+                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 2, "villainy": 0 }
+              }
+            }
+          }
+        },
+        "rat": {
+          "recruited": ["Port Avon", "Lustrum", "Titania"],
+          "tiers": {
+            "1": {
+              "lexical_name": "The Rat Brigade",
+              "perks": {
+                "skills": { "iron": 2, "mirrors": 0, "hearts": 0, "veils": 6 },
+                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy": 1 }
+              }
+            },
+            "2_a": {
+              "lexical_name": "The Ratty Revengers",
+              "perks": {
+                "skills": { "iron": 0, "mirrors": 0, "hearts": 0, "veils": 10 },
+                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy": 2 }
+              }
+            },            
+            "2_b": {
+              "lexical_name": "The Ratty Reunion",
+              "perks": {
+                "skills": { "iron": 0, "mirrors": 0, "hearts": 10, "veils": 0 },
+                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 2, "villainy": 0 }
+              }
+            }
+          }
+        },
+        "eccentric": {
+          "recruited": ["Pan", "Eagle's Empyrean"],
+          "tiers": {
+            "1": {
+              "lexical_name": "Felined Eccentric",
+              "perks": {
+                "skills": { "iron": 0, "mirrors": 6, "hearts": 2, "veils": 0 },
+                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy": 1 }
+              }
+            },
+            "2_a": {
+              "lexical_name": "Brilliant Eccentric",
+              "perks": {
+                "skills": { "iron": 0, "mirrors": 10, "hearts": 0, "veils": 0 },
+                "affiliations": { "academe": 0, "bohemia": 1, "establishment": 0, "villainy": 1 }
+              }
+            },            
+            "2_b": {
+              "lexical_name": "Gentile Eccentric",
+              "perks": {
+                "skills": { "iron": 0, "mirrors": 0, "hearts": 10, "veils": 0 },
+                "affiliations": { "academe": 1, "bohemia": 0, "establishment": 0, "villainy": 1 }
+              }
+            }
+          }
+        }
+      },
+
+      "mascot": {
+        "cat": {
+          "recruited": ["Well of the Wolf"],
+          "lexical_name": "Useless Cat",
+          "perks": {
+            "skills": { "iron": 0, "mirrors": 1, "hearts": 0, "veils": 0 }
+          }
+        },
+        "dog": {
+          "recruited": ["Port Prosper"],
+          "lexical_name": "Inadvisably Big Dog",
+          "perks": {
+            "skills": { "iron": 1, "mirrors": 0, "hearts": 0, "veils": 0 }
+          }
+        },
+        "blemmigan": {
+          "recruited": ["Port Avon"],
+          "lexical_name": "Blemmigan Voyager",
+          "perks": {
+            "skills": { "iron": 2, "mirrors": 1, "hearts": 0, "veils": 0 }
+          }
+        },
+        "pangolin": {
+          "recruited": ["Langley Hall"],
+          "lexical_name": "Perfect Pangolin",
+          "perks": {
+            "skills": { "iron": 0, "mirrors": 0, "hearts": 0, "veils":  1}
+          }
+        },
+        "urchin": {
+          "recruited": ["Lustrum"],
+          "lexical_name": "Sky-Work Urchin",
+          "perks": {
+            "skills": {"iron": 0, "mirrors": 0, "hearts": 1, "veils": 0 }
+          }
+        },
+        "dilly": {
+          "recruited": ["Curator's Egg"],
+          "lexical_name": "Dilly",
+          "perks": {
+            "skills": { "iron": 0, "mirrors": 0, "hearts": -1, "veils": 3 }
+          }
+        }
+      }
+    },
+
     "market_directory": {
       "standard_goods": {
         "approved_literature": {
@@ -296,33 +676,35 @@
         }
       }
     },
+
     "possessions_directory":{
       "__NOTE:":"Category 2: Immutable 16 progression tokens. Weightless.",
       "academe":{
-        "searing_enigma":{ "display_name":"Searing Enigma"},
-        "condemned_experiment":{ "display_name":"Condemned Experiment"},
-        "otherworldly_artifact":{ "display_name":"Otherworldly Artifact"},
-        "uncanny_specimen":{ "display_name":"Uncanny Specimen"}
+        "searing_enigma":{ "display_name":"Searing Enigma" },
+        "condemned_experiment":{ "display_name":"Condemned Experiment" },
+        "otherworldly_artifact":{ "display_name":"Otherworldly Artifact" },
+        "uncanny_specimen":{ "display_name":"Uncanny Specimen" }
       },
       "bohemia":{
-        "captivating_treasure":{ "display_name":"Captivating Treasure"},
-        "moment_of_inspiration":{ "display_name":"Moment of Inspiration"},
-        "vision_of_the_heavens":{ "display_name":"Vision of the Heavens"},
-        "sky_story":{ "display_name":"Sky Story"}
+        "captivating_treasure":{ "display_name":"Captivating Treasure" },
+        "moment_of_inspiration":{ "display_name":"Moment of Inspiration" },
+        "vision_of_the_heavens":{ "display_name":"Vision of the Heavens" },
+        "sky_story":{ "display_name":"Sky Story" }
       },
       "establishment":{
-        "royal_dispensation":{ "display_name":"Royal Dispensation"},
-        "cryptic_benefactor":{ "display_name":"Cryptic Benefactor"},
-        "ministry_stamped_permit":{ "display_name":"Ministry Stamped Permit"},
-        "salon_stewed_gossip":{ "display_name":"Salon Stewed Gossip"}
+        "royal_dispensation":{ "display_name":"Royal Dispensation" },
+        "cryptic_benefactor":{ "display_name":"Cryptic Benefactor" },
+        "ministry_stamped_permit":{ "display_name":"Ministry Stamped Permit" },
+        "salon_stewed_gossip":{ "display_name":"Salon Stewed Gossip" }
       },
       "villainy":{
-        "crimson_promise":{ "display_name":"Crimson Promise"},
-        "unlicensed_chart":{ "display_name":"Unlicensed Chart"},
-        "savage_secret":{ "display_name":"Savage Secret"},
-        "tale_of_terror":{ "display_name":"Tale of Terror"}
+        "crimson_promise":{ "display_name":"Crimson Promise" },
+        "unlicensed_chart":{ "display_name":"Unlicensed Chart" },
+        "savage_secret":{ "display_name":"Savage Secret" },
+        "tale_of_terror":{ "display_name":"Tale of Terror" }
       }
     },
+
     "port_directory": {
       "the_reach": {
         "carillon": {
