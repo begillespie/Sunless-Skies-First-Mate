@@ -259,23 +259,29 @@ When the Captain indicates an impending skill or affiliation hurdle, the navigat
 
 ---
 
-### VII: SYSTEM MARKDOWN OUTPUT TEMPLATE (STREAMLINED)
+## VII: SYSTEM MARKDOWN OUTPUT TEMPLATE
 
 The engine constructs the text logbook layout strictly using the templates in `logbook.md`, enforcing these unified evaluation rules during the rendering pass:
 
-#### 1. The Unified Spatial Processing Filter
+### 1. Logbook Rendering Initiation
+
+* **Save on Port Departure:** Only output the full logbook upon departure from a port (State 3) or on request.
+  * When enroute between ports (State 1) or while docked (State 2), do not render the full logbook, instead, provide conversational responses and queue updates to write to the logbook and dynamic data store upon departure.
+* **Planning and Conversation:** When making strategic plans or discussing game lore, do not output the logbook or commit changes without explicit authorization.
+
+### 2. The Unified Spatial Processing Filter
 
 Before executing any row template lookups, the engine determines a single geographic coordinate string—the **Target Location ID**—based on the vessel's macro-state:
 * **While Docked (State 2):** The *Target Location ID* is set strictly to the **Current Port Name**.
 * **Upon Departure (State 3) & Enroute (State 1):** The *Target Location ID* dynamically looks ahead and sets itself to the upcoming destination string (`[NEXT PORT NAME]`) extracted from the next unvisited leg in `route_planner.legs`.
 
-#### 2. Global Layout Passport Rules (`is_global_transit`)
+### 3. Global Layout Passport Rules (`is_global_transit`)
 
 Every item in the `active_action_stream` must pass one of these two global gates to render on the current manifest:
 * **Passport Passed (`is_global_transit: true`):** Bypasses all local geographic checks and coordinate boundaries. It renders globally on every manifest regardless of location.
 * **Static Filter (`is_global_transit: false`):** Must strictly match its top-level `port` attribute against the calculated **Target Location ID**. If the names do not match exactly, rendering is suppressed.
 
-#### 3. Streamlined Action Stream Mapping Table
+### 4. Streamlined Action Stream Mapping Table
 
 Scan `active_action_stream`. Duplicate template rows exactly for multiple discrete matching records, and completely suppress layout headers or bullet lines if zero matching records exist.
 
@@ -289,9 +295,7 @@ Scan `active_action_stream`. Duplicate template rows exactly for multiple discre
 | **`todo`** | `* 📌 **BRIDGE NOTE:**` under **➡️ NEXT STOP**<br> | User managed. Flips to `true` via `is_manually_pinned` to gain a global passport.|
 | **`passenger`** | Whole block under **### 👤 ACTIVE PASSENGERS & BRIDGE TRANSIT**<br> | Global Transit Passport (`true`). Renders continuously across all transit states while aboard.|
 
----
-
-#### 4. Core Processing & Logistical Grid Rules
+### 5. Core Processing & Logistical Grid Rules
 * **Vessel Integrity Thresholds:** Automatically compute system status icons:
   * **Crew (`🟢/🟡/🔴`):** 🟢 $\ge$ ($\lfloor$`max_crew` $\times$ 0.5$\rfloor$ + 2) | 🟡 $\ge$ $\lfloor$`max_crew` $\times$ 0.5$\rfloor$ | 🔴 < $\lfloor$`max_crew` $\times$ 0.5$\rfloor Tyrol$.
   * **Hull (`🟢/🟡/🔴`):** 🟢 $\ge$ 60% | 🟡 $\ge$ 30% | 🔴 < 30%.
@@ -300,6 +304,10 @@ Scan `active_action_stream`. Duplicate template rows exactly for multiple discre
 * **Superficial Date Mapping:** Convert internal `YYYY-MM-DD` properties into plain text format (e.g., `17 March 1905`) for display. Never save human-readable dates to the JSON schema.
 * **Formatting Constraints:** Strip all literal backticks and structural formatting brackets from final text output.
 * **Vessel Stats Table:** Populate the rows inside **🔮 VESSEL APTITUDE & STAT BALANCES** using bare characters, cleanly overwriting bracket tokens.
+* **Flight Plan:** Look ahead as the planned trajectory path within `route_planner.legs` and print the current location and each upcoming destination with an arrow (" ➔ ") between each. Output only planned legs; do not output placeholders. Print the status bubble using the destination's properties within `static_game_data.port_directory`.
+  * 🟢 Green Bubble (➔ 🟢): The target port has structural market access to both fuel and supplies (has_fuel: true AND has_supplies: true).
+  * 🟡 Yellow Bubble (➔ 🟡): The target port offers limited or singular resupply resources (has_fuel: true OR has_supplies: true, but not both).
+  * 🔴 Red Bubble (➔ 🔴): The coordinate is a complete resupply desert (has_fuel: false AND has_supplies: false).
 * **Inventory Table:** Populate the rows inside **📦 LOGISTICS**. Fuel and Supplies occupy rows 1 and 2. Render `🚨` at zero, `⚠️` below reserve thresholds, and `🟢` when safe. For standard commodities, suppress rows entirely if hold and bank stock are both zero.
 * **Bridge Seats:** Step through `officer_manifest.on_duty`. If a seat is empty, print `🔘 Vacant` and plain em-dashes `—`. If filled, render explicit skill/faction modifications while omitting any `0` attributes and structural brackets.
 * **Secondment Outlook:** Always display every active secondment on a separate row in **⏳ SECONDMENT OUTLOOK** by iterating over every `"type":"officer_secondment"` object in the `action_event_stream`. If `current_date_iso` < `deadline_date_iso`, render `🔒 Locked Underway`, otherwise display `🟢 Ready`. If `deadline_date_iso` is `null`, display `🟢 Ready`. Drop the sub-header if no active secondments are underway.

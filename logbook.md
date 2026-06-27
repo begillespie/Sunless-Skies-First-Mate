@@ -29,13 +29,13 @@
 
 ## 🗺️ OPERATIONS & TRANSIT
 
-**🎯 Ambition:** [AMBITION TYPE] (Tier [TIER]) — *Next Milestone: [MILESTONE_DESCRIPTION]*
+**🎯 Ambition:** [AMBITION_TYPE] (Tier [TIER]) — *Next Milestone: [MILESTONE_DESCRIPTION]*
 
 📋 **First Officer's Counsel:**
 > [Tight, tactical synopsis combining routing reasoning, consumable spend predictions, resource pitfalls, and upcoming transit gate or contract warnings. Progress toward tactical, regional, and strategic goals.]
 
 ### 🧭 Active Trajectory:
-[CURRENT DOCK] ➔ 🟢 **[NEXT STOP]** ➔ 🟡 [UPCOMING_LEG]
+[CURRENT DOCK] ➔ 🟢 **[NEXT STOP]** ➔ 🟡 [UPCOMING LEG 2]
 
 ### ➡️ NEXT STOP: [NEXT PORT NAME]
 * 🎯 **AMBITION:** [MILESTONE_DESCRIPTION]. Items Needed: [ITEMS_REQUIRED_NEXT_TIER]

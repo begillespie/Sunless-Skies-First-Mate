@@ -15,6 +15,8 @@
             "sovereigns": 1000,
             "current_date_iso": "1905-02-18"
         },
+        "crew_stats": {},
+        "officer_manifest": {},
         "engine_status": {
             "current_locomotive": "Spatchcock-Class Scout",
             "terror": 12,
@@ -37,6 +39,7 @@
                 "average_unit_cost": 40.00 
             },
         },
+        "possessions":{},
         "active_action_stream": [],
         "completed_action_log": [],
         "route_planner": {},

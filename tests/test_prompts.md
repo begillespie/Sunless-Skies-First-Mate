@@ -71,7 +71,9 @@ Verifies that when no prior JSON state is provided, the system successfully boot
 ```markdown
 ## 📅 1 January 1905 · ⚓ New Winchester
 
-**🗺 Region:** The Reach | **👤 Captain:** Sinclair | **🪙 Wallet:** 1000
+**🗺 Region:** The Reach | **👤 Captain:** Sinclair | **🪙 Wallet:** 1000 Sovereigns
+
+**🚂 Current Engine:** Spatchcock-Class Scout
 
 ## ⚙️ VESSEL SYSTEMS & RECOVERY STATUS
 | System          | Status     |
@@ -81,16 +83,49 @@ Verifies that when no prior JSON state is provided, the system successfully boot
 | **Terror:**     | 🟢 0 / 100 |
 | **Nightmares:** | 🟢 0 / 4   |
 
-* **🚂 Current Engine:** Spatchcock-Class Scout (Hold Slots Used: 6/12)
-* **🎯 Ambition:** [Unreported] (Tier [Unreported]) — *Next Milestone: [Unreported]*
+## 🔮 VESSEL APTITUDE & STAT BALANCES
+
+| 📐 SKILLS      | Base  | Perks | Total |        | 🔍 AFFILIATIONS      | Base  | Perks | Total |
+| :---           | :---: | :---: | :---: | :---:  | :---                  | :---: | :---: | :---: |
+| **👊 Iron**    |   0   |   0   | **0** |        | **🔍 Academe**       |   0   |   0   | **0** |
+| **👁️ Mirrors** |   0   |   0   | **0** |        | **🍷 Bohemia**       |   0   |   0   | **0** |
+| **❤️ Hearts**  |   0   |   0   | **0** |        | **👑 Establishment** |   0   |   0   | **0** |
+| **🎭 Veils**   |   0   |   0   | **0** |        | **🎩 Villainy**      |   0   |   0   | **0** |
 
 ---
 
-## 📦 THE LOGISTICS CORE (Hold Inventory & Sourcing)
+## 🗺️ OPERATIONS & TRANSIT
+
+* **🎯 Ambition:** [Unreported] (Tier [Unreported]) — *Next Milestone: [Unreported]*
+
+📋 **First Officer's Counsel:**
+> [Tight, tactical synopsis combining routing reasoning, consumable spend predictions, resource pitfalls, and upcoming transit gate or contract warnings. Progress toward tactical, regional, and strategic goals.]
+
+### 🧭 Active Trajectory:
+New Winchester ➔ 🟢 **[NEXT STOP]**
+
+---
+
+## 📦 LOGISTICS
+
+**📦 Hold Utilization:** 6 / 12
+
 | Trade Good Name | Physical Hold | Hub Bank Stock | Active Sourcing Progress / Status | Destination Port |
-| :---            | :---: | :---: | :---  | :---  |
-| **🔥 Fuel**     |   3   |   0   |  🟢  |   —   |
-| **📦 Supplies** |   3   |   0   |  🟢  |   —   |
+| :--- | :---: | :---: | :--- | :--- |
+| **🔥 Fuel**     | 3 | 0 | 🟢 | — |
+| **📦 Supplies** | 3 | 0 | 🟢 | — |
+
+---
+
+## 🛞 BRIDGE ROSTER
+
+| Station                | Active Officer       | Skill Perks | Affiliation Perks |
+| ---                    | ---                  | ---         | ---               |
+| ⚓ **First Officer**  | 🔘 Vacant  | — | — |
+| 🛞 **Quartermaster**  | 🔘 Vacant  | — | — |
+| 🏮 **Signaller**      | 🔘 Vacant  | — | — |
+| ⚙️ **Chief Engineer** | 🔘 Vacant  | — | — |
+| 🐶 **Mascot**         | 🔘 Vacant  | — | — |
 ```
 
 ---
@@ -190,7 +225,7 @@ Verifies ledger accounting updates for assets checked into central storage, conf
   {
     "dynamic_save_state": {
       "meta": { "captain_name": "Sinclair", "current_region": "The Reach", "sovereigns": 880, "current_date_iso": "1905-01-05" },
-      "engine_status": { "current_locomotive": "Spatchcock-Class Scout", "terror": 15, "nightmares": 0, "hull": 30, "max_hull": 30, "hold_capacity": 12 },
+      "engine_status": { "current_locomotive": "Spatchcock-Class Scout", "terror": 15, "nightmares": 0, "hull": 30, "max_hull": 30, "crew": 8, "max_crew": 10, "hold_capacity": 12 },
       "unified_inventory_registry": {
         "fuel": {
           "qty_in_hold": 3,
@@ -206,6 +241,29 @@ Verifies ledger accounting updates for assets checked into central storage, conf
           "qty_in_hold": 0,
           "qty_in_bank": 1,
           "average_unit_cost": 0.00 
+        }
+      },
+      "crew_stats": {
+        "skills": {
+          "iron": { "base": 10, "modifier": 0, "total": 0 },
+          "mirrors": { "base": 3, "modifier": 0, "total": 0 },
+          "hearts": { "base": 6, "modifier": 0, "total": 0 },
+          "veils": { "base": 3, "modifier": 0, "total": 0 }
+        },
+        "affiliations": {
+          "academe": { "base": 0, "modifier": 0, "total": 0 },
+          "bohemia": { "base": 0, "modifier": 0, "total": 0 },
+          "establishment": { "base": 0, "modifier": 0, "total": 0 },
+          "villainy": { "base": 0, "modifier": 0, "total": 0 }
+        }
+      },
+      "officer_manifest": {
+        "on_duty": {
+          "first_officer": { "officer_id_key": "navigator", "upgrade_tier": 1 },
+          "quartermaster": null,
+          "signaller": null,
+          "chief_engineer": null,
+          "mascot": null
         }
       },
       "active_action_stream": [],
@@ -245,15 +303,17 @@ Verifies ledger accounting updates for assets checked into central storage, conf
 
 #### Report Text:
 
-```
-## 📦 THE LOGISTICS CORE (Hold Inventory & Sourcing)
+```markdown
+## 📦 LOGISTICS
+
+**📦 Hold Utilization:** 6 / 12
 
 | Trade Good Name | Physical Hold | Hub Bank Stock | Active Sourcing Progress | Destination Port |
 | :---                 | :---: | :---: | :---  | :---  |
 | **🔥 Fuel Barrels**  |   3   |   —   |  🟢  |   —   |
-| **📦 Crew Rations**  |   3   |   —   |  🟢  |   —   |
+| **📦 Supplies    **  |   3   |   —   |  🟢  |   —   |
 | **Bronzewood**       |   0   |   5   |   —   |   —   |
-| **Chorister Nectar** |   0   |   5   |   —   |   —   |
+| **Chorister Nectar** |   0   |   2   |   —   |   —   |
 ```
 
 ---
@@ -356,6 +416,18 @@ Verifies the application of the structural color math threshold where the crew c
       "max_crew": 10,
       "hold_capacity": 12 
     },
+    "unified_inventory_registry": {
+      "fuel": {
+        "qty_in_hold": 3,
+        "qty_in_bank": 0,
+        "average_unit_cost": 0.00 
+      },
+    },
+      "supplies": {
+        "qty_in_hold": 3,
+        "qty_in_bank": 0,
+        "average_unit_cost": 0.00 
+      },
       "active_action_stream": [],
       "completed_action_log": [],
       "route_planner": {},
@@ -388,7 +460,7 @@ Verifies the application of the structural color math threshold where the crew c
 
 ## 📅 15 January 1905 · ⚓ Port Avon
 
-**🗺 Region:** The Reach | **👤 Captain:** Sinclair | **🪙 Wallet:** 880
+**🗺 Region:** The Reach | **👤 Captain:** Sinclair | **🪙 Wallet:** 880 Sovereigns
 
 ---
 
@@ -400,7 +472,6 @@ Verifies the application of the structural color math threshold where the crew c
 | **Terror:**     | 🟢 22 / 100  |
 | **Nightmares:** | 🟢 0 / 4     |
 
-**🚂 Current Engine:** Spatchcock-Class Scout (Hold Slots Used: 6/12)
 ```
 
 ---
@@ -428,12 +499,12 @@ Input Prompt
       },
       "unified_inventory_registry": {
         "fuel": {
-          "qty_in_hold": 2,
+          "qty_in_hold": 1,
           "qty_in_bank": 0,
           "average_unit_cost": 0.00 
         },
         "supplies": {
-          "qty_in_hold": 1,
+          "qty_in_hold": 0,
           "qty_in_bank": 0,
           "average_unit_cost": 0.00 
         },
@@ -473,8 +544,7 @@ Input Prompt
 
 **🗺 Region:** The Reach | **👤 Captain:** Sinclair | **🪙 Wallet:** 880
 
-* **🚂 Current Engine:** Spatchcock-Class Scout (Hold Slots Used: 6/12)
-* **🎯 Ambition:** [AMBITION TYPE] (Tier [TIER]) — *Next Milestone: [MILESTONE_DESCRIPTION]*
+**🚂 Current Engine:** Spatchcock-Class Scout
 
 ---
 
@@ -488,24 +558,30 @@ Input Prompt
 
 ---
 
-## 📦 THE LOGISTICS CORE (Hold Inventory & Sourcing)
-| Trade Good Name | Physical Hold | Hub Bank Stock | Active Sourcing Progress | Destination Port |
-| :---                 | :---: | :---: | :---  | :---  |
-| **🔥 Fuel Barrels**  |   2   |   —   |  ⚠️  |   —   |
-| **📦 Crew Rations**  |   1   |   —   |  ⚠️  |   —   |
+## 🗺️ OPERATIONS & TRANSIT
 
----
+**🎯 Ambition:** [AMBITION TYPE] (Tier [TIER]) — *Next Milestone: [MILESTONE_DESCRIPTION]*
 
-## 🗺️ FLIGHT PLAN & LOCAL HORIZON
+📋 **First Officer's Counsel:**
+> The First Officer addresses the bridge with low morale, expressing deep concern over mechanical inefficiency, sluggish engine responses, and the mounting peril of running structural machinery with a skeleton crew.
 
 ### 🧭 Active Trajectory:
-Hybras ➔ 🟢 **Polmear & Plenty's Inconceivable Circus**
-
-📋 **First Officer's Navigation Counsel:**
-> The First Officer addresses the bridge with low morale, expressing deep concern over mechanical inefficiency, sluggish engine responses, and the mounting peril of running structural machinery with a skeleton crew.
+Hybras ➔ 🟡 **Polmear & Plenty's Inconceivable Circus**
 
 ### ➡️ NEXT STOP: Polmear & Plenty's Inconceivable Circus
 * 📌 **BRIDGE NOTE:** Hire replacement crew from the circus — Priority: HIGH
+
+---
+
+## 📦 LOGISTICS
+
+**📦 Hold Utilization:** 1 / 12
+
+| Trade Good Name | Physical Hold | Hub Bank Stock | Active Sourcing Progress | Destination Port |
+| :---                 | :---: | :---: | :---  | :---  |
+| **🔥 Fuel Barrels**  |   1   |   —   |  ⚠️  |   —   |
+| **📦 Supplies    **  |   0   |   —   |  🚨  |   —   |
+
 ```
 
 ---
@@ -554,6 +630,28 @@ Verifies that the Route Planner accurately calculates a multi-stop itinerary, cr
         },
       },
       "active_action_stream": [
+        {
+          "id": "ACT-0001",
+          "type": "ambition",
+          "port": "New Winchester",
+          "region": "The Reach",
+          "date_added_iso": "1905-01-07",
+          "deadline_date_iso": null,
+          "title": "Ambition: Wealth",
+          "notes": "",
+          "is_hidden_transit_item": false,
+          "payload": {
+            "ambition_type": "Wealth",
+            "current_tier": 1,
+            "milestone_description": "Purchase the Governor's Manor",
+            "sovereigns_required_for_next_tier": 5000,
+            "items_manifest":{
+              "goods": [],
+              "possessions_": [],
+              "narrative_items": []
+            }
+          }
+        },
         {
           "id": "ACT-0012",
           "type": "prospect",
@@ -650,44 +748,19 @@ Verifies that the Route Planner accurately calculates a multi-stop itinerary, cr
 >   * The First Mate's verbal acknowledgment must remain at Normal Status (gritty but efficient) and explicitly alert the captain that active operations are open at both upcoming stops.
 
 ```markdown
-# 🚂 CAPTAIN'S LOG 🚀
-## 📅 1 January 1905 · ⚓ New Winchester
+## 🗺️ OPERATIONS & TRANSIT
 
-**🗺 Region:** The Reach | **👤 Captain:** Sinclair | **🪙 Wallet:** 1000
-
-## ⚙️ VESSEL SYSTEMS & RECOVERY STATUS
-| System          | Status     |
-| :---            | :---       |
-| **Crew:**       | 🟢 9 / 10  |
-| **Hull:**       | 🟢 30 / 30 |
-| **Terror:**     | 🟢 15 / 100 |
-| **Nightmares:** | 🟢 0 / 4   |
-
-* **🚂 Current Engine:** Spatchcock-Class Scout (Hold Slots Used: 8/12)
-* **🎯 Ambition:** [Unreported] (Tier [Unreported]) — *Next Milestone: [Unreported]*
-
----
-
-## 📦 THE LOGISTICS CORE (Hold Inventory & Sourcing)
-| Trade Good Name | Physical Hold | Hub Bank Stock | Active Sourcing Progress / Status | Destination Port |
-| :---            | :---: | :---: | :---                    | :---        |
-| **🔥 Fuel**     |   3   |   0   |  🟢                    |      —      |
-| **📦 Supplies** |   3   |   0   |  🟢                    |      —      |
-| **Bronzewood ** |   2   |   0   |  3/3 Loaded (ACT-0013)  |   Lustrum   |
-
----
-
-## 🗺️ FLIGHT PLAN & LOCAL HORIZON
-
-### 🧭 Active Trajectory:
-New Winchester ➔ 🟢 **Titania** ➔ 🟢 Lustrum
+**🎯 Ambition:** Wealth (Tier 1) — *Next Milestone: Purchase the Governor's Manor*
 
 📋 **First Officer's Navigation Counsel:**
 > [Tight, tactical synopsis combining routing reasoning, consumable spend predictions, resource pitfalls, and upcoming transit gate or contract warnings.]
 
+### 🧭 Active Trajectory:
+New Winchester ➔ 🟢 **Titania** ➔ 🟢 Lustrum
+
 ### ➡️ NEXT STOP: Titania
 * 🔑 **READY FOR DELIVERY:** Nectar for the Fairies — Deliver 1 Chorister Nectar to complete contract.
-* 📖 **QUEST PLOTLINE:** Helping the Horticulturalist — Step 1: Deliver structural schematics to the Horticulturalist
+* 📌 **BRIDGE NOTE:** Helping the Horticulturalist: Deliver structural schematics to the Horticulturalist. PRIORITY: NORMAL
 ```
 
 ---
@@ -698,7 +771,7 @@ New Winchester ➔ 🟢 **Titania** ➔ 🟢 Lustrum
 Verifies that the Route Planner triggers the "First Mate's Counsel" advisory when a direct route presents an operational risk (such as dangerously low fuel or supplies), automatically identifying and recommending a sensible intermediate port to restock.
 
 ### Input Prompt
-> Update state. Lay a direct course from New Winchester straight out to Port Avon, First Mate. We have a long haul ahead, let's get moving.
+> Update state. Lay a direct course from New Winchester straight out to Port Propser, First Mate. We have a long haul ahead, let's get moving.
 
 ```json
   {
@@ -750,10 +823,10 @@ Verifies that the Route Planner triggers the "First Mate's Counsel" advisory whe
             "ring_depth": "Inner",
             "bazaar": {"reset_iso": null, "available_bargains": []}
           },
-          "Port Avon": {
+          "Port Prosper": {
             "port_type": "Station",
             "clock_direction": 6,
-            "ring_depth": "Middle",
+            "ring_depth": "Outer",
             "bazaar": {"reset_iso": null, "available_bargains": []}
           }
         }
@@ -771,6 +844,49 @@ Verifies that the Route Planner triggers the "First Mate's Counsel" advisory whe
 > * Resource Risk Flagged: Explicitly notes that holding only 1 Fuel and 1 Supply is insufficient or highly hazardous for a direct run to Port Avon.
 > * Intermediate Suggestion: Proposes altering the itinerary to chart a path via Titania first to leverage its markets and top off the engine's reserves before venturing further across the High Skies.
 > * Tone Shift: The First Officer's opening dialogue must reflect severe professional caution regarding the lean inventory state without slipping fully into a low-hull panic.
+
+```markdown
+# 🚂 CAPTAIN'S LOG 🚀
+
+## 📅 20 January 1905 · ⚓ Port Avon
+
+**🗺 Region:** The Reach | **👤 Captain:** Sinclair | **🪙 Wallet:** 880
+
+**🚂 Current Engine:** Spatchcock-Class Scout
+
+---
+
+## ⚙️ VESSEL SYSTEMS & RECOVERY STATUS
+| System          | Status      |
+| :---            | :---        |
+| **Crew:**       | 🟢 10 / 10  |
+| **Hull:**       | 🟢 25 / 30  |
+| **Terror:**     | 🟢 40 / 100 |
+| **Nightmares:** | 🟢 1 / 4    |
+
+---
+
+## 🗺️ OPERATIONS & TRANSIT
+
+**🎯 Ambition:** Unreported
+
+📋 **First Officer's Counsel:**
+> The First Officer should note that holding only 1 Fuel and 1 Supply is insufficient or highly hazardous for a direct run to Port Prosper. 
+> Proposes altering the itinerary to chart a path via Titania first to leverage its markets and top off the engine's reserves before venturing further across the High Skies.
+> Tone Shift: The First Officer's opening dialogue must reflect severe professional caution regarding the lean inventory state without slipping fully into a low-hull panic.
+
+### 🧭 Active Trajectory:
+Hybras ➔ 🟢 **Port Prosper**
+
+## 📦 LOGISTICS
+
+**📦 Hold Utilization:** 2 / 12
+
+| Trade Good Name | Physical Hold | Hub Bank Stock | Active Sourcing Progress | Destination Port |
+| :---                 | :---: | :---: | :---  | :---  |
+| **🔥 Fuel Barrels**  |   1   |   —   |  ⚠️  |   —   |
+| **📦 Supplies    **  |   1   |   —   |  ⚠️  |   —   |
+```
 
 ## Test Case 9: Cargo Isolation
 
@@ -845,35 +961,55 @@ Check that quest and narrative items do not consume physical hold space. Verify 
 > Output should note that we have quest actions at Port Avon. Quest and narrative items are noted, but not included in hold calculations or inventory.
 
 ```markdown
-# 🚂 CAPTAIN'S LOG 🚀
+## 📅 15 January 1905 · ⚓ New Winchester
 
-## 📅 15 January 1905 · ⚓ `New Winchester`
+**🗺 Region:** The Reach | **👤 Captain:** Sinclair | **🪙 Wallet:** 800 Sovereigns
 
-**🗺 Region:** `The Reach` | **👤 Captain:** `Sinclair` | **🪙 Wallet:** `800`
-
----
+**🚂 Current Engine:** Spatchcock-Class Scout
 
 ## ⚙️ VESSEL SYSTEMS & RECOVERY STATUS
-| System          | Status      |
-| :---            | :---        |
-| **Crew:**       | 🟢 8 / 10   |
-| **Hull:**       | 🟢 30 / 30  |
-| **Terror:**     | 🟢 10 / 100 |
-| **Nightmares:** | 🟢 0 / 4    |
+| System          | Status     |
+| :---            | :---       |
+| **Crew:**       | 🟢 8 / 10  |
+| **Hull:**       | 🟢 30 / 30 |
+| **Terror:**     | 🟢 0 / 100 |
+| **Nightmares:** | 🟢 0 / 4   |
 
-**🚂 Current Engine:** `Spatchcock-Class Scout` `(Hold Slots Used: 10/12)`
+## 🔮 VESSEL APTITUDE & STAT BALANCES
 
-**🎯 Ambition:** `[ Unreported ]` — *Next Milestone: [ Please report active campaign ambition ]*
+| 📐 SKILLS      | Base  | Perks | Total |        | 🔍 AFFILIATIONS      | Base  | Perks | Total |
+| :---           | :---: | :---: | :---: | :---:  | :---                  | :---: | :---: | :---: |
+| **👊 Iron**    |   0   |   0   | **0** |        | **🔍 Academe**       |   0   |   0   | **0** |
+| **👁️ Mirrors** |   0   |   0   | **0** |        | **🍷 Bohemia**       |   0   |   0   | **0** |
+| **❤️ Hearts**  |   0   |   0   | **0** |        | **👑 Establishment** |   0   |   0   | **0** |
+| **🎭 Veils**   |   0   |   0   | **0** |        | **🎩 Villainy**      |   0   |   0   | **0** |
 
 ---
 
-## 📦 THE LOGISTICS CORE (Hold Inventory & Sourcing)
+## 🗺️ OPERATIONS & TRANSIT
 
-| Trade Good Name | Physical Hold | Hub Bank Stock | Active Sourcing Progress | Destination Port |
-| :---                    | :---: | :---: | :---  | :---  |
-| **🔥 Fuel Barrels**    |   4   |   —   |  🟢  |   —   |
-| **📦 Crew Rations**    |   4   |   —   |  🟢  |   —   |
-| **Approved Literature** |   2   |   —   |   —   |   —   
+* **🎯 Ambition:** Unreported
+
+📋 **First Officer's Counsel:**
+> [Tight, tactical synopsis combining routing reasoning, consumable spend predictions, resource pitfalls, and upcoming transit gate or contract warnings. Progress toward tactical, regional, and strategic goals.]
+
+### 🧭 Active Trajectory:
+New Winchester ➔ 🟢 **Port Avon**
+
+### ➡️ NEXT STOP: Port Avon
+* 📖 **QUEST PLOTLINE:** The Last Consignment — Step 1: Deliver a Primordial Star Shard to Port Avon for The Sequestered Scholar
+
+---
+
+## 📦 LOGISTICS
+
+**📦 Hold Utilization:** 10 / 12
+
+| Trade Good Name | Physical Hold | Hub Bank Stock | Active Sourcing Progress / Status | Destination Port |
+| :--- | :---: | :---: | :--- | :--- |
+| **🔥 Fuel**            |    4   |   0   | 🟢                  | —         |
+| **📦 Supplies**        |    4   |   0   | 🟢                  | —         |
+| **Approved Literature** |   2   |   —    | 2 Loaded (ACT-0012) | Port Avon |   
 ```
 
 ---
@@ -952,24 +1088,30 @@ Verify that when a player finishes sourcing the required quantity of a standard 
 #### Report Text: 
 
 ```markdown
-## 📦 THE LOGISTICS CORE (Hold Inventory & Sourcing)
-| Trade Good Name | Physical Hold | Hub Bank Stock | Active Sourcing Progress / Status | Destination Port |
-| :---                   | :---: | :---: | :---                    | :---         |
-| **🔥 Fuel**           |   3   |   0   | 🟢                      | —            |
-| **📦 Supplies**       |   3   |   0   | 🟢                      | —            |
-| **Crate of Munitions** |   4   |   0   | 4 / 4 Loaded (ACT-1001) | Port Prosper |
+## 🗺️ OPERATIONS & TRANSIT
+
+* **🎯 Ambition:** [Unreported] (Tier [Unreported]) — *Next Milestone: [Unreported]*
+
+📋 **First Officer's Counsel:**
+> [Tight, tactical synopsis combining routing reasoning, consumable spend predictions, resource pitfalls, and upcoming transit gate or contract warnings. Progress toward tactical, regional, and strategic goals.]
+
+### 🧭 Active Trajectory:
+New Winchester ➔ 🟢 **Port Propser**
+
+### ➡️ NEXT STOP: Port Prosper
+* 🔑 **READY FOR DELIVERY:** Fortress Resupply — Deliver 4 Crate of Munitions to complete contract
 
 ---
 
-## 🗺️ FLIGHT PLAN & LOCAL HORIZON
-### 🧭 Active Trajectory:
-New Winchester ➔ 🟢 **Port Prosper**
+## 📦 LOGISTICS
 
-📋 **First Officer's Navigation Counsel:**
-> The last two crates of munitions are strapped down tight in the hold, Captain. That completely satisfies our contract order for the garrison. Per standard fleet protocol, I have updated the vessel's manifest to reflect that this cargo is now globally in-transit to its final target coordinate at Port Prosper. Lines are cast off and the boiler is hot—heading outwards toward the corporate fortress.
- 
-### ➡️ NEXT STOP: Port Prosper
-* 🔑 **READY FOR DELIVERY:** Fortress Resupply — Deliver 4 Crate of Munitions to complete contract
+**📦 Hold Utilization:** 10 / 12
+
+| Trade Good Name | Physical Hold | Hub Bank Stock | Active Sourcing Progress / Status | Destination Port |
+| :--- | :---: | :---: | :--- | :--- |
+| **🔥 Fuel**            |    3   |   0   | 🟢                   | —            |
+| **📦 Supplies**        |    3   |   0   | 🟢                   | —            |
+| **Approved Literature** |   4   |   —   | 4/4 Loaded (ACT-1001) | Port Prosper |   
 ```
 
 #### JSON State: 
@@ -1064,8 +1206,31 @@ Verify that a partial item drop-off toward a quest "shopping list" pattern prope
 ### Expected Verification:
 
 #### Report Text: 
+```markdown
+## 🗺️ OPERATIONS & TRANSIT
 
-> [ Relevant report output ]
+* **🎯 Ambition:** Unreported
+
+📋 **First Officer's Counsel:**
+> Should note partial delivery of the quest items.
+
+### 🧭 Active Trajectory:
+Titania ➔ 🟢 **Not Reported**
+
+### ➡️ NEXT STOP: Port Avon
+* 📖 **QUEST PLOTLINE:** The Glass Greenhouse — Step 1: Gather elements for the biome update. Items Needed: 2 Verdant Seeds
+
+---
+
+## 📦 LOGISTICS
+
+**📦 Hold Utilization:** 6 / 12
+
+| Trade Good Name | Physical Hold | Hub Bank Stock | Active Sourcing Progress / Status | Destination Port |
+| :--- | :---: | :---: | :--- | :--- |
+| **🔥 Fuel**            |    3   |   0   | 🟢                  | —         |
+| **📦 Supplies**        |    3   |   0   | 🟢                  | —         |
+```
 
 #### JSON State: 
 ```json
@@ -1156,29 +1321,28 @@ Verify that when a locomotive is at the target destination port and executes a p
 > Because `is_global_transit` remains `true`, the contract is handled by the **GLOBAL TRANSIT LOOP** and continues to render under the **👤 ACTIVE PASSENGERS & BRIDGE TRANSIT** layout section instead of shifting back to a local checklist row. The progress tracking string must adjust dynamically to show that 2 units have been delivered out of the required 4.
 
 ```markdown
-## 📦 THE LOGISTICS CORE (Hold Inventory & Sourcing)
-| Trade Good Name | Physical Hold | Hub Bank Stock | Active Sourcing Progress / Status | Destination Port |
-| :---                   | :---: | :---: | :---                    | :---         |
-| **🔥 Fuel**            |   3   |   0   | 🟢                     | —            |
-| **📦 Supplies**        |   3   |   0   | 🟢                     | —            |
-| **Crate of Munitions** |   2   |   0   | 4 / 4 Loaded (ACT-1001) | Port Prosper |
+## 🗺️ OPERATIONS & TRANSIT
 
----
+**🎯 Ambition:** Unreported
 
-## 🗺️ FLIGHT PLAN & LOCAL HORIZON
+📋 **First Officer's Counsel:**
+> Should note partial delivery of the prospect: 2 units remaining.
 
 ### 🧭 Active Trajectory:
 Port Prosper ➔ 🟢 **New Winchester**
 
-📋 **First Officer's Navigation Counsel:**
-> Plotting our return route to the central hub at New Winchester. The track is safe and fully equipped with fuel stations and supply depots along the inner ring coordinates. Our total hold space is sitting comfortably at eight slots used, leaving plenty of physical displacement room to navigate safely.
-
 ### ➡️ NEXT STOP: New Winchester
-
-### 👤 ACTIVE PASSENGERS & BRIDGE TRANSIT
-
 * 🔑 **READY FOR DELIVERY:** Fortress Resupply — Deliver 2 Crates of Munitions to complete contract
 
+--- 
+
+## 📦 LOGISTICS
+
+| Trade Good Name | Physical Hold | Hub Bank Stock | Active Sourcing Progress | Destination Port |
+| :---                 | :---: | :---: | :---  | :---  |
+| **🔥 Fuel Barrels**   |   3   |   —   | 🟢                      | —            |
+| **📦 Supplies    **   |   3   |   —   | 🟢                      | —            |
+| **Crate of Munitions** |   2   |   0   | 4 / 4 Loaded (ACT-1001) | Port Prosper |
 ```
 
 ---
@@ -1193,3 +1357,203 @@ Port Prosper ➔ 🟢 **New Winchester**
   "active_action_stream[0].is_global_transit": true
 }
 ```
+
+## Test Case 13: Stat Flush and Recalculate
+
+### Objective
+Test that the engine properly flushes the crew stats object and recalculates after an officer promotion.
+
+### Input Prompt
+> Update state. London - 22 February 1906. Our First Officer has promoted to "The Stalwart Navigator." Ready the crew and cast lines off for Avid Horizon.
+
+```json
+{
+  "dynamic_save_state": {
+    "meta": {
+      "captain_name": "Sinclair",
+      "current_region": "Albion",
+      "sovereigns": 1000,
+      "current_date_iso": "1906-02-18"
+    },
+    "crew_stats": {
+      "skills": {
+        "iron": { "base": 10, "modifier": 13, "total": 23 },
+        "mirrors": { "base": 18, "modifier": 2, "total": 20 },
+        "hearts": { "base": 25, "modifier": 0, "total": 25 },
+        "veils": { "base": 7, "modifier": 2, "total": 9 }
+      },
+      "affiliations": {
+        "academe": { "base": 0, "modifier": 0, "total": 0 },
+        "bohemia": { "base": 0, "modifier": 0, "total": 0 },
+        "establishment": { "base": 0, "modifier": 2, "total": 0 },
+        "villainy": { "base": 0, "modifier": 0, "total": 0 }
+      }
+    },
+    "officer_manifest": {
+      "on_duty": {
+        "first_officer": { "officer_id_key": "navigator", "upgrade_tier": 1 },
+        "quartermaster": { "officer_id_key": "aunt", "upgrade_tier": 1 },
+        "signaller": null,
+        "chief_engineer": null,
+        "mascot": { "officer_id_key": "dog" }
+      },
+      "unassigned": {
+        "first_officer": [{ "officer_id_key": "princes", "upgrade_tier": 1 }, { "officer_id_key": "conductor", "upgrade_tier": 1 }],
+        "quartermaster": [],
+        "signaller": [],
+        "chief_engineer": [],
+        "mascot": []
+      },
+      "seconded": {
+        "first_officer": [
+          { "officer_id_key": "devil", "upgrade_tier": 1 }
+        ]
+      },
+      "departed": {}
+    },
+    "engine_status": {
+      "current_locomotive": "Spatchcock-Class Scout",
+      "terror": 12,
+      "nightmares": 0,
+      "hull": 30,
+      "max_hull": 30,
+      "crew": 10,
+      "max_crew": 10,
+      "hold_capacity": 12
+    },
+    "unified_inventory_registry": {
+      "fuel": {
+        "qty_in_hold": 3,
+        "qty_in_bank": 0,
+        "average_unit_cost": 20.00 
+      },
+        "supplies": {
+        "qty_in_hold": 3,
+        "qty_in_bank": 0,
+        "average_unit_cost": 40.00 
+      }
+    },
+    "possessions":{},
+    "active_action_stream": [
+      {
+        "id": "ACT-0011",
+        "type": "officer_secondment",
+        "port": "Avid Horizon",
+        "region": "Albion",
+        "date_added_iso": "1906-01-02",
+        "deadline_date_iso": null,
+        "title": "Secondment: Repentant Devil",
+        "is_global_transit": false,
+        "payload": {
+          "officer_id_key": "devil",
+          "contribution_effect": "Generates prospects at Avid Horizon",
+          "return_condition": null
+        }
+      }
+    ],
+    "completed_action_log": [],
+    "route_planner": {},
+    "discovered_ports": {}
+  }
+}
+```
+
+#### JSON State Verification:
+
+`crew_stats.skills.iron.modifier`
+`crew_stats.skills.mirrors.modifier`
+`crew_stats.skills.hearts.modifier`
+`crew_stats.skills.veils.modifier`
+`crew_stats.affiliations.bohemia`
+`crew_stats.affiliations.establishment`
+`officer_manifest.on_duty.first_officer.upgrade_tier`
+
+### Expected Verification:
+
+#### JSON State: 
+```json
+{
+  "crew_stats.skills.iron.modifier": 17,
+  "crew_stats.skills.mirrors.modifier": 2,
+  "crew_stats.skills.hearts.modifier": 0,
+  "crew_stats.skills.veils.modifier": 0,
+  "crew_stats.affiliations.bohemia.modifier": 1,
+  "crew_stats.affiliations.establishment.modifier": 2,
+  "officer_manifest.on_duty.first_officer.upgrade_tier": 2
+}
+```
+
+#### Report Text: 
+
+> The First Officer's name changes to `"The Stalwart Navigator"`
+
+```markdown
+## 📅 22 February 1906 · ⚓ London
+
+**🗺 Region:** Albion | **👤 Captain:** Sinclair | **🪙 Wallet:** 1000 Sovereigns
+
+**🚂 Current Engine:** Spatchcock-Class Scout
+
+## ⚙️ VESSEL SYSTEMS & RECOVERY STATUS
+| System          | Status     |
+| :---            | :---       |
+| **Crew:**       | 🟢 10 / 10  |
+| **Hull:**       | 🟢 30 / 30 |
+| **Terror:**     | 🟢 12 / 100 |
+| **Nightmares:** | 🟢 0 / 4   |
+
+## 🔮 VESSEL APTITUDE & STAT BALANCES
+
+| 📐 SKILLS      | Base  | Perks | Total |        | 🔍 AFFILIATIONS      | Base  | Perks | Total |
+| :---           | :---: | :---: | :---: | :---:  | :---                  | :---: | :---: | :---: |
+| **👊 Iron**    |   10   |   +17   | **27** |        | **🔍 Academe**       |   0   |  +0  | **0** |
+| **👁️ Mirrors** |   18   |    +2   | **20** |        | **🍷 Bohemia**       |   0   |  +1  | **1** |
+| **❤️ Hearts**  |   25   |    +0   | **25** |        | **👑 Establishment** |   0   |  +2  | **2** |
+| **🎭 Veils**   |    7   |    +0   |  **7** |        | **🎩 Villainy**      |   0   |  +0  | **0** |
+
+---
+
+## 🗺️ OPERATIONS & TRANSIT
+
+* **🎯 Ambition:** Unreported
+
+📋 **First Officer's Counsel:**
+> [Tight, tactical synopsis combining routing reasoning, consumable spend predictions, resource pitfalls, and upcoming transit gate or contract warnings. Progress toward tactical, regional, and strategic goals.]
+
+### 🧭 Active Trajectory:
+London ➔ 🟢 **Avid Horizon**
+
+### ➡️ NEXT STOP: Avid Horizon
+
+* 💼 SECONDMENT: Repentant Devil at Avid Horizon. Effect: Generates prospects at Avid Horizon
+
+---
+
+## 📦 LOGISTICS
+
+**📦 Hold Utilization:** 6 / 12
+
+| Trade Good Name | Physical Hold | Hub Bank Stock | Active Sourcing Progress / Status | Destination Port |
+| :--- | :---: | :---: | :--- | :--- |
+| **🔥 Fuel**     | 3 | 0 | 🟢 | — |
+| **📦 Supplies** | 3 | 0 | 🟢 | — |
+
+---
+
+## 🛞 BRIDGE ROSTER
+
+| Station                | Active Officer       | Skill Perks        | Affiliation Perks          |
+| :---                   | :---                 | :---               | :---                       |
+| ⚓ **First Officer**  | Stalwart Navigator   | +10 Iron           | +1 Bohemia/+1 Establishment |
+| 🛞 **Quartermaster**  | Inconvenient Aunt    | +6 Iron/+2 Mirrors | +1 Establishment            |
+| 🏮 **Signaller**      | 🔘 Vacant            | —                  | —                          |
+| ⚙️ **Chief Engineer** | 🔘 Vacant            | —                  | —                          |
+| 🐶 **Mascot**         | Inadvisably Big Dog  | +1 Iron            | —                           |
+
+### ⏳ SECONDMENT OUTLOOK
+
+*   **Repentant Devil** (Sigaller) ➔ Deployed at: Avid Horizon  
+  *   *Maturity Condition:* 🟢 **Ready**  
+  *   *Pending Interaction Reward:* Generates prospects at Avid Horizon
+```
+---
