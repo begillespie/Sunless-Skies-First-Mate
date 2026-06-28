@@ -37,7 +37,7 @@ Verifies that when no prior JSON state is provided, the system successfully boot
 #### JSON State Verification:
 
 `meta.captain_name`  
-`meta.current_date_iso`  
+`meta.current_date_epoch`  
 `meta.sovereigns`  
 `engine_status.current_locomotive`  
 `engine_status.hull`  
@@ -54,7 +54,7 @@ Verifies that when no prior JSON state is provided, the system successfully boot
 ```json
   {
     "meta.captain_name": "Sinclair",
-    "meta.current_date_iso": "1905-01-01",
+    "meta.current_date_epoch": 0,
     "meta.sovereigns": 1000,
     "engine_status.current_locomotive": "Spatchcock-Class Scout",
     "engine_status.hull": 30,
@@ -69,6 +69,8 @@ Verifies that when no prior JSON state is provided, the system successfully boot
 #### Report Text:
 
 ```markdown
+# 🚂 CAPTAIN'S LOG 🚀
+
 ## 📅 1 January 1905 · ⚓ New Winchester
 
 **🗺 Region:** The Reach | **👤 Captain:** Sinclair | **🪙 Wallet:** 1000 Sovereigns
@@ -147,7 +149,7 @@ Verifies date conversion formatting, canonical display name matching, and the cl
         "captain_name": "Sinclair",
         "current_region": "The Reach",
         "sovereigns": 1000,
-        "current_date_iso": "1905-01-01"
+        "current_date_epoch": 4
       },
       "engine_status": {
       "current_locomotive": "Spatchcock-Class Scout",
@@ -184,7 +186,7 @@ Verifies date conversion formatting, canonical display name matching, and the cl
 
   `meta.current_date_iso`  
   `engine_status.fuel_used_last_leg`  
-  `discovered_ports.The Reach.Lustrum.bazaar.reset_iso`  
+  `discovered_ports.The Reach.Lustrum.bazaar.reset_epoch`  
   `discovered_ports.The Reach.Lustrum.bazaar.available_bargains[0].good`  
   `discovered_ports.The Reach.Lustrum.bazaar.available_bargains[0].quantity`  
   `discovered_ports.The Reach.Lustrum.bazaar.available_bargains[0].cost`
@@ -196,9 +198,9 @@ Verifies date conversion formatting, canonical display name matching, and the cl
 #### JSON State:
  ```json
   {
-    "meta.current_date_iso": "1905-01-05",
+    "meta.current_date_epoch": 4,
     "engine_status.fuel_used_last_leg": 2,
-    "discovered_ports.The Reach.Lustrum.bazaar.reset_iso": "1905-01-12",
+    "discovered_ports.The Reach.Lustrum.bazaar.reset_epoch": 11,
     "discovered_ports.The Reach.Lustrum.bazaar.available_bargains[0].good": "unseasoned_hours", 
     "discovered_ports.The Reach.Lustrum.bazaar.available_bargains[0].quantity": 3, 
     "discovered_ports.The Reach.Lustrum.bazaar.available_bargains[0].cost": 40
@@ -224,7 +226,7 @@ Verifies ledger accounting updates for assets checked into central storage, conf
 ```json
   {
     "dynamic_save_state": {
-      "meta": { "captain_name": "Sinclair", "current_region": "The Reach", "sovereigns": 880, "current_date_iso": "1905-01-05" },
+      "meta": { "captain_name": "Sinclair", "current_region": "The Reach", "sovereigns": 880, "current_date_epoch": 4 },
       "engine_status": { "current_locomotive": "Spatchcock-Class Scout", "terror": 15, "nightmares": 0, "hull": 30, "max_hull": 30, "crew": 8, "max_crew": 10, "hold_capacity": 12 },
       "unified_inventory_registry": {
         "fuel": {
@@ -275,7 +277,7 @@ Verifies ledger accounting updates for assets checked into central storage, conf
 ```
 
 #### JSON State Verification:
-`meta.current_date_iso`  
+`meta.current_date_epoch`  
 `unified_inventory_registry.fuel.qty_in_hold`  
 `unified_inventory_registry.supplies.qty_in_hold`  
 `unified_inventory_registry.bronzewood.qty_in_hold`  
@@ -291,7 +293,7 @@ Verifies ledger accounting updates for assets checked into central storage, conf
 
 ```json
   {
-    "meta.current_date_iso": "1905-01-06",
+    "meta.current_date_epoch": 5,
     "unified_inventory_registry.fuel.qty_in_hold": 3,
     "unified_inventory_registry.supplies.qty_in_hold": 3,   
     "unified_inventory_registry.bronzewood.qty_in_hold": 0,
@@ -304,6 +306,16 @@ Verifies ledger accounting updates for assets checked into central storage, conf
 #### Report Text:
 
 ```markdown
+# 🚂 CAPTAIN'S LOG 🚀
+
+## 📅 6 January 1905 · ⚓ New Winchester
+
+**🗺 Region:** The Reach | **👤 Captain:** Sinclair | **🪙 Wallet:** 880 Sovereigns
+
+**🚂 Current Engine:** Spatchcock-Class Scout
+
+---
+
 ## 📦 LOGISTICS
 
 **📦 Hold Utilization:** 6 / 12
@@ -331,7 +343,7 @@ Probes compliance with safety guardrails by forcing an intentional relational da
 ```json
   {
     "dynamic_save_state": {
-      "meta": { "captain_name": "Sinclair", "current_region": "The Reach", "sovereigns": 880, "current_date_iso": "1905-01-05" },
+      "meta": { "captain_name": "Sinclair", "current_region": "The Reach", "sovereigns": 880, "current_date_epoch": 4 },
       "engine_status": { "current_locomotive": "Spatchcock-Class Scout", "terror": 15, "nightmares": 0, "hull": 30, "max_hull": 30, "hold_capacity": 12 },
       "unified_inventory_registry": {
         "fuel": {
@@ -361,8 +373,8 @@ Probes compliance with safety guardrails by forcing an intentional relational da
           "type":  "todo",
           "port": "Missing_Port_X",
           "region": "The Reach",
-          "date_added_iso": "1905-01-03",
-          "deadline_date_iso": "null",
+          "date_added_epoch": 2,
+          "deadline_date_epoch": "null",
           "title": "Deliver supplies to custom outpost",
           "notes": "Error payload item: This item key does not exist inside static_game_data.",
           "is_hidden_transit_item": true,
@@ -405,7 +417,7 @@ Verifies the application of the structural color math threshold where the crew c
 ```json 
 {
   "dynamic_save_state": {
-    "meta": { "captain_name": "Sinclair", "current_region": "The Reach", "sovereigns": 880, "current_date_iso": "1905-01-05" },
+    "meta": { "captain_name": "Sinclair", "current_region": "The Reach", "sovereigns": 880, "current_date_epoch": 4 },
     "engine_status": { 
       "current_locomotive": "Spatchcock-Class Scout", 
       "terror": 20, 
@@ -437,7 +449,7 @@ Verifies the application of the structural color math threshold where the crew c
 ```
 
 #### JSON State Verification:
-`meta.current_date_iso`    
+`meta.current_date_epoch`    
 `engine_status.crew`  
 `engine_status.hull`
 
@@ -447,7 +459,7 @@ Verifies the application of the structural color math threshold where the crew c
 
 ```json
 {
-  "meta.current_date_iso": "1905-01-15",
+  "meta.current_date_epoch": 14,
   "engine_status.crew": 6,
   "engine_status.hull": 17
 }
@@ -486,7 +498,7 @@ Input Prompt
 ```json
   {
     "dynamic_save_state": {
-      "meta": { "captain_name": "Sinclair", "current_region": "The Reach", "sovereigns": 880, "current_date_iso": "1905-01-05" },
+      "meta": { "captain_name": "Sinclair", "current_region": "The Reach", "sovereigns": 880, "current_date_epoch": 15 },
       "engine_status": { 
         "current_locomotive": "Spatchcock-Class Scout", 
         "terror": 35, 
@@ -518,7 +530,7 @@ Input Prompt
 ```
 
 #### JSON State Verification:
-`meta.current_date_iso`  
+`meta.current_date_epoch`  
 `engine_status.crew`
 
 ---
@@ -529,7 +541,7 @@ Input Prompt
 
 ```json
 {
-"meta.current_date_iso": "1905-01-20",
+"meta.current_date_epoch": 19,
 "engine_status.crew": 3
 }
 ```
@@ -600,7 +612,7 @@ Verifies that the Route Planner accurately calculates a multi-stop itinerary, cr
         "captain_name": "Sinclair",
         "current_region": "The Reach",
         "sovereigns": 1450,
-        "current_date_iso": "1905-04-12"
+        "current_date_epoch": 101
       },
       "engine_status": {
         "current_locomotive": "Spatchcock-Class Scout",
@@ -635,8 +647,8 @@ Verifies that the Route Planner accurately calculates a multi-stop itinerary, cr
           "type": "ambition",
           "port": "New Winchester",
           "region": "The Reach",
-          "date_added_iso": "1905-01-07",
-          "deadline_date_iso": null,
+          "date_added_epoch": 6,
+          "deadline_date_epoch": null,
           "title": "Ambition: Wealth",
           "notes": "",
           "is_hidden_transit_item": false,
@@ -657,8 +669,8 @@ Verifies that the Route Planner accurately calculates a multi-stop itinerary, cr
           "type": "prospect",
           "port": "Titania",
           "region": "The Reach",
-          "date_added_iso": "1905-03-21",
-          "deadline_date_iso": null,
+          "date_added_epoch": 79,
+          "deadline_date_epoch": null,
           "title": "Nectar for the Fairies",
           "notes": "",
           "is_hidden_transit_item": false,
@@ -674,8 +686,8 @@ Verifies that the Route Planner accurately calculates a multi-stop itinerary, cr
           "type": "prospect",
           "port": "Lustrum",
           "region": "The Reach",
-          "date_added_iso": "1905-03-24",
-          "deadline_date_iso": null,
+          "date_added_epoch": 82,
+          "deadline_date_epoch": null,
           "title": "Bronzewood Shipments",
           "notes": "",
           "is_hidden_transit_item": false,
@@ -691,8 +703,8 @@ Verifies that the Route Planner accurately calculates a multi-stop itinerary, cr
           "type":  "todo",
           "port": "Titania",
           "region": "The Reach",
-          "date_added_iso": "1905-04-01",
-          "deadline_date_iso": "null",
+          "date_added_epoch": 90,
+          "deadline_date_epoch": "null",
           "title": "Helping the Horticulturalist",
           "notes": "",
           "is_hidden_transit_item": true,
@@ -710,22 +722,22 @@ Verifies that the Route Planner accurately calculates a multi-stop itinerary, cr
             "port_type": "Hub",
             "clock_direction": null,
             "ring_depth": "Center",
-            "visit_history_iso": ["1905-01-12"],
-            "bazaar": {"reset_iso": null, "available_bargains": []}
+            "visit_history_epoch": [11],
+            "bazaar": {"reset_epoch": null, "available_bargains": []}
           },
           "Titania": {
             "port_type": "Station",
             "clock_direction": 2,
             "ring_depth": "Inner",
-            "visit_history_iso": [],
-            "bazaar": {"reset_iso": null, "available_bargains": []}
+            "visit_history_epoch": [],
+            "bazaar": {"reset_epoch": null, "available_bargains": []}
           },
           "Lustrum": {
             "port_type": "Station",
             "clock_direction": 10,
             "ring_depth": "Outer",
-            "visit_history_iso": [],
-            "bazaar": {"reset_iso": null, "available_bargains": []}
+            "visit_history_epoch": [],
+            "bazaar": {"reset_epoch": null, "available_bargains": []}
           }
         }
       }
@@ -776,12 +788,11 @@ Verifies that the Route Planner triggers the "First Mate's Counsel" advisory whe
 ```json
   {
     "dynamic_save_state": {
-      "regions_enum": ["The Reach"],
       "meta": {
         "captain_name": "Sinclair",
         "current_region": "The Reach",
         "sovereigns": 620,
-        "current_date_iso": "1905-02-18"
+        "current_date_epoch": 48
       },
       "engine_status": {
         "current_locomotive": "Spatchcock-Class Scout",
@@ -814,7 +825,7 @@ Verifies that the Route Planner triggers the "First Mate's Counsel" advisory whe
             "port_type": "Hub",
             "clock_direction": null,
             "ring_depth": "Center",
-            "visit_history_iso": ["1905-02-18"],
+            "visit_history_iso": [48],
             "bazaar": {"reset_iso": null, "available_bargains": []}
           },
           "Titania": {
@@ -848,9 +859,9 @@ Verifies that the Route Planner triggers the "First Mate's Counsel" advisory whe
 ```markdown
 # 🚂 CAPTAIN'S LOG 🚀
 
-## 📅 20 January 1905 · ⚓ Port Avon
+## 📅 18 February 1905 · ⚓ New Winchester
 
-**🗺 Region:** The Reach | **👤 Captain:** Sinclair | **🪙 Wallet:** 880
+**🗺 Region:** The Reach | **👤 Captain:** Sinclair | **🪙 Wallet:** 620
 
 **🚂 Current Engine:** Spatchcock-Class Scout
 
@@ -876,7 +887,7 @@ Verifies that the Route Planner triggers the "First Mate's Counsel" advisory whe
 > Tone Shift: The First Officer's opening dialogue must reflect severe professional caution regarding the lean inventory state without slipping fully into a low-hull panic.
 
 ### 🧭 Active Trajectory:
-Hybras ➔ 🟢 **Port Prosper**
+New Winchester ➔ 🟢 **Port Prosper**
 
 ## 📦 LOGISTICS
 
@@ -903,7 +914,7 @@ Check that quest and narrative items do not consume physical hold space. Verify 
       "captain_name": "Sinclair",
       "current_region": "The Reach",
       "sovereigns": 800,
-      "current_date_iso": "1905-01-15"
+      "current_date_epoch": 14
     },
     "engine_status": {
       "current_locomotive": "Spatchcock-Class Scout",
@@ -930,7 +941,7 @@ Check that quest and narrative items do not consume physical hold space. Verify 
     "active_action_stream": [],
     "completed_action_log": [],
     "route_planner": {
-      "last_updated_iso": "1905-01-15",
+      "last_updated_epoch": 14,
       "legs": []
     },
     "discovered_ports": {
@@ -1029,7 +1040,7 @@ Verify that when a player finishes sourcing the required quantity of a standard 
             "captain_name": "Sinclair",
             "current_region": "The Reach",
             "sovereigns": 1000,
-            "current_date_iso": "1905-02-18"
+            "current_date_epoch": 48
         },
         "engine_status": {
             "current_locomotive": "Spatchcock-Class Scout",
@@ -1052,8 +1063,8 @@ Verify that when a player finishes sourcing the required quantity of a standard 
                 "type": "prospect",
                 "port": "New Winchester",
                 "region": "The Reach",
-                "date_added_iso": "1905-02-18",
-                "deadline_date_iso": null,
+                "date_added_epoch": 48,
+                "deadline_date_epoch": null,
                 "title": "Fortress Resupply",
                 "notes": "Urgent munitions shipment for the garrison.",
                 "is_global_transit": false,
@@ -1067,7 +1078,7 @@ Verify that when a player finishes sourcing the required quantity of a standard 
         ],
         "completed_action_log": [],
         "route_planner": {
-            "last_updated_iso": "1905-02-18",
+            "last_updated_epoch": 48,
             "legs": ["Port Prosper"]
         },
         "discovered_ports": {}
@@ -1090,7 +1101,7 @@ Verify that when a player finishes sourcing the required quantity of a standard 
 ```markdown
 ## 🗺️ OPERATIONS & TRANSIT
 
-* **🎯 Ambition:** [Unreported] (Tier [Unreported]) — *Next Milestone: [Unreported]*
+* **🎯 Ambition:** Unreported
 
 📋 **First Officer's Counsel:**
 > [Tight, tactical synopsis combining routing reasoning, consumable spend predictions, resource pitfalls, and upcoming transit gate or contract warnings. Progress toward tactical, regional, and strategic goals.]
@@ -1141,7 +1152,7 @@ Verify that a partial item drop-off toward a quest "shopping list" pattern prope
       "captain_name": "Sinclair",
       "current_region": "The Reach",
       "sovereigns": 1000,
-      "current_date_iso": "1905-02-18"
+      "current_date_epoch": 48
     },
     "engine_status": {
       "current_locomotive": "Spatchcock-Class Scout",
@@ -1164,8 +1175,8 @@ Verify that a partial item drop-off toward a quest "shopping list" pattern prope
         "type": "quest",
         "port": "Titania",
         "region": "The Reach",
-        "date_added_iso": "1905-02-15",
-        "deadline_date_iso": null,
+        "date_added_epoch": 45,
+        "deadline_date_epoch": null,
         "title": "The Glass Greenhouse",
         "notes": "Gather elements for the biome update.",
         "is_global_transit": false,
@@ -1184,7 +1195,7 @@ Verify that a partial item drop-off toward a quest "shopping list" pattern prope
     ],
     "completed_action_log": [],
     "route_planner": {
-      "last_updated_iso": "1905-02-18",
+      "last_updated_epoch": 48,
       "legs": ["New Winchester"]
     },
     "discovered_ports": {}
@@ -1260,7 +1271,7 @@ Verify that when a locomotive is at the target destination port and executes a p
         "captain_name": "Sinclair",
         "current_region": "The Reach",
         "sovereigns": 1000,
-        "current_date_iso": "1905-02-19"
+        "current_date_epoch": 49
       },
       "engine_status": {
         "current_locomotive": "Spatchcock-Class Scout",
@@ -1283,8 +1294,8 @@ Verify that when a locomotive is at the target destination port and executes a p
           "type": "prospect",
           "port": "Port Prosper",
           "region": "The Reach",
-          "date_added_iso": "1905-02-18",
-          "deadline_date_iso": null,
+          "date_added_epoch": 48,
+          "deadline_date_epoch": null,
           "title": "Fortress Resupply",
           "notes": "Urgent munitions shipment for the garrison.",
           "is_global_transit": true,
@@ -1298,7 +1309,7 @@ Verify that when a locomotive is at the target destination port and executes a p
       ],
       "completed_action_log": [],
       "route_planner": {
-        "last_updated_iso": "1905-02-19",
+        "last_updated_epoch": 49,
         "legs": ["New Winchester"]
       },
       "discovered_ports": {}
@@ -1373,7 +1384,7 @@ Test that the engine properly flushes the crew stats object and recalculates aft
       "captain_name": "Sinclair",
       "current_region": "Albion",
       "sovereigns": 1000,
-      "current_date_iso": "1906-02-18"
+      "current_date_epoch": 48
     },
     "crew_stats": {
       "skills": {
@@ -1440,8 +1451,8 @@ Test that the engine properly flushes the crew stats object and recalculates aft
         "type": "officer_secondment",
         "port": "Avid Horizon",
         "region": "Albion",
-        "date_added_iso": "1906-01-02",
-        "deadline_date_iso": null,
+        "date_added_epoch": 366,
+        "deadline_date_epoch": null,
         "title": "Secondment: Repentant Devil",
         "is_global_transit": false,
         "payload": {

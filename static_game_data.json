@@ -12,8 +12,8 @@
           "__NOTE": "Persistent freeform scratchpad for player-driven tracking, custom goals, or quest branch reminders. Defaults to []."
         },
         "bazaar": {
-          "reset_iso": {
-            "type": "string (YYYY-MM-DD) | null",
+          "reset_epoch": {
+            "type": "integer| null",
             "__NOTE": "The engine calendar date when the local market inventory refreshes. Set to null if current bargains are unobserved."
           },
           "available_bargains": [
@@ -36,8 +36,8 @@
           "type": "string",
           "__ENUM": ["The Reach", "Albion", "Eleutheria", "The Blue Kingdom"]
         },
-        "date_added_iso": "string (YYYY-MM-DD)",
-        "deadline_date_iso": "string (YYYY-MM-DD) | null",
+        "date_added_epoch": "integer",
+        "deadline_date_epoch": "integer | null",
         "title": "string",
         "notes": "string",
         "is_global_transit": {

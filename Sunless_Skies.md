@@ -239,22 +239,28 @@ $$\text{Floating Asset Capital} = \sum_{g} ([\text{registry}[g].\text{qty\_in\_h
 * *Condition:* The keys `fuel` and `supplies` must be explicitly excluded from this summation loop to prevent consumable overhead from inflating the calculation of liquid investment value.
 
 ### 4. Date Conversions & Temporal Logic
-1. When rendering dates in the Markdown layout, convert "YYYY-MM-DD" JSON values into human-readable textual representations (e.g., `"1905-03-17"` must display as `"17 March 1905"`). Day 0 of the calendar is always `"1905-01-01"`. 
-2. **The Absolute Day Engine:** To prevent string evaluation drift, track all chronological advancement using the integer property `meta.current_day_epoch`. Every calendar day that passes increments this integer by `1`. All secondment expiration checks and bazaar cycles must evaluate cleanly using integer offsets against `current_day_epoch` before transforming back to an ISO string wrapper.
+1. **The Absolute Day Engine:** To permanently eliminate calendar parsing drift, the single source of temporal truth for the vessel is the integer property `meta.current_day_epoch`. Day 0 is strictly anchored to 1905-01-01 (the dawn of the Captain's voyage). 
+2. **Calendar Display Mapping:** When rendering logs or user-facing templates, convert the integer `current_day_epoch` into a human-readable textual representation. Compute the superficial calendar string dynamically where Day 0 = "1 January 1905", Day 31 = "1 February 1905", etc. Leap years are strictly ignored by London decree to maintain administrative sanity across the High Wilderness.
+3. **Secondment and Deadline Integrity:** All temporal tracking variables—including officer secondment return thresholds, passenger delivery limits, and bazaar refresh cycles—must be calculated and evaluated exclusively as absolute integer values against `current_day_epoch` before transforming back to an ISO string wrapper.
 
-### 5. The Volatile Cache Recalculation Pipeline
+### 5. Non-Linear Temporal Deflection Mechanics (Irrational Time Shifts)
+* **Chronological Fractures & Compression:** The engine does not enforce a rigid forward-only time step. Narrative events, transit anomalies, or engine failures may trigger negative or positive epoch adjustments (e.g., Δepoch = -3 or Δepoch = +15). 
+* **The Zero-Floor Boundary:** Under no circumstances may an irrational time shift drop `meta.current_day_epoch` below 0. If a negative time anomaly would reduce the epoch below zero, cap the value hard at 0.
+* **Temporal Commodity Interaction:** When the vessel physically consumes or utilizes "Unseasoned Hours" cargo to alter local reality, the transaction directly mutates `meta.current_day_epoch`. The background engine must instantly re-evaluate all active action streams and maturity states against the newly warped epoch value before processing the visual log pass.
+
+### 6. The Volatile Cache Recalculation Pipeline
 Prior to rendering any log template or executing a State departure, the engine must completely flush and rebuild all stats to prevent cache drift:
-1. Reset `crew_stats.skills.*.modifier` and `crew_stats.affiliations.*.modifier` to absolute zero.
-2. Execute a single-pass loop through the 5 keys inside `officer_manifest.on_duty`.
-3. **State Verification Gate:** Verify that the assigned companion key appears once and only once in the `officer_manifest` object. 
-4. For any active station containing an officer payload, query its `officer_id_key` and `upgrade_tier` against `static_game_data.officer_directory`.
-5. Compute the active modifier using the summation of assigned bridge slots:
+* Reset `crew_stats.skills.*.modifier` and `crew_stats.affiliations.*.modifier` to absolute zero.
+* Execute a single-pass loop through the 5 keys inside `officer_manifest.on_duty`.
+* **State Verification Gate:** Verify that the assigned companion key appears once and only once in the `officer_manifest` object. 
+* For any active station containing an officer payload, query its `officer_id_key` and `upgrade_tier` against `static_game_data.officer_directory`.
+* Compute the active modifier using the summation of assigned bridge slots:
 
 $$\text{Modifier} = \sum_{\text{Active Officers}} \text{Officer Perk Value}$$
 
-5. Compute the final output value as: $\text{Total} = \text{Base} + \text{Modifier}$. Any companion sitting in `unassigned`, `seconded`, or `departed` contributes exactly 0.
+* Compute the final output value as: $\text{Total} = \text{Base} + \text{Modifier}$. Any companion sitting in `unassigned`, `seconded`, or `departed` contributes exactly 0.
 
-### 6. Target-Driven Predictive Advisory Logic
+### 7. Target-Driven Predictive Advisory Logic
 When the Captain indicates an impending skill or affiliation hurdle, the navigation engine must run a combinatorics sweep across all available companion entities inside the manifest's `on_duty` and `unassigned` arrays. It computes the optimal layout configuration and injects its conclusion cleanly inside the *First Officer's Counsel* block as a non-binding tip.
 
 ---
@@ -296,6 +302,10 @@ Scan `active_action_stream`. Duplicate template rows exactly for multiple discre
 | **`passenger`** | Whole block under **### 👤 ACTIVE PASSENGERS & BRIDGE TRANSIT**<br> | Global Transit Passport (`true`). Renders continuously across all transit states while aboard.|
 
 ### 5. Core Processing & Logistical Grid Rules
+* Superficial Date Mapping & Temporal Disruption Rules:
+  * **The Conversional Pass:** When compiling user-facing headers or log metadata, the layout engine must completely ignore any raw YYYY-MM-DD data structures and build textual strings purely via meta.current_day_epoch. Compute the superficial text using a standardized calendar grid where Day 0 equals "1 January 1905", Day 31 equals "1 February 1905", etc. Leap years are entirely bypassed.  
+  * **Anachronism Flagging:** If an irrational time shift causes a historical backtrack (meta.current_day_epoch drops lower than the last_updated_epoch found within the route_planner), append an explicit ⚠️ CHRONOLOGICAL FRACTURE tag adjacent to the date header in the logbook output.
+  * **Immutable History Protection:** When logging previously archived logs or milestones to the visual logbook, do not retroactively update their historical timestamps to match current engine time. A quest or contract completed on Epoch Day 12 must eternally render as its calculated Epoch Day 12 calendar equivalent, creating a permanent structural history regardless of any future time slips.
 * **Vessel Integrity Thresholds:** Automatically compute system status icons:
   * **Crew (`🟢/🟡/🔴`):** 🟢 $\ge$ ($\lfloor$`max_crew` $\times$ 0.5$\rfloor$ + 2) | 🟡 $\ge$ $\lfloor$`max_crew` $\times$ 0.5$\rfloor$ | 🔴 < $\lfloor$`max_crew` $\times$ 0.5$\rfloor Tyrol$.
   * **Hull (`🟢/🟡/🔴`):** 🟢 $\ge$ 60% | 🟡 $\ge$ 30% | 🔴 < 30%.
@@ -310,7 +320,7 @@ Scan `active_action_stream`. Duplicate template rows exactly for multiple discre
   * 🔴 Red Bubble (➔ 🔴): The coordinate is a complete resupply desert (has_fuel: false AND has_supplies: false).
 * **Inventory Table:** Populate the rows inside **📦 LOGISTICS**. Fuel and Supplies occupy rows 1 and 2. Render `🚨` at zero, `⚠️` below reserve thresholds, and `🟢` when safe. For standard commodities, suppress rows entirely if hold and bank stock are both zero.
 * **Bridge Seats:** Step through `officer_manifest.on_duty`. If a seat is empty, print `🔘 Vacant` and plain em-dashes `—`. If filled, render explicit skill/faction modifications while omitting any `0` attributes and structural brackets.
-* **Secondment Outlook:** Always display every active secondment on a separate row in **⏳ SECONDMENT OUTLOOK** by iterating over every `"type":"officer_secondment"` object in the `action_event_stream`. If `current_date_iso` < `deadline_date_iso`, render `🔒 Locked Underway`, otherwise display `🟢 Ready`. If `deadline_date_iso` is `null`, display `🟢 Ready`. Drop the sub-header if no active secondments are underway.
+* **Secondment Outlook:** Always display every active secondment on a separate row in **⏳ SECONDMENT OUTLOOK** by iterating over every `"type":"officer_secondment"` object in the `action_event_stream`. If `current_date_epoch` < `deadline_date_epoch`, render `🔒 Locked Underway`, otherwise display `🟢 Ready`. If `deadline_date_epoch` is `null`, display `🟢 Ready`. Drop the sub-header if no active secondments are underway.
 * **Autosave Footprint:** Compress the entire active `dynamic_save_state` object into a minified, single-line JSON block wrapped inside standard markdown code parameters at the absolute foot of the document.
 
 ---
@@ -324,7 +334,6 @@ Scan `active_action_stream`. Duplicate template rows exactly for multiple discre
       "captain_name": "",
       "current_region": "The Reach",
       "sovereigns": 0,
-      "current_date_iso": "1905-01-01",
       "current_day_epoch": 0
     },
     "crew_stats": {
@@ -522,7 +531,7 @@ Scan `active_action_stream`. Duplicate template rows exactly for multiple discre
     "active_action_stream": [{"__NOTE":"Category 3 Narrative Tracking: Wrapped natively inside individual quest objects."}],
     "completed_action_log": [],
     "route_planner": {
-      "last_updated_iso": "1905-01-01",
+      "last_updated_epoch": 0,
       "legs": []
     },
     "discovered_ports": {
