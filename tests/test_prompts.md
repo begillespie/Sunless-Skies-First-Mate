@@ -1181,7 +1181,6 @@ Verify that a partial item drop-off toward a quest "shopping list" pattern prope
         "notes": "Gather elements for the biome update.",
         "is_global_transit": false,
         "payload": {
-          "questline_name": "The Orchid Engine",
           "npc_or_faction": "Chief Botanist",
           "current_step_number": 1,
           "quest_pattern": "shopping_list",
@@ -1226,9 +1225,9 @@ Verify that a partial item drop-off toward a quest "shopping list" pattern prope
 > Should note partial delivery of the quest items.
 
 ### 🧭 Active Trajectory:
-Titania ➔ 🟢 **Not Reported**
+Titania ➔ 🟢 **New Winchester**
 
-### ➡️ NEXT STOP: Port Avon
+### ➡️ NEXT STOP: Winchester
 * 📖 **QUEST PLOTLINE:** The Glass Greenhouse — Step 1: Gather elements for the biome update. Items Needed: 2 Verdant Seeds
 
 ---
@@ -1343,7 +1342,7 @@ Verify that when a locomotive is at the target destination port and executes a p
 Port Prosper ➔ 🟢 **New Winchester**
 
 ### ➡️ NEXT STOP: New Winchester
-* 🔑 **READY FOR DELIVERY:** Fortress Resupply — Deliver 2 Crates of Munitions to complete contract
+* 🔑 **READY FOR DELIVERY:** Fortress Resupply — Deliver 2 Crates of Munitions to Port Prosper to complete contract
 
 --- 
 
@@ -1475,8 +1474,8 @@ Test that the engine properly flushes the crew stats object and recalculates aft
 `crew_stats.skills.mirrors.modifier`
 `crew_stats.skills.hearts.modifier`
 `crew_stats.skills.veils.modifier`
-`crew_stats.affiliations.bohemia`
-`crew_stats.affiliations.establishment`
+`crew_stats.affiliations.bohemia.modifier`
+`crew_stats.affiliations.establishment.modifier`
 `officer_manifest.on_duty.first_officer.upgrade_tier`
 
 ### Expected Verification:

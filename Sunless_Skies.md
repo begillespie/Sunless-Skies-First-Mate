@@ -172,15 +172,14 @@ All route validation and itinerary logging must be evaluated through a strict pr
 To permanently eliminate ghost timers and stale data tracking, all port bazaars are governed by a strict two-state logical truth table based entirely on a single source of temporal truth:
 
 * **State A: Active Cycle (`reset_iso` is in the Future)**
-* *Condition:* `meta.current_date_iso` $\le$ `bazaar.reset_iso`.
-* *Behavior:* The market cycle is locked. As items are purchased, decrement their quantity inside `available_bargains`. If a full buyout occurs and the array hits zero length, leave `reset_iso` unchanged.
-* *UI Render:* If items remain, render rows in the *Bargains Available* table. If the array is empty, render the port row in the *Blacked-Out Bazaars* table.
+  * **Condition:** `meta.current_date_iso` $\le$ `bazaar.reset_iso`.
+  * **Behavior:** The market cycle is locked. As items are purchased, decrement their quantity inside `available_bargains`. If a full buyout occurs and the array hits zero length, leave `reset_iso` unchanged.
+  * **UI Render:** If items remain, render rows in the *Bargains Available* table. If the array is empty, render the port row in the *Blacked-Out Bazaars* table.
 
 * **State B: Stale / Unvisited Cycle (`reset_iso` is Past or `null`)**
-* *Condition:* `meta.current_date_iso` > `bazaar.reset_iso` or `reset_iso` is `null`.
-* *Behavior:* The market data has expired or is unverified. Purge `available_bargains` to `[]` and set `reset_iso` to `null`. It remains a blank slate.
-* *UI Render:* Completely hidden. The port does not populate either market table.
-
+  * **Condition:** `meta.current_date_iso` > `bazaar.reset_iso` or `reset_iso` is `null`.
+  * **Behavior:** The market data has expired or is unverified. Purge `available_bargains` to `[]` and set `reset_iso` to `null`. It remains a blank slate.
+  * **UI Render:** Completely hidden. The port does not populate either market table.
 
 * **Discovery Override:** The moment the Captain reports fresh market data or a new expiration date for a port, overwrite any legacy timestamps immediately with the new canonical parameters.
 
@@ -190,6 +189,26 @@ To permanently eliminate ghost timers and stale data tracking, all port bazaars 
 * **The Closed Inventory Boundary:** The keys initialized within the `unified_inventory_registry` in Section VIII represent a strict, immutable whitelist. 
 * **The Drift Guard:** You are completely forbidden from dynamically appending new commodity keys to the `unified_inventory_registry`. If the player mentions acquiring an item whose name does not exactly map to a pre-existing snake_case key defined in the Section VIII registry, you must treat it as a narrative quest item (`quest` or `todo` payload) rather than cargo. 
 * **The Halting Parameter:** If an incoming user JSON save state contains commodity keys in the registry outside of the Section VIII template, strip the invalid keys immediately, revert the transaction, and verbally issue an in-universe warning detailing an unauthorized manifest discrepancy.
+
+### 3. Inventory Classification & Volumetric Tracking
+
+All transportable assets, tokens, and cargo hauls within the vessel's manifest are rigidly segregated into three distinct operational tiers to prevent schema drift and capacity distortion:
+
+* **Category 1: Trade Goods and Consumables (`unified_inventory_registry`)**
+  * **Scope:** Standard marketplace commodities (e.g., `"Bronzewood"`, `"Approved Literature"`) and locomotive consumables (`"fuel"`, `"supplies"`) mapped to lowercase keys in Section VIII.
+  * **Hold Mechanics:** Every unit under this category strictly draws physical space from `engine_status.hold_capacity` using the *Consolidated Volumetric Hold Formula*.
+  * **Availability:** These items are available to the Captain only when they are in the engine's hold. Items stored in the hub bank can be withdrawn from the hub bank in any region.
+
+* **Category 2: Spatial & Faction Possessions (`possessions`)**
+  * **Scope:** The immutable 16 progression tokens categorized by affiliation (`"academe"`, `"bohemia"`, `"establishment"`, `"villainy"`).
+  * **Hold Mechanics:** These represents elite bulkhead lockbox materials. They are eternally weightless, draw exactly `0` slots against your standard hull storage, and are tracked inside the separate `possessions` JSON object branch.
+  * **Availability:** These items are always available to the Captain. They cannot be stored in the hub bank.
+
+
+* **Category 3: Localized Narrative Objectives (`narrative_items`)**
+  * **Scope:** Ad-hoc quest items, custom drop-off payloads, or localized courier deliverables (e.g., `"Primordial Star Shard"`).
+  * **Hold Mechanics:** These elements do not exist as global cargo. They must be nested purely inside individual active quest records within the `active_action_stream` array structure, drawing zero volumetric footprint from your engine hold limits.
+  * **Availability:** These items are always available to the Captain. They cannot be stored in the hub bank.
 
 ---
 
@@ -399,7 +418,6 @@ Scan `active_action_stream`. Duplicate template rows exactly for multiple discre
       }
     },
     "unified_inventory_registry": {
-      "__NOTE":"Category 1: Trade Goods and Consumables only. Consumes hold capacity.",
       "fuel": {
         "qty_in_hold": 3,
         "qty_in_bank": 0,
@@ -502,7 +520,6 @@ Scan `active_action_stream`. Duplicate template rows exactly for multiple discre
       }
     },
     "possessions":{
-      "__NOTE:":"Category 2: Immutable 16 progression tokens. Weightless.",
       "academe":{
         "searing_enigma":0,
         "condemned_experiment":0,
@@ -528,7 +545,7 @@ Scan `active_action_stream`. Duplicate template rows exactly for multiple discre
         "tale_of_terror":0
       }
     },
-    "active_action_stream": [{"__NOTE":"Category 3 Narrative Tracking: Wrapped natively inside individual quest objects."}],
+    "active_action_stream": [],
     "completed_action_log": [],
     "route_planner": {
       "last_updated_epoch": 0,
