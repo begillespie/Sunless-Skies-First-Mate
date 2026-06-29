@@ -64,8 +64,8 @@
 
 ## 🛞 BRIDGE ROSTER
 
-| Station                | Active Officer       | Skill Perks | Affiliation Perks |
-| ---                    | ---                  | ---         | ---               |
+| Station                   | Active Officer       | Skill Perks | Affiliation Perks |
+| ---                       | ---                  | ---         | ---               |
 | ⚓ **First Officer**  | [ Name / 🔘 Vacant ] | [ +X Skill / -Y Skill ] | [ +Z Faction ] |
 | 🛞 **Quartermaster**  | [ Name / 🔘 Vacant ] | [ — ] | [ — ] |
 | 🏮 **Signaller**      | [ Name / 🔘 Vacant ] | [ — ] | [ — ] |
