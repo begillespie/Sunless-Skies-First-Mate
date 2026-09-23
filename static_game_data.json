@@ -1,571 +1,952 @@
 {
+  "_metadata": {
+    "file_type": "static_game_data",
+    "static_data_version": "0.2.0",
+    "target_schema_version": "0.2.0",
+    "target_rules_version": "0.2.0",
+    "description": "Authoritative immutable game data, enums, schemas, and object blueprints for the Sunless Skies First Mate Engine."
+  },
+
   "static_game_data": {
-    "regions_enum": ["The Reach", "Albion", "Eleutheria", "The Blue Kingdom"],
+    "enums": {
+      "regions": [
+        "The Reach",
+        "Albion",
+        "Eleutheria",
+        "The Blue Kingdom"
+      ],
+      "port_keys": [
+        "carillon",
+        "company_house",
+        "hybras",
+        "leadbeater_and_stainrods_nature_reserve",
+        "lustrum",
+        "magdalenes",
+        "new_winchester",
+        "polmear_and_plentys_inconceivable_circus",
+        "port_avon",
+        "port_prosper",
+        "titania",
+        "traitors_wood",
+        "victory_hall",
+        "avid_horizon",
+        "london",
+        "perdurance",
+        "the_brabazon_workworld",
+        "the_clockwork_sun",
+        "the_floating_parliament",
+        "the_ministries",
+        "the_most_serene_mausoleum",
+        "the_royal_society",
+        "the_stair_to_the_sea",
+        "wit_and_vinegar_lumber_company",
+        "worlebury_juxta_mare",
+        "achlys",
+        "caduceus",
+        "eagle_provinces_empyrean",
+        "heart_catcher_gardens",
+        "langley_hall",
+        "pan",
+        "piranesi",
+        "the_brazen_brigade",
+        "the_gentlemen",
+        "the_house_of_rods_and_chains",
+        "winter_reside",
+        "deaths_door",
+        "sky_barnet",
+        "the_forge_of_souls",
+        "the_house_of_days",
+        "the_shadow_of_the_sun",
+        "the_white_well",
+        "wellmouth"
+      ],
+      "good_keys": [
+        "approved_literature",
+        "bombazine",
+        "bronzewood",
+        "caged_catch",
+        "chorister_nectar",
+        "dried_tea",
+        "fuel",
+        "gemstones",
+        "immaculate_souls",
+        "munitions",
+        "nostalgic_crockery",
+        "petrichor",
+        "stained_glass",
+        "supplies",
+        "undistinguished_souls",
+        "unseasoned_hours",
+        "verdant_seeds",
+        "illicit_literature",
+        "red_honey",
+        "starshine"
+      ],
+      "possession_keys": [
+        "searing_enigma",
+        "condemned_experiment",
+        "otherworldly_artifact",
+        "uncanny_specimen",
+        "captivating_treasure",
+        "moment_of_inspiration",
+        "vision_of_the_heavens",
+        "sky_story",
+        "royal_dispensation",
+        "cryptic_benefactor",
+        "ministry_stamped_permit",
+        "salon_stewed_gossip",
+        "crimson_promise",
+        "unlicensed_chart",
+        "savage_secret",
+        "tale_of_terror"
+      ],
+      "officer_id_keys": [
+        "conductor.clay",
+        "conductor.caring",
+        "conductor.copper_companion",
+        "princess.incognito",
+        "princess.shed_skin",
+        "princess.analytical",
+        "princess.political",
+        "navigator.fortunate",
+        "navigator.stalwart",
+        "old_friend",
+        "portrait_queen.unseen",
+        "portrait_queen.martyr_king",
+        "aunt.inconvenient",
+        "aunt.spymaster",
+        "aunt.revolutionary",
+        "hoarder.chiropterous",
+        "hoarder.multiplicitous",
+        "hoarder.immutable",
+        "forged_companion.illusive",
+        "forged_companion.poetic",
+        "forged_companion.pugilistic",
+        "forged_companion.studious",
+        "signalman.fatalistic",
+        "signalman.omnibus",
+        "devil.repentant",
+        "devil.defiant",
+        "vagabond.amiable",
+        "vagabond.dendrified",
+        "vagabond.incorrigible",
+        "driver.incautious",
+        "driver.judicious",
+        "driver.reckless",
+        "rat.brigade",
+        "rat.revengers",
+        "rat.reunion",
+        "eccentric.felined",
+        "eccentric.brilliant",
+        "eccentric.gentile",
+        "cat",
+        "dog",
+        "blemmigan",
+        "pangolin",
+        "urchin",
+        "dilly"
+      ],
+      "action_types": [
+        "prospect",
+        "quest",
+        "officer",
+        "officer_secondment",
+        "passenger",
+        "ambition",
+        "todo"
+      ],
+      "action_statuses": [
+        "active",
+        "ready",
+        "completed",
+        "failed",
+        "cancelled"
+      ],
+      "priorities": [
+        "low",
+        "routine",
+        "high"
+      ],
+      "ambition_types": [
+        "Wealth",
+        "Fame",
+        "The Truth",
+        "Martyrdom"
+      ]
+    },
+
     "object_blueprints": {
       "discovered_port_template": {
-        "clock_direction": {
-          "type": "integer | null",
-          "__NOTE": "Mutates from null to an integer (1-12) the exact turn the player reports its relative position on the regional chart."
-        },
-        "captains_notes": {
-          "type": "array_of_strings",
-          "__NOTE": "Persistent freeform scratchpad for player-driven tracking, custom goals, or quest branch reminders. Defaults to []."
-        },
-        "bazaar": {
-          "reset_epoch": {
-            "type": "integer| null",
-            "__NOTE": "The engine calendar date when the local market inventory refreshes. Set to null if current bargains are unobserved."
+        "type": "object",
+        "required": ["clock_direction", "captains_notes", "bazaar"],
+        "additionalProperties": false,
+        "properties": {
+          "clock_direction": {
+            "type": ["integer", "null"],
+            "minimum": 1,
+            "maximum": 12,
+            "description": "Relative clock position (1-12) on the regional chart, or null if unobserved."
           },
-          "available_bargains": [
-            {
-              "good_key": "string (ref: static_game_data.market_directory)",
-              "quantity_available": "integer",
-              "cost_per_unit": "integer"
+          "captains_notes": {
+            "type": "array",
+            "items": { "type": "string" },
+            "default": [],
+            "description": "Persistent freeform scratchpad for player-driven tracking or quest reminders."
+          },
+          "bazaar": {
+            "type": "object",
+            "required": ["reset_epoch", "available_bargains"],
+            "additionalProperties": false,
+            "properties": {
+              "reset_epoch": {
+                "type": ["integer", "null"],
+                "minimum": 0,
+                "description": "Engine calendar date when market inventory refreshes. Null if unobserved."
+              },
+              "available_bargains": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["good_key", "quantity_available", "cost_per_unit"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "good_key": {
+                      "type": "string",
+                      "enum": { "$ref": "#/static_game_data/enums/good_keys" }
+                    },
+                    "quantity_available": { "type": "integer", "minimum": 0 },
+                    "cost_per_unit": { "type": "integer", "minimum": 0 }
+                  }
+                }
+              }
             }
-          ]
+          }
         }
       },
+
       "action_event": {
-        "id": "string (pattern: ACT-XXXX)",
-        "type": {
-          "type": "string",
-          "__ENUM": ["prospect", "quest", "officer", "officer_secondment", "passenger", "ambition", "todo"]
-        },
-        "port": "string",
-        "region": {
-          "type": "string",
-          "__ENUM": ["The Reach", "Albion", "Eleutheria", "The Blue Kingdom"]
-        },
-        "date_added_epoch": "integer",
-        "deadline_date_epoch": "integer | null",
-        "title": "string",
-        "notes": "string",
-        "is_global_transit": {
-          "type": "boolean",
-          "__NOTE": "True indicates the item is loaded aboard the locomotive and tracking globally with the ship's manifest. False anchors the item to a static, local port."
-        },
-        "payload": {
-          "type": "object"
+        "type": "object",
+        "required": [
+          "action_id",
+          "type",
+          "status",
+          "origin_port",
+          "origin_region",
+          "title",
+          "notes",
+          "priority",
+          "is_pinned",
+          "created_epoch",
+          "updated_epoch",
+          "deadline_epoch",
+          "payload"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "action_id": {
+            "type": "string",
+            "pattern": "^ACT-[0-9]{4}$",
+            "description": "Sequential identifier, e.g., ACT-1001."
+          },
+          "type": {
+            "type": "string",
+            "enum": { "$ref": "#/static_game_data/enums/action_types" }
+          },
+          "status": {
+            "type": "string",
+            "enum": { "$ref": "#/static_game_data/enums/action_statuses" }
+          },
+          "origin_port": {
+            "type": "string",
+            "enum": { "$ref": "#/static_game_data/enums/port_keys" }
+          },
+          "origin_region": {
+            "type": "string",
+            "enum": { "$ref": "#/static_game_data/enums/regions" }
+          },
+          "title": { "type": "string" },
+          "notes": { "type": "string" },
+          "priority": {
+            "type": "string",
+            "enum": { "$ref": "#/static_game_data/enums/priorities" }
+          },
+          "is_pinned": { "type": "boolean" },
+          "created_epoch": { "type": "integer", "minimum": 0 },
+          "updated_epoch": { "type": "integer", "minimum": 0 },
+          "deadline_epoch": { "type": ["integer", "null"], "minimum": 0 },
+          "payload": { "type": "object" }
         }
       },
 
       "payload_variants": {
         "prospect": {
-          "good_key": "string (ref: static_game_data.market_directory)",
-          "quantity_required": "integer",
-          "quantity_sourced": "integer",
-          "quantity_delivered": "integer"
+          "type": "object",
+          "required": [
+            "good_key",
+            "quantity_required",
+            "quantity_sourced",
+            "quantity_delivered",
+            "destination_port",
+            "destination_region",
+            "reward_sovereigns"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "good_key": {
+              "type": "string",
+              "enum": { "$ref": "#/static_game_data/enums/good_keys" }
+            },
+            "quantity_required": { "type": "integer", "minimum": 1 },
+            "quantity_sourced": { "type": "integer", "minimum": 0 },
+            "quantity_delivered": { "type": "integer", "minimum": 0 },
+            "destination_port": {
+              "type": "string",
+              "enum": { "$ref": "#/static_game_data/enums/port_keys" }
+            },
+            "destination_region": {
+              "type": "string",
+              "enum": { "$ref": "#/static_game_data/enums/regions" }
+            },
+            "reward_sovereigns": { "type": ["integer", "null"], "minimum": 0 }
+          }
         },
 
         "quest": {
-          "npc_or_faction": "string",
-          "current_step_number": "integer",
-          "quest_pattern": {
-            "type": "string",
-            "__ENUM": ["fetch", "sequential", "hub_and_spoke", "shopping_list"]
-          },
-          "items_manifest":{
-            "goods": [
-              {
-                "good_key": "string (ref: static_game_data.market_directory)",
-                "quantity_required": "integer",
-                "quantity_delivered": "integer"
+          "type": "object",
+          "required": [
+            "npc_or_faction",
+            "current_step_number",
+            "quest_pattern",
+            "active_destinations",
+            "items_manifest"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "npc_or_faction": { "type": "string" },
+            "current_step_number": { "type": "integer", "minimum": 0 },
+            "quest_pattern": {
+              "type": "string",
+              "enum": ["fetch", "sequential", "hub_and_spoke", "shopping_list"]
+            },
+            "active_destinations": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["port", "region", "objective"],
+                "additionalProperties": false,
+                "properties": {
+                  "port": {
+                    "type": "string",
+                    "enum": { "$ref": "#/static_game_data/enums/port_keys" }
+                  },
+                  "region": {
+                    "type": "string",
+                    "enum": { "$ref": "#/static_game_data/enums/regions" }
+                  },
+                  "objective": { "type": "string" }
+                }
               }
-            ],
-            "possessions_": [
-              {
-                "possession_key": "string (ref: static_game_data.possessions_directory)",
-                "quantity_required": "integer",
-                "quantity_delivered": "integer"
-              }
-            ],
-            "narrative_items": [
-              {
-                "narrative_item_name": "string",
-                "quantity_required": "integer",
-                "quantity_delivered": "integer"
-              }
-            ]
+            },
+            "items_manifest": {
+              "$ref": "#/static_game_data/object_blueprints/shared_components/items_manifest"
+            }
           }
         },
 
         "officer": {
-          "officer_id_key": "string",
-          "current_step_number": "integer",
-          "items_manifest":{
-            "goods": [
-              {
-                "good_key": "string (ref: static_game_data.market_directory)",
-                "quantity_required": "integer",
-                "quantity_delivered": "integer"
+          "type": "object",
+          "required": [
+            "officer_id_key",
+            "target_upgrade_tier",
+            "current_step_number",
+            "active_destinations",
+            "items_manifest"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "officer_id_key": {
+              "type": "string",
+              "enum": { "$ref": "#/static_game_data/enums/officer_id_keys" }
+            },
+            "target_id_key": {
+              "type": "string",
+              "enum": { "$ref": "#/static_game_data/enums/officer_id_keys" }
+            },
+            "current_step_number": { "type": "integer", "minimum": 0 },
+            "active_destinations": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["port", "region", "objective"],
+                "additionalProperties": false,
+                "properties": {
+                  "port": {
+                    "type": "string",
+                    "enum": { "$ref": "#/static_game_data/enums/port_keys" }
+                  },
+                  "region": {
+                    "type": "string",
+                    "enum": { "$ref": "#/static_game_data/enums/regions" }
+                  },
+                  "objective": { "type": "string" }
+                }
               }
-            ],
-            "possessions_": [
-              {
-                "possession_key": "string (ref: static_game_data.possessions_directory)",
-                "quantity_required": "integer",
-                "quantity_delivered": "integer"
-              }
-            ],
-            "narrative_items": [
-              {
-                "narrative_item_name": "string",
-                "quantity_required": "integer",
-                "quantity_delivered": "integer"
-              }
-            ]
+            },
+            "items_manifest": {
+              "$ref": "#/static_game_data/object_blueprints/shared_components/items_manifest"
+            }
           }
         },
 
         "officer_secondment": {
-          "officer_id_key": "string",
-          "contribution_effect": "string | null",
-          "return_condition": "string | null"
+          "type": "object",
+          "required": [
+            "officer_id_key",
+            "duration_days",
+            "contribution_effect",
+            "return_condition"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "officer_id_key": {
+              "type": "string",
+              "enum": { "$ref": "#/static_game_data/enums/officer_id_keys" }
+            },
+            "duration_days": { "type": "integer", "minimum": 1 },
+            "contribution_effect": { "type": "string" },
+            "return_condition": { "type": "string" }
+          }
         },
 
         "passenger": {
-          "passenger_name": "string",
-          "complication_type": {
-            "type": "string",
-            "__ENUM": ["none", "terror_modifier", "crew_hazard", "contraband_risk"]
-          },
-          "complication_notes": "string"
+          "type": "object",
+          "required": [
+            "passenger_name",
+            "destination_port",
+            "destination_region",
+            "fare_sovereigns"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "passenger_name": { "type": "string" },
+            "destination_port": {
+              "type": "string",
+              "enum": { "$ref": "#/static_game_data/enums/port_keys" }
+            },
+            "destination_region": {
+              "type": "string",
+              "enum": { "$ref": "#/static_game_data/enums/regions" }
+            },
+            "fare_sovereigns": { "type": ["integer", "null"], "minimum": 0 }
+          }
         },
 
         "ambition": {
-          "ambition_type": {
-            "type": "string",
-            "__ENUM": ["Wealth", "Fame", "The Truth", "Martyrdom"]
-          },
-          "current_tier": "integer",
-          "milestone_description": "string",
-          "sovereigns_required_for_next_tier": "integer",
-          "items_manifest":{
-            "goods": [
-              {
-                "good_key": "string (ref: static_game_data.market_directory)",
-                "quantity_required": "integer",
-                "quantity_delivered": "integer"
-              }
-            ],
-            "possessions_": [
-              {
-                "possession_key": "string (ref: static_game_data.possessions_directory)",
-                "quantity_required": "integer",
-                "quantity_delivered": "integer"
-              }
-            ],
-            "narrative_items": [
-              {
-                "narrative_item_name": "string",
-                "quantity_required": "integer",
-                "quantity_delivered": "integer"
-              }
-            ]
+          "type": "object",
+          "required": [
+            "ambition_type",
+            "current_tier",
+            "milestone_description",
+            "sovereigns_required_for_next_tier",
+            "items_manifest"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "ambition_type": {
+              "type": "string",
+              "enum": { "$ref": "#/static_game_data/enums/ambition_types" }
+            },
+            "current_tier": { "type": "integer", "minimum": 1 },
+            "milestone_description": { "type": "string" },
+            "sovereigns_required_for_next_tier": { "type": "integer", "minimum": 0 },
+            "items_manifest": {
+              "$ref": "#/static_game_data/object_blueprints/shared_components/items_manifest"
+            }
           }
         },
 
         "todo": {
-          "priority": {
-            "type": "string",
-            "__ENUM": ["low", "normal", "high"]
-          },
-          "is_manually_pinned": {
-            "type": "boolean",
-            "__NOTE": "If true, forces this note to bypass location filtering and always render in the departure manifest."
+          "type": "object",
+          "required": ["target_port", "target_region"],
+          "additionalProperties": false,
+          "properties": {
+            "target_port": {
+              "type": ["string", "null"],
+              "enum": {
+                "anyOf": [
+                  { "$ref": "#/static_game_data/enums/port_keys" },
+                  { "type": "null" }
+                ]
+              }
+            },
+            "target_region": {
+              "type": ["string", "null"],
+              "enum": [
+                "The Reach",
+                "Albion",
+                "Eleutheria",
+                "The Blue Kingdom",
+                null
+              ]
+            }
+          }
+        }
+      },
+
+      "shared_components": {
+        "items_manifest": {
+          "type": "object",
+          "required": ["goods", "possessions", "narrative_items"],
+          "additionalProperties": false,
+          "properties": {
+            "goods": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["good_key", "quantity_required", "quantity_delivered"],
+                "additionalProperties": false,
+                "properties": {
+                  "good_key": {
+                    "type": "string",
+                    "enum": { "$ref": "#/static_game_data/enums/good_keys" }
+                  },
+                  "quantity_required": { "type": "integer", "minimum": 1 },
+                  "quantity_delivered": { "type": "integer", "minimum": 0 }
+                }
+              }
+            },
+            "possessions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["possession_key", "quantity_required", "quantity_delivered"],
+                "additionalProperties": false,
+                "properties": {
+                  "possession_key": {
+                    "type": "string",
+                    "enum": { "$ref": "#/static_game_data/enums/possession_keys" }
+                  },
+                  "quantity_required": { "type": "integer", "minimum": 1 },
+                  "quantity_delivered": { "type": "integer", "minimum": 0 }
+                }
+              }
+            },
+            "narrative_items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["narrative_item_name", "quantity_required", "quantity_delivered"],
+                "additionalProperties": false,
+                "properties": {
+                  "narrative_item_name": { "type": "string" },
+                  "quantity_required": { "type": "integer", "minimum": 1 },
+                  "quantity_delivered": { "type": "integer", "minimum": 0 }
+                }
+              }
+            }
           }
         }
       }
-    },
+    },  
 
     "officer_directory": {
       "first_officer": { 
         "conductor": {
-          "recruited": ["London", "The Brabazon Workworld"],
-          "tiers": {
-            "1": {
-              "lexical_name": "Clay Conductor",
-              "perks": {
-                "skills": { "iron": 2, "mirrors": 0, "hearts": 6, "veils": 0 },
-                "affiliations": { "academe": 1, "bohemia": 0, "establishment": 0, "villainy": 0 }
-              }
-            },
-            "2_a": {
-              "lexical_name": "Caring Conductor",
-              "perks": {
-                "skills": { "iron": 0, "mirrors": 0, "hearts": 10, "veils": 0 },
-                "affiliations": { "academe": 2, "bohemia": 0, "establishment": 0, "villainy": 0 }
-              }
-            },            
-            "2_b": {
-              "lexical_name": "Clay Conductor and Copper Companion",
-              "perks": {
-                "skills":  {"iron": 0, "mirrors": 10, "hearts": 0, "veils": 0 },
-                "affiliations": { "academe": 2, "bohemia": 0, "establishment": 0, "villainy": 0 }
-              }
+          "_recruited": ["London", "The Brabazon Workworld"],
+          "clay": {
+            "lexical_name": "Clay Conductor",
+            "tier": 1,
+            "perks": {
+              "skills": { "iron": 2, "mirrors": 0, "hearts": 6, "veils": 0 },
+              "affiliations": { "academe": 1, "bohemia": 0, "establishment": 0, "villainy": 0 }
+            }
+          },
+          "caring": {
+            "lexical_name": "Caring Conductor",
+            "tier": 2,
+            "perks": {
+              "skills": { "iron": 0, "mirrors": 0, "hearts": 10, "veils": 0 },
+              "affiliations": { "academe": 2, "bohemia": 0, "establishment": 0, "villainy": 0 }
+            }
+          },            
+          "copper_companion": {
+            "lexical_name": "Clay Conductor and Copper Companion",
+            "tier": 2,
+            "perks": {
+              "skills":  {"iron": 0, "mirrors": 10, "hearts": 0, "veils": 0 },
+              "affiliations": { "academe": 2, "bohemia": 0, "establishment": 0, "villainy": 0 }
             }
           }
         },
         "princess": {
-          "recruited": ["Port Prosper", "New Winchester"],
-          "tiers": {
-            "1": {
-              "lexical_name": "Incognito Princess",
-              "perks": {
-                "skills": { "iron": 0, "mirrors": 6, "hearts": 2, "veils": 0 },
-                "affiliations": { "academe": 0, "bohemia": 1, "establishment": 0, "villainy": 0 }
-              }
-            },
-            "2": {
-              "lexical_name": "The Shed Skin of the Incognito Princess",
-              "perks": {
-                "skills": {"iron": 0, "mirrors": 0, "hearts": 0, "veils": 0 },
-                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy": 0 }
-              }
-            },            
-            "3_a": {
-              "lexical_name": "Analytical Princess",
-              "perks": {
-                "skills": { "iron": 0, "mirrors": 10, "hearts": 0, "veils": 0 },
-                "affiliations": { "academe": 2, "bohemia": 0, "establishment": 0, "villainy": 0 }
-              }
-            },            
-            "3_b": {
-              "lexical_name": "Political Princess",
-              "perks": {
-                "skills": { "iron": 0, "mirrors": 10, "hearts": 0, "veils": 0 },
-                "affiliations": { "academe": 0, "bohemia": 2, "establishment": 0, "villainy": 0 }
-              }
+          "_recruited": ["Port Prosper", "New Winchester"],
+          "incognito": {
+            "lexical_name": "Incognito Princess",
+            "tier": 1,
+            "perks": {
+              "skills": { "iron": 0, "mirrors": 6, "hearts": 2, "veils": 0 },
+              "affiliations": { "academe": 0, "bohemia": 1, "establishment": 0, "villainy": 0 }
+            }
+          },
+          "shed_skin": {
+            "lexical_name": "The Shed Skin of the Incognito Princess",
+            "tier": 2,
+            "perks": {
+              "skills": {"iron": 0, "mirrors": 0, "hearts": 0, "veils": 0 },
+              "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy": 0 }
+            }
+          },            
+          "analytical": {
+            "lexical_name": "Analytical Princess",
+            "tier": 3,
+            "perks": {
+              "skills": { "iron": 0, "mirrors": 10, "hearts": 0, "veils": 0 },
+              "affiliations": { "academe": 2, "bohemia": 0, "establishment": 0, "villainy": 0 }
+            }
+          },            
+          "political": {
+            "lexical_name": "Political Princess",
+            "tier": 3,
+            "perks": {
+              "skills": { "iron": 0, "mirrors": 10, "hearts": 0, "veils": 0 },
+              "affiliations": { "academe": 0, "bohemia": 2, "establishment": 0, "villainy": 0 }
             }
           }
         },
         "navigator": {
-          "recruited": ["Lustrum"],
-          "tiers": {
-            "1": {
-              "lexical_name": "Fortunate Navigator",
-              "perks": {
-                "skills": { "iron": 6, "mirrors": 0, "hearts": 0, "veils": 2 },
-                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 1, "villainy": 0 }
-              }
-            },
-            "2": {
-              "lexical_name": "Stalwart Navigator",
-              "perks": {
-                "skills": { "iron": 10, "mirrors": 0, "hearts": 0, "veils": 0 },
-                "affiliations": { "academe": 0, "bohemia": 1, "establishment": 1, "villainy": 0 }
-              }
+          "_recruited": ["Lustrum"],
+          "fortunate": {
+            "lexical_name": "Fortunate Navigator",
+            "tier": 1,
+            "perks": {
+              "skills": { "iron": 6, "mirrors": 0, "hearts": 0, "veils": 2 },
+              "affiliations": { "academe": 0, "bohemia": 0, "establishment": 1, "villainy": 0 }
+            }
+          },
+          "stalwart": {
+            "lexical_name": "Stalwart Navigator",
+            "tier": 2,
+            "perks": {
+              "skills": { "iron": 10, "mirrors": 0, "hearts": 0, "veils": 0 },
+              "affiliations": { "academe": 0, "bohemia": 1, "establishment": 1, "villainy": 0 }
             }
           }
         },
         "old_friend": {
-          "recruited": ["New Winchester"],
-          "tiers": {
-            "1": {
-              "lexical_name": "Old Friend",
-              "perks": {
-                "skills": { "iron": 2, "mirrors": 2, "hearts": 2, "veils": 2 },
-                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy": 0 }
-              }
-            }
-          }
+          "_recruited": ["New Winchester"],
+          "lexical_name": "Old Friend",
+          "tier": 1,
+          "perks": {
+            "skills": { "iron": 2, "mirrors": 2, "hearts": 2, "veils": 2 },
+            "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy": 0 }
+         }
         },
         "portrait_queen": {
-          "recruited": ["London"],
-          "tiers": {
-            "1_a": {
-              "lexical_name": "The Portrait of the Unseen Queen",
-              "perks": {
-                "skills": { "iron": 0, "mirrors": 0, "hearts": 3, "veils": 2 },
-                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy": 0 }
-              }
-            },
-            "1_b": {
-              "lexical_name": "The Unseen Queen, depicted with the Martyr-King's Cup",
-              "perks": {
-                "skills": { "iron": 0, "mirrors": 0, "hearts": 3, "veils": 2 },
-                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy": 0 }
-              }
+          "_recruited": ["London"],
+          "unseen": {
+            "lexical_name": "The Portrait of the Unseen Queen",
+            "tier": 1,
+            "perks": {
+              "skills": { "iron": 0, "mirrors": 0, "hearts": 3, "veils": 2 },
+              "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy": 0 }
+            }
+          },
+          "martyr_king": {
+            "lexical_name": "The Unseen Queen, depicted with the Martyr-King's Cup",
+            "tier": 1,
+            "perks": {
+              "skills": { "iron": 0, "mirrors": 0, "hearts": 3, "veils": 2 },
+              "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy": 0 }
             }
           }
         }
       },
-      
       "quartermaster": {
         "aunt": {
-          "recruited": ["London", "Perdurance"],
-          "tiers": {
-            "1": {
-              "lexical_name": "Inconvenient Aunt",
-              "perks": {
-                "skills": { "iron": 6, "mirrors": 2, "hearts": 0, "veils": 0 },
-                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 1, "villainy": 0 }
-              }
-            },
-            "2_a": {
-              "lexical_name": "Your Spymaster Aunt",
-              "perks": {
-                "skills": { "iron": 10, "mirrors": 0, "hearts": 0, "veils": 0 },
-                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 2, "villainy": 0 }
-              }
-            },            
-            "2_b": {
-              "lexical_name": "Your Revolutionary Aunt",
-              "perks": {
-                "skills": { "iron": 0, "mirrors": 0, "hearts": 0, "veils": 10 },
-                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy": 2 }
-              }
+          "_recruited": ["London", "Perdurance"],
+          "inconvenient": {
+            "lexical_name": "Inconvenient Aunt",
+            "tier": 1,
+            "perks": {
+              "skills": { "iron": 6, "mirrors": 2, "hearts": 0, "veils": 0 },
+              "affiliations": { "academe": 0, "bohemia": 0, "establishment": 1, "villainy": 0 }
+            }
+          },
+          "spymaster": {
+            "lexical_name": "Your Spymaster Aunt",
+            "tier": 2,
+            "perks": {
+              "skills": { "iron": 10, "mirrors": 0, "hearts": 0, "veils": 0 },
+              "affiliations": { "academe": 0, "bohemia": 0, "establishment": 2, "villainy": 0 }
+            }
+          },            
+          "revolutionary": {
+            "lexical_name": "Your Revolutionary Aunt",
+            "tier": 2,
+            "perks": {
+              "skills": { "iron": 0, "mirrors": 0, "hearts": 0, "veils": 10 },
+              "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy": 2 }
             }
           }
         },
         "hoarder": {
-          "recruited": ["London"],
-          "tiers": {
-            "1": {
-              "lexical_name": "Chiropterous Hoarder",
-              "perks": {
-                "skills": { "iron": 0, "mirrors": 2, "hearts": 0, "veils": 6 },
-                "affiliations": { "academe": 0, "bohemia": 1, "establishment": 0, "villainy": 0 }
-              }
-            },
-            "2_a": {
-              "lexical_name": "Multiplicitous Hoarder",
-              "perks": {
-                "skills": { "iron": 10, "mirrors": 0, "hearts": 0, "veils": 0 },
-                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 2, "villainy": 0 }
-              }
-            },            
-            "2_b": {
-              "lexical_name": "Immutable Hoarder",
-              "perks": {
-                "skills": { "iron": 0, "mirrors": 0, "hearts": 0, "veils": 10 },
-                "affiliations": { "academe": 0, "bohemia": 2, "establishment": 0, "villainy": 0 }
-              }
+          "_recruited": ["London"],
+          "chiropterous": {
+            "lexical_name": "Chiropterous Hoarder",
+            "tier": 1,
+            "perks": {
+              "skills": { "iron": 0, "mirrors": 2, "hearts": 0, "veils": 6 },
+              "affiliations": { "academe": 0, "bohemia": 1, "establishment": 0, "villainy": 0 }
+            }
+          },
+          "multiplicitous": {
+            "lexical_name": "Multiplicitous Hoarder",
+            "tier": 2,
+            "perks": {
+              "skills": { "iron": 10, "mirrors": 0, "hearts": 0, "veils": 0 },
+              "affiliations": { "academe": 0, "bohemia": 0, "establishment": 2, "villainy": 0 }
+            }
+          },            
+          "immutable": {
+            "lexical_name": "Immutable Hoarder",
+            "tier": 2,
+            "perks": {
+              "skills": { "iron": 0, "mirrors": 0, "hearts": 0, "veils": 10 },
+              "affiliations": { "academe": 0, "bohemia": 2, "establishment": 0, "villainy": 0 }
             }
           }
         },
         "forged_companion": {
-          "recruited": ["The Forge of Souls"],
-          "tiers": {
-            "1_a": {
-              "lexical_name": "Illusive Forged Companion",
-              "perks": {
-                "skills": { "iron": 0, "mirrors": 0, "hearts": 0, "veils": 10 },
-                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy": 0 }
-              }
-            },
-            "1_b": {
-              "lexical_name": "Poetic Forged Companion",
-              "perks": {
-                "skills": { "iron": 0, "mirrors": 0, "hearts": 10, "veils": 0 },
-                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy": 0 }
-              }
-            },            
-            "1_c": {
-              "lexical_name": "Pugilistic Forged Companion",
-              "perks": {
-                "skills": { "iron": 10, "mirrors": 0, "hearts": 0, "veils": 0 },
-                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy": 0 }
-              }
-            },
-            "1_d": {
-              "lexical_name": "Studious Forged Companion",
-              "perks": {
-                "skills": { "iron": 0, "mirrors": 10, "hearts": 0, "veils": 0 },
-                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy": 0 }
-              }
+          "_recruited": ["The Forge of Souls"],
+          "illusive": {
+            "lexical_name": "Illusive Forged Companion",
+            "tier": 1,
+            "perks": {
+              "skills": { "iron": 0, "mirrors": 0, "hearts": 0, "veils": 10 },
+              "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy": 0 }
+            }
+          },
+          "poetic": {
+            "lexical_name": "Poetic Forged Companion",
+            "tier": 1,
+            "perks": {
+              "skills": { "iron": 0, "mirrors": 0, "hearts": 10, "veils": 0 },
+              "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy": 0 }
+            }
+          },            
+          "pugilistic": {
+            "lexical_name": "Pugilistic Forged Companion",
+            "tier": 1,
+            "perks": {
+              "skills": { "iron": 10, "mirrors": 0, "hearts": 0, "veils": 0 },
+              "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy": 0 }
+            }
+          },
+          "studious": {
+            "lexical_name": "Studious Forged Companion",
+            "tier": 1,
+            "perks": {
+              "skills": { "iron": 0, "mirrors": 10, "hearts": 0, "veils": 0 },
+              "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy": 0 }
             }
           }
         }
       },
-
       "signaller": {
         "signalman": {
-          "recruited": ["An Abandoned Signal Box"],
-          "tiers": {
-            "1": {
-              "lexical_name": "Fatalistic Signalman",
-              "perks": {
-                "skills": { "iron": 0, "mirrors": 6, "hearts": 0, "veils": 2 },
-                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy":  1}
-              }
-            },
-            "2": {
-              "lexical_name": "Signs and Signals of the High Wilderness: An Omnibus",
-              "perks": {
-                "skills": { "iron": 0, "mirrors": 10, "hearts": 0, "veils": 0 },
-                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy": 2 }
-              }
+          "_recruited": ["An Abandoned Signal Box"],
+          "fatalistic": {
+            "lexical_name": "Fatalistic Signalman",
+            "tier": 1,
+            "perks": {
+              "skills": { "iron": 0, "mirrors": 6, "hearts": 0, "veils": 2 },
+              "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy":  1}
+            }
+          },
+          "omnibus": {
+            "lexical_name": "Signs and Signals of the High Wilderness: An Omnibus",
+            "tier": 2,  
+            "perks": {
+              "skills": { "iron": 0, "mirrors": 10, "hearts": 0, "veils": 0 },
+              "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy": 2 }
             }
           }
         },
         "devil": {
-          "recruited": ["Port Avon"],
-          "tiers": {
-            "1": {
-              "lexical_name": "Repentant Devil",
-              "perks": {
-                "skills": { "iron": 2, "mirrors": 0, "hearts": 0, "veils": 6 },
-                "affiliations": { "academe": 1, "bohemia": 0, "establishment": 0, "villainy": 0 }
-              }
-            },
-            "2": {
-              "lexical_name": "Defiant Devil",
-              "perks": {
-                "skills": { "iron": 0, "mirrors": 0, "hearts": 0, "veils": 10 },
-                "affiliations": { "academe": 2, "bohemia": 0, "establishment": 0, "villainy": 0 }
-              }
+          "_recruited": ["Port Avon"],
+          "repentant": {
+            "lexical_name": "Repentant Devil",
+            "tier": 1,
+            "perks": {
+              "skills": { "iron": 2, "mirrors": 0, "hearts": 0, "veils": 6 },
+              "affiliations": { "academe": 1, "bohemia": 0, "establishment": 0, "villainy": 0 }
+            }
+          },
+          "defiant": {
+            "lexical_name": "Defiant Devil",
+            "tier": 2,
+            "perks": {
+              "skills": { "iron": 0, "mirrors": 0, "hearts": 0, "veils": 10 },
+              "affiliations": { "academe": 2, "bohemia": 0, "establishment": 0, "villainy": 0 }
             }
           }
         },
         "vagabond": {
-          "recruited": ["Polmear & Plenty's Inconceviable Circus"],
-          "tiers": {
-            "1": {
-              "lexical_name": "Amiable Vagabond",
-              "perks": {
-                "skills": { "iron": 0, "mirrors": 0, "hearts": 4, "veils": 4 },
-                "affiliations": {"academe": 0, "bohemia": 1, "establishment": 0, "villainy": 0 }
-              }
-            },
-            "2_a": {
-              "lexical_name": "Dendrified Vagabond",
-              "perks": {
-                "skills": { "iron": 0, "mirrors": 0, "hearts": 10, "veils": 0 },
-                "affiliations": { "academe": 0, "bohemia": 2, "establishment": 0, "villainy": 0 }
-              }
-            },            
-            "2_b": {
-              "lexical_name": "Incorrigible Vagabond",
-              "perks": {
-                "skills": { "iron": 0, "mirrors": 0, "hearts": 0, "veils": 10 },
-                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy": 2 }
-              }
+          "_recruited": ["Polmear & Plenty's Inconceviable Circus"],
+          "amiable": {
+            "lexical_name": "Amiable Vagabond",
+            "tier": 1,
+            "perks": {
+              "skills": { "iron": 0, "mirrors": 0, "hearts": 4, "veils": 4 },
+              "affiliations": {"academe": 0, "bohemia": 1, "establishment": 0, "villainy": 0 }
+            }
+          },
+          "dendrified": {
+            "lexical_name": "Dendrified Vagabond",
+            "tier": 2,
+            "perks": {
+              "skills": { "iron": 0, "mirrors": 0, "hearts": 10, "veils": 0 },
+              "affiliations": { "academe": 0, "bohemia": 2, "establishment": 0, "villainy": 0 }
+            }
+          },            
+          "incorrigible": {
+            "lexical_name": "Incorrigible Vagabond",
+            "tier": 2,
+            "perks": {
+              "skills": { "iron": 0, "mirrors": 0, "hearts": 0, "veils": 10 },
+              "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy": 2 }
             }
           }
         }
       },
-
       "chief_engineer": {
         "driver": {
-          "recruited": ["New Winchester", "Traitor's Wood"],
-          "tiers": {
-            "1": {
-              "lexical_name": "Incautious Driver",
-              "perks": {
-                "skills": { "iron": 6, "mirrors": 0, "hearts": 2, "veils": 0 },
-                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 1, "villainy": 0 }
-              }
-            },
-            "2_a": {
-              "lexical_name": "Judicious Driver",
-              "perks": {
-                "skills": { "iron": 10, "mirrors": 0, "hearts": 0, "veils": 0 },
-                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 2, "villainy": 0 }
-              }
-            },            
-            "2_b": {
-              "lexical_name": "Reckless Driver",
-              "perks": {
-                "skills": { "iron": 10, "mirrors": 0, "hearts": 0, "veils": 0 },
-                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 2, "villainy": 0 }
-              }
+          "_recruited": ["New Winchester", "Traitor's Wood"],
+          "incautious": {
+            "lexical_name": "Incautious Driver",
+            "tier": 1,
+            "perks": {
+              "skills": { "iron": 6, "mirrors": 0, "hearts": 2, "veils": 0 },
+              "affiliations": { "academe": 0, "bohemia": 0, "establishment": 1, "villainy": 0 }
+            }
+          },
+          "judicious": {
+            "lexical_name": "Judicious Driver",
+            "tier": 2,
+            "perks": {
+              "skills": { "iron": 10, "mirrors": 0, "hearts": 0, "veils": 0 },
+              "affiliations": { "academe": 0, "bohemia": 0, "establishment": 2, "villainy": 0 }
+            }
+          },            
+          "reckless": {
+            "lexical_name": "Reckless Driver",
+            "tier": 2,
+            "perks": {
+              "skills": { "iron": 10, "mirrors": 0, "hearts": 0, "veils": 0 },
+              "affiliations": { "academe": 0, "bohemia": 0, "establishment": 2, "villainy": 0 }
             }
           }
         },
         "rat": {
-          "recruited": ["Port Avon", "Lustrum", "Titania"],
-          "tiers": {
-            "1": {
-              "lexical_name": "The Rat Brigade",
-              "perks": {
-                "skills": { "iron": 2, "mirrors": 0, "hearts": 0, "veils": 6 },
-                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy": 1 }
-              }
-            },
-            "2_a": {
-              "lexical_name": "The Ratty Revengers",
-              "perks": {
-                "skills": { "iron": 0, "mirrors": 0, "hearts": 0, "veils": 10 },
-                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy": 2 }
-              }
-            },            
-            "2_b": {
-              "lexical_name": "The Ratty Reunion",
-              "perks": {
-                "skills": { "iron": 0, "mirrors": 0, "hearts": 10, "veils": 0 },
-                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 2, "villainy": 0 }
-              }
+          "_recruited": ["Port Avon", "Lustrum", "Titania"],
+          "brigade": {
+            "lexical_name": "The Rat Brigade",
+            "tier": 1,
+            "perks": {
+              "skills": { "iron": 2, "mirrors": 0, "hearts": 0, "veils": 6 },
+              "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy": 1 }
+            }
+          },
+          "revengers": {
+            "lexical_name": "The Ratty Revengers",
+            "tier": 2,
+            "perks": {
+              "skills": { "iron": 0, "mirrors": 0, "hearts": 0, "veils": 10 },
+              "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy": 2 }
+            }
+          },            
+          "reunion": {
+            "lexical_name": "The Ratty Reunion",
+            "tier": 2,
+            "perks": {
+              "skills": { "iron": 0, "mirrors": 0, "hearts": 10, "veils": 0 },
+              "affiliations": { "academe": 0, "bohemia": 0, "establishment": 2, "villainy": 0 }
             }
           }
         },
         "eccentric": {
-          "recruited": ["Pan", "Eagle's Empyrean"],
-          "tiers": {
-            "1": {
-              "lexical_name": "Felined Eccentric",
-              "perks": {
-                "skills": { "iron": 0, "mirrors": 6, "hearts": 2, "veils": 0 },
-                "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy": 1 }
-              }
-            },
-            "2_a": {
-              "lexical_name": "Brilliant Eccentric",
-              "perks": {
-                "skills": { "iron": 0, "mirrors": 10, "hearts": 0, "veils": 0 },
-                "affiliations": { "academe": 0, "bohemia": 1, "establishment": 0, "villainy": 1 }
-              }
-            },            
-            "2_b": {
-              "lexical_name": "Gentile Eccentric",
-              "perks": {
-                "skills": { "iron": 0, "mirrors": 0, "hearts": 10, "veils": 0 },
-                "affiliations": { "academe": 1, "bohemia": 0, "establishment": 0, "villainy": 1 }
-              }
+          "_recruited": ["Pan", "Eagle's Empyrean"],
+          "felined": {
+            "lexical_name": "Felined Eccentric",
+            "tier": 1,
+            "perks": {
+              "skills": { "iron": 0, "mirrors": 6, "hearts": 2, "veils": 0 },
+              "affiliations": { "academe": 0, "bohemia": 0, "establishment": 0, "villainy": 1 }
+            }
+          },
+          "brilliant": {
+            "lexical_name": "Brilliant Eccentric",
+            "tier": 2,
+            "perks": {
+              "skills": { "iron": 0, "mirrors": 10, "hearts": 0, "veils": 0 },
+              "affiliations": { "academe": 0, "bohemia": 1, "establishment": 0, "villainy": 1 }
+            }
+          },            
+          "gentile": {
+            "lexical_name": "Gentile Eccentric",
+            "tier": 2,
+            "perks": {
+              "skills": { "iron": 0, "mirrors": 0, "hearts": 10, "veils": 0 },
+              "affiliations": { "academe": 1, "bohemia": 0, "establishment": 0, "villainy": 1 }
             }
           }
         }
       },
-
       "mascot": {
         "cat": {
-          "recruited": ["Well of the Wolf"],
+          "_recruited": ["Well of the Wolf"],
           "lexical_name": "Useless Cat",
+          "tier": 1,
           "perks": {
             "skills": { "iron": 0, "mirrors": 1, "hearts": 0, "veils": 0 }
           }
         },
         "dog": {
-          "recruited": ["Port Prosper"],
+          "_recruited": ["Port Prosper"],
           "lexical_name": "Inadvisably Big Dog",
+          "tier": 1,
           "perks": {
             "skills": { "iron": 1, "mirrors": 0, "hearts": 0, "veils": 0 }
           }
         },
         "blemmigan": {
-          "recruited": ["Port Avon"],
+          "_recruited": ["Port Avon"],
           "lexical_name": "Blemmigan Voyager",
+          "tier": 1,
           "perks": {
             "skills": { "iron": 2, "mirrors": 1, "hearts": 0, "veils": 0 }
           }
         },
         "pangolin": {
-          "recruited": ["Langley Hall"],
+          "_recruited": ["Langley Hall"],
           "lexical_name": "Perfect Pangolin",
+          "tier": 1,
           "perks": {
             "skills": { "iron": 0, "mirrors": 0, "hearts": 0, "veils":  1}
           }
         },
         "urchin": {
-          "recruited": ["Lustrum"],
+          "_recruited": ["Lustrum"],
           "lexical_name": "Sky-Work Urchin",
+          "tier": 1,
           "perks": {
             "skills": {"iron": 0, "mirrors": 0, "hearts": 1, "veils": 0 }
           }
         },
         "dilly": {
-          "recruited": ["Curator's Egg"],
+          "_recruited": ["Curator's Egg"],
           "lexical_name": "Dilly",
+          "tier": 1,
           "perks": {
             "skills": { "iron": 0, "mirrors": 0, "hearts": -1, "veils": 3 }
           }
