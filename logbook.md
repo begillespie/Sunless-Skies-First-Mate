@@ -18,12 +18,17 @@
 
 ## 🔮 VESSEL APTITUDE & STAT BALANCES
 
-| 📐 SKILLS      | Base  |  Perks |   Total   |        | 🔍 AFFILIATIONS      | Base  | Perks  |   Total   |
-| :---           | :---: |  :---:  |   :---:   | :---: | :---                  | :---: | :---:  |   :---:   |
-| **👊 Iron**    | [ B ] | [ +M ] | **[ T ]** |        | **🔍 Academe**       | [ B ] | [ +M ] | **[ T ]** |
-| **👁️ Mirrors** | [ B ] | [ +M ] | **[ T ]** |        | **🍷 Bohemia**       | [ B ] | [ +M ] | **[ T ]** |
-| **❤️ Hearts**  | [ B ] | [ +M ] | **[ T ]** |        | **👑 Establishment** | [ B ] | [ +M ] | **[ T ]** |
-| **🎭 Veils**   | [ B ] | [ +M ] | **[ T ]** |        | **🎩 Villainy**      | [ B ] | [ +M ] | **[ T ]** |
+| 📐 SKILLS           | Base     |  Perks    |   Total   |
+| :---                | :---:    |  :---:    |   :---:   |
+| - 👊 Iron           | [ B ]    | [ +M ]    | **[ T ]** |
+| - 👁️ Mirrors        | [ B ]    | [ +M ]    | **[ T ]** |
+| - ❤️ Hearts         | [ B ]    | [ +M ]    | **[ T ]** |
+| - 🎭 Veils          | [ B ]    | [ +M ]    | **[ T ]** |
+| 🔍 **AFFILIATIONS** | **Base** | **Perks** | **Total** |
+| - 🔍 Academe        | [ B ]    | [ +M ]    | **[ T ]** |
+| - 🍷 Bohemia        | [ B ]    | [ +M ]    | **[ T ]** |
+| - 👑 Establishment  | [ B ]    | [ +M ]    | **[ T ]** |
+| - 🎩 Villainy       | [ B ]    | [ +M ]    | **[ T ]** |
 
 ---
 
