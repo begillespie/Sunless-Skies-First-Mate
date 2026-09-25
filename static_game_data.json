@@ -1,12 +1,12 @@
 {
   "_metadata": {
     "file_type": "static_game_data",
-    "static_data_version": "0.2.0",
+    "static_data_version": "0.3.0",
     "supported_save_format": "sunless-skies-first-mate",
     "compatibility_contract": {
-      "rules_version_expected": "0.2.0",
-      "minimum_schema_version": "0.2.0",
-      "target_schema_version": "0.2.0",
+      "rules_version_expected": "0.3.0",
+      "minimum_schema_version": "0.3.0",
+      "target_schema_version": "0.3.0",
       "breaking_major": 0
     },
     "description": "Authoritative immutable game data, enums, schemas, and object blueprints for the Sunless Skies First Mate Engine."
@@ -20,50 +20,86 @@
         "Eleutheria",
         "The Blue Kingdom"
       ],
-      "port_keys": [
+      "location_keys": [
+        "achlys",
+        "apoidean_gardens",
+        "avid_horizon",
+        "avid_horizon_spectacle",
+        "bone_orchard",
+        "brabazon_workworld",
+        "braley_rock",
+        "brazen_brigade",
+        "caduceus",
         "carillon",
+        "cemetery_of_beacons",
+        "clockwork_sun",
+        "clockwork_sun_spectacle",
         "company_house",
+        "crystal_gardens",
+        "dead_sun",
+        "deaths_door",
+        "desolation_of_saliba",
+        "domain_of_the_halved",
+        "eagle_provinces_empyrean",
+        "faiths_fall",
+        "field_of_petals",
+        "floating_parliament",
+        "forge_of_souls",
+        "forge_of_the_sun",
+        "gentlemen",
+        "grave_of_the_silent_saint",
+        "heart_catcher_gardens",
+        "heart_of_the_mountain",
+        "horologion",
+        "house_of_days",
+        "house_of_rods_and_chains",
         "hybras",
+        "langley_hall",
         "leadbeater_and_stainrods_nature_reserve",
+        "london",
         "lustrum",
         "magdalenes",
+        "memorial_to_the_unknown_rat",
+        "ministries",
+        "most_serene_mausoleum",
         "new_winchester",
+        "old_toms_well",
+        "pan",
+        "parliament_of_flies",
+        "perdurance",
+        "piranesi",
         "polmear_and_plentys_inconceivable_circus",
         "port_avon",
         "port_prosper",
+        "regents_grave",
+        "regents_tears",
+        "remnants_of_light",
+        "royal_society",
+        "sapphire_abyss",
+        "sapphire_pyres",
+        "schwartzs_oath",
+        "screaming_stones",
+        "serpentine_gate",
+        "shadow_of_the_sun",
+        "sky_barnet",
+        "skyhenge",
+        "st_anthonys_lighthouse",
+        "stair_to_the_sea",
+        "tiggelaars_haunt",
         "titania",
+        "tower_of_chimes",
         "traitors_wood",
         "victory_hall",
-        "avid_horizon",
-        "london",
-        "perdurance",
-        "the_brabazon_workworld",
-        "the_clockwork_sun",
-        "the_floating_parliament",
-        "the_ministries",
-        "the_most_serene_mausoleum",
-        "the_royal_society",
-        "the_stair_to_the_sea",
+        "weeping_steps",
+        "well_of_the_wolf",
+        "well_of_wonders",
+        "wellmouth",
+        "white_well",
+        "winter_reside",
         "wit_and_vinegar_lumber_company",
         "worlebury_juxta_mare",
-        "achlys",
-        "caduceus",
-        "eagle_provinces_empyrean",
-        "heart_catcher_gardens",
-        "langley_hall",
-        "pan",
-        "piranesi",
-        "the_brazen_brigade",
-        "the_gentlemen",
-        "the_house_of_rods_and_chains",
-        "winter_reside",
-        "deaths_door",
-        "sky_barnet",
-        "the_forge_of_souls",
-        "the_house_of_days",
-        "the_shadow_of_the_sun",
-        "the_white_well",
-        "wellmouth"
+        "wreck_of_the_parliament",
+        "xanthous_moon"
       ],
       "good_keys": [
         "approved_literature",
@@ -229,6 +265,8 @@
         }
       },
 
+      
+
       "action_event": {
         "type": "object",
         "required": [
@@ -263,7 +301,7 @@
           },
           "origin_port": {
             "type": "string",
-            "enum": { "$ref": "#/static_game_data/enums/port_keys" }
+            "enum": { "$ref": "#/static_game_data/enums/location_keys" }
           },
           "origin_region": {
             "type": "string",
@@ -306,7 +344,7 @@
             "quantity_delivered": { "type": "integer", "minimum": 0 },
             "destination_port": {
               "type": "string",
-              "enum": { "$ref": "#/static_game_data/enums/port_keys" }
+              "enum": { "$ref": "#/static_game_data/enums/location_keys" }
             },
             "destination_region": {
               "type": "string",
@@ -342,7 +380,7 @@
                 "properties": {
                   "port": {
                     "type": "string",
-                    "enum": { "$ref": "#/static_game_data/enums/port_keys" }
+                    "enum": { "$ref": "#/static_game_data/enums/location_keys" }
                   },
                   "region": {
                     "type": "string",
@@ -387,7 +425,7 @@
                 "properties": {
                   "port": {
                     "type": "string",
-                    "enum": { "$ref": "#/static_game_data/enums/port_keys" }
+                    "enum": { "$ref": "#/static_game_data/enums/location_keys" }
                   },
                   "region": {
                     "type": "string",
@@ -436,7 +474,7 @@
             "passenger_name": { "type": "string" },
             "destination_port": {
               "type": "string",
-              "enum": { "$ref": "#/static_game_data/enums/port_keys" }
+              "enum": { "$ref": "#/static_game_data/enums/location_keys" }
             },
             "destination_region": {
               "type": "string",
@@ -479,7 +517,7 @@
               "type": ["string", "null"],
               "enum": {
                 "anyOf": [
-                  { "$ref": "#/static_game_data/enums/port_keys" },
+                  { "$ref": "#/static_game_data/enums/location_keys" },
                   { "type": "null" }
                 ]
               }
@@ -1090,659 +1128,750 @@
         "tale_of_terror":{ "display_name":"Tale of Terror" }
       }
     },
-
-    "location_directory": {
-      "the_reach": {
+    "locations_directory": {
+      "The Reach": {
+        "apoidean_gardens": {
+          "display_name": "Apoidean Gardens",
+          "type": "spectacle",
+          "region": "The Reach",
+          "ring_depth": "outer",
+          "lore_snippet": "A quiet wash of flowers in the dark—fields of asphodel where shadows worn to weariness find gentle rest.",
+          "data": {
+            "spectacle_category": "wonder",
+            "waypoint_station": "leadbeater_and_stainrods_nature_reserve"
+          }
+        },
+        "braley_rock": {
+          "display_name": "Braley Rock",
+          "type": "spectacle",
+          "region": "The Reach",
+          "ring_depth": "inner",
+          "lore_snippet": "Miners burrowed too deep into this worldlet, unearthing a violent, chittering disgruntlement of Cantankeri from the stone.",
+          "data": {
+            "spectacle_category": "horror",
+            "waypoint_station": "port_prosper"
+          }
+        },
         "carillon": {
           "display_name": "Carillon",
-          "port_type": "Station",
-          "ring_depth": "Outer",
-          "services_manifest": {
-            "has_fuel": false,
-            "has_supplies": true,
-            "has_bazaar": false,
-            "has_regional_bank_access": false,
-            "has_drydock_repairs": false,
-            "has_crew_recruitment": false
-          },
-          "export_goods_keys": ["chorister_nectar"],
-          "lore_snippet": "A quiet, eerie penitentiary overseen by devils who offer the penitent a chance to refine, alter, or completely scrub away their sins."
+          "type": "station",
+          "region": "The Reach",
+          "ring_depth": "outer",
+          "lore_snippet": "A quiet, eerie penitentiary overseen by devils who offer the penitent a chance to refine, alter, or completely scrub away their sins.",
+          "data": {
+            "services": ["supplies"],
+            "export_goods": ["chorister_nectar"]
+          }
         },
         "company_house": {
           "display_name": "Company House",
-          "port_type": "Platform",
-          "ring_depth": "Center",
-          "services_manifest": {
-            "has_fuel": false,
-            "has_supplies": false,
-            "has_bazaar": false,
-            "has_regional_bank_access": false,
-            "has_drydock_repairs": false,
-            "has_crew_recruitment": false
-          },
-          "export_goods_keys": [],
-          "lore_snippet": "The bureaucratic heart and regional headquarters of the Windward Company, representing London's stark imperial interests in the Reach."
+          "type": "platform",
+          "region": "The Reach",
+          "ring_depth": "center",
+          "lore_snippet": "The bureaucratic heart and regional headquarters of the Windward Company, representing London's stark imperial interests in the Reach.",
+          "data": {
+            "parent_station": "new_winchester",
+            "faction_alignment": "stovepipes",
+            "services": ["port_reports"],
+            "export_goods": []
+          }
+        },
+        "desolation_of_saliba": {
+          "display_name": "Desolation of Saliba",
+          "type": "spectacle",
+          "region": "The Reach",
+          "ring_depth": "outer",
+          "lore_snippet": "Bleak, forgotten cyclopean ruins where glowing correspondence sigils crawl along fractured stone like marching ants.",
+          "data": {
+            "spectacle_category": "horror",
+            "waypoint_station": null
+          }
+        },
+        "faiths_fall": {
+          "display_name": "Faith's Fall",
+          "type": "spectacle",
+          "region": "The Reach",
+          "ring_depth": "outer",
+          "lore_snippet": "The titanic, rotting remains of a celestial Messenger resting in the dark—a fallen behemoth of heaven that brings tears to watching eyes.",
+          "data": {
+            "spectacle_category": "horror",
+            "waypoint_station": "hybras"
+          }
+        },
+        "grave_of_the_silent_saint": {
+          "display_name": "Grave of the Silent Saint",
+          "type": "spectacle",
+          "region": "The Reach",
+          "ring_depth": "outer",
+          "lore_snippet": "HIC SVNT DRACONES inscribed across an ancient tomb; the crew flies softly on muffled throttle, whispering that even death may die.",
+          "data": {
+            "spectacle_category": "horror",
+            "waypoint_station": "lustrum"
+          }
         },
         "hybras": {
           "display_name": "Hybras",
-          "port_type": "Station",
-          "ring_depth": "Middle",
-          "services_manifest": {
-            "has_fuel": false,
-            "has_supplies": true,
-            "has_bazaar": false,
-            "has_regional_bank_access": false,
-            "has_drydock_repairs": false,
-            "has_crew_recruitment": false
-          },
-          "export_goods_keys": ["verdant_seeds"],
-          "lore_snippet": "A verdant, fungal settlement nestled within dense vegetation whose original colonists mysteriously vanished without a trace."
+          "type": "station",
+          "region": "The Reach",
+          "ring_depth": "middle",
+          "lore_snippet": "A verdant, fungal settlement nestled within dense vegetation whose original colonists mysteriously vanished without a trace.",
+          "data": {
+            "services": ["supplies"],
+            "export_goods": ["verdant_seeds"]
+          }
         },
         "leadbeater_and_stainrods_nature_reserve": {
           "display_name": "Leadbeater & Stainrod's Nature Reserve",
-          "port_type": "Station",
-          "ring_depth": "Inner",
-          "services_manifest": {
-            "has_fuel": true,
-            "has_supplies": true,
-            "has_bazaar": false,
-            "has_regional_bank_access": false,
-            "has_drydock_repairs": false,
-            "has_crew_recruitment": false
-          },
-          "export_goods_keys": ["verdant_seeds"],
-          "lore_snippet": "A corporate sanctuary established to study and domesticate the wild, overgrown flora and fauna native to the High Wilderness."
+          "type": "station",
+          "region": "The Reach",
+          "ring_depth": "inner",
+          "lore_snippet": "A corporate sanctuary established to study and domesticate the wild, overgrown flora and fauna native to the High Wilderness.",
+          "data": {
+            "services": ["fuel", "supplies"],
+            "export_goods": ["verdant_seeds"]
+          }
         },
         "lustrum": {
           "display_name": "Lustrum",
-          "port_type": "Station",
-          "ring_depth": "Outer",
-          "services_manifest": {
-            "has_fuel": true,
-            "has_supplies": true,
-            "has_bazaar": false,
-            "has_regional_bank_access": false,
-            "has_drydock_repairs": false,
-            "has_crew_recruitment": true
-          },
-          "export_goods_keys": ["unseasoned_hours"],
-          "lore_snippet": "A freezing, ramshackle frontier town built around the Mother of Mountains where desperate prospectors mine frozen time."
+          "type": "station",
+          "region": "The Reach",
+          "ring_depth": "outer",
+          "lore_snippet": "A freezing, ramshackle frontier town built around the Mother of Mountains where desperate prospectors mine frozen time.",
+          "data": {
+            "services": ["fuel", "supplies", "recruitment"],
+            "export_goods": ["unseasoned_hours"]
+          }
         },
         "magdalenes": {
           "display_name": "Magdalene's",
-          "port_type": "Station",
-          "ring_depth": "Inner",
-          "services_manifest": {
-            "has_fuel": true,
-            "has_supplies": true,
-            "has_bazaar": false,
-            "has_regional_bank_access": false,
-            "has_drydock_repairs": false,
-            "has_crew_recruitment": false
-          },
-          "export_goods_keys": ["undistinguished_souls"],
-          "lore_snippet": "A sanctuary for those seeking treatment, recovery, or comfortable concealment from the psychological burdens of the sky."
+          "type": "station",
+          "region": "The Reach",
+          "ring_depth": "inner",
+          "lore_snippet": "A sanctuary for those seeking treatment, recovery, or comfortable concealment from the psychological burdens of the sky.",
+          "data": {
+            "services": ["fuel", "supplies"],
+            "export_goods": ["undistinguished_souls"]
+          }
+        },
+        "memorial_to_the_unknown_rat": {
+          "display_name": "Memorial to the Unknown Rat",
+          "type": "spectacle",
+          "region": "The Reach",
+          "ring_depth": "outer",
+          "lore_snippet": "A small, solemn stone raised to the brave rattus faber who perished in the early exodus to Heaven; one by one, the crew remove their hats.",
+          "data": {
+            "spectacle_category": "wonder",
+            "waypoint_station": "port_prosper"
+          }
         },
         "new_winchester": {
           "display_name": "New Winchester",
-          "port_type": "Hub",
-          "ring_depth": "Center",
-          "services_manifest": {
-            "has_fuel": true,
-            "has_supplies": true,
-            "has_bazaar": true,
-            "has_regional_bank_access": true,
-            "has_drydock_repairs": true,
-            "has_crew_recruitment": true
-          },
-          "export_goods_keys": ["munitions", "approved_literature"],
-          "lore_snippet": "The bustling cosmopolitan hub of the Reach, caught in a perpetual, simmering tug-of-war between London Loyalists and Tackety Rebels."
+          "type": "station",
+          "region": "The Reach",
+          "ring_depth": "center",
+          "lore_snippet": "The bustling cosmopolitan hub of the Reach, caught in a perpetual, simmering tug-of-war between London Loyalists and Tackety Rebels.",
+          "data": {
+            "services": ["fuel", "supplies", "bank", "shipyard", "recruitment"],
+            "export_goods": ["munitions", "approved_literature"]
+          }
         },
         "polmear_and_plentys_inconceivable_circus": {
           "display_name": "Polmear & Plenty's Inconceivable Circus",
-          "port_type": "Station",
-          "ring_depth": "Middle",
-          "services_manifest": {
-            "has_fuel": false,
-            "has_supplies": true,
-            "has_bazaar": false,
-            "has_regional_bank_access": false,
-            "has_drydock_repairs": false,
-            "has_crew_recruitment": true
-          },
-          "export_goods_keys": ["bronzewood"],
-          "lore_snippet": "A dazzling, bizarre traveling entertainment troupe operating out of giant tents strung between drifting space rocks."
+          "type": "station",
+          "region": "The Reach",
+          "ring_depth": "middle",
+          "lore_snippet": "A dazzling, bizarre traveling entertainment troupe operating out of giant tents strung between drifting space rocks.",
+          "data": {
+            "services": ["supplies", "recruitment"],
+            "export_goods": ["bronzewood"]
+          }
         },
         "port_avon": {
           "display_name": "Port Avon",
-          "port_type": "Station",
-          "ring_depth": "Middle",
-          "services_manifest": {
-            "has_fuel": true,
-            "has_supplies": true,
-            "has_bazaar": false,
-            "has_regional_bank_access": false,
-            "has_drydock_repairs": false,
-            "has_crew_recruitment": false
-          },
-          "export_goods_keys": ["undistinguished_souls"],
-          "lore_snippet": "A sleepy, picturesque riverside community modeled directly after rural Britain, masking deep-rooted traditional superstitions."
+          "type": "station",
+          "region": "The Reach",
+          "ring_depth": "middle",
+          "lore_snippet": "A sleepy, picturesque riverside community modeled directly after rural Britain, masking deep-rooted traditional superstitions.",
+          "data": {
+            "services": ["fuel", "supplies"],
+            "export_goods": ["undistinguished_souls"]
+          }
         },
         "port_prosper": {
           "display_name": "Port Prosper",
-          "port_type": "Station",
-          "ring_depth": "Outer",
-          "services_manifest": {
-            "has_fuel": true,
-            "has_supplies": true,
-            "has_bazaar": false,
-            "has_regional_bank_access": false,
-            "has_drydock_repairs": true,
-            "has_crew_recruitment": false
-          },
-          "export_goods_keys": [],
-          "lore_snippet": "A heavily fortified corporate stronghold acting as the primary military bastion and gateway for London's nobility into the Reach."
+          "type": "station",
+          "region": "The Reach",
+          "ring_depth": "outer",
+          "lore_snippet": "A heavily fortified corporate stronghold acting as the primary military bastion and gateway for London's nobility into the Reach.",
+          "data": {
+            "services": ["fuel", "supplies", "shipyard"],
+            "export_goods": []
+          }
+        },
+        "regents_grave": {
+          "display_name": "Regent's Grave",
+          "type": "spectacle",
+          "region": "The Reach",
+          "ring_depth": "outer",
+          "lore_snippet": "Near the quiet heart of the shifting wood, a silent, solemn clearing where cold dread gathers thick beneath the boughs.",
+          "data": {
+            "spectacle_category": "horror",
+            "waypoint_station": "traitors_wood"
+          }
+        },
+        "regents_tears": {
+          "display_name": "Regent's Tears",
+          "type": "spectacle",
+          "region": "The Reach",
+          "ring_depth": "outer",
+          "lore_snippet": "A tremble in the air swells into thunder as crystalline falls tumble through the sky, alight with all the hues of heaven.",
+          "data": {
+            "spectacle_category": "wonder",
+            "waypoint_station": "traitors_wood"
+          }
+        },
+        "schwartzs_oath": {
+          "display_name": "Schwartz's Oath",
+          "type": "spectacle",
+          "region": "The Reach",
+          "ring_depth": "outer",
+          "lore_snippet": "The broken remnants of a grand astronomical foundation, once kissed by the light of a long-dead Judgement.",
+          "data": {
+            "spectacle_category": "horror",
+            "waypoint_station": null
+          }
+        },
+        "tiggelaars_haunt": {
+          "display_name": "Tiggelaar's Haunt",
+          "type": "spectacle",
+          "region": "The Reach",
+          "ring_depth": "outer",
+          "lore_snippet": "Looming, shattered masonry where lambent, unreadable sigils cast an eerie, sickly glow through the curling mists.",
+          "data": {
+            "spectacle_category": "horror",
+            "waypoint_station": null
+          }
         },
         "titania": {
           "display_name": "Titania",
-          "port_type": "Station",
-          "ring_depth": "Inner",
-          "services_manifest": {
-            "has_fuel": true,
-            "has_supplies": true,
-            "has_bazaar": false,
-            "has_regional_bank_access": false,
-            "has_drydock_repairs": false,
-            "has_crew_recruitment": false
-          },
-          "export_goods_keys": [],
-          "lore_snippet": "An ambitious settlement constructed entirely inside a giant, hollowed-out mechanical sky-flower, vulnerable to the elements."
+          "type": "station",
+          "region": "The Reach",
+          "ring_depth": "inner",
+          "lore_snippet": "An ambitious settlement constructed entirely inside a giant, hollowed-out mechanical sky-flower, vulnerable to the elements.",
+          "data": {
+            "services": ["fuel", "supplies"],
+            "export_goods": []
+          }
         },
         "traitors_wood": {
           "display_name": "Traitor's Wood",
-          "port_type": "Station",
-          "ring_depth": "Outer",
-          "services_manifest": {
-            "has_fuel": true,
-            "has_supplies": true,
-            "has_bazaar": false,
-            "has_regional_bank_access": false,
-            "has_drydock_repairs": false,
-            "has_crew_recruitment": false
-          },
-          "export_goods_keys": ["bronzewood"],
-          "lore_snippet": "An ancient, labyrinthine, and inherently hostile forest of moving trees that harbors dangerous secrets of the Garden-King."
+          "type": "station",
+          "region": "The Reach",
+          "ring_depth": "outer",
+          "lore_snippet": "An ancient, labyrinthine, and inherently hostile forest of moving trees that harbors dangerous secrets of the Garden-King.",
+          "data": {
+            "services": ["fuel", "supplies"],
+            "export_goods": ["bronzewood"]
+          }
         },
         "victory_hall": {
           "display_name": "Victory Hall",
-          "port_type": "Platform",
-          "ring_depth": "Center",
-          "services_manifest": {
-            "has_fuel": false,
-            "has_supplies": false,
-            "has_bazaar": false,
-            "has_regional_bank_access": false,
-            "has_drydock_repairs": false,
-            "has_crew_recruitment": false
-          },
-          "export_goods_keys": [],
-          "lore_snippet": "The rowdy political meeting hall and temporary capital of the Tackety Independence movement, sitting in defiance of London rule."
+          "type": "platform",
+          "region": "The Reach",
+          "ring_depth": "center",
+          "lore_snippet": "The rowdy political meeting hall and temporary capital of the Tackety Independence movement, sitting in defiance of London rule.",
+          "data": {
+            "parent_station": "new_winchester",
+            "faction_alignment": "tacketies",
+            "services": ["port_reports"],
+            "export_goods": []
+          }
+        },
+        "well_of_the_wolf": {
+          "display_name": "The Well of the Wolf",
+          "type": "spectacle",
+          "region": "The Reach",
+          "ring_depth": "outer",
+          "lore_snippet": "A lightless gravitational wound in the celestial wild where the frozen void sighs with ancient, ravenous cold.",
+          "data": {
+            "spectacle_category": "horror",
+            "waypoint_station": "lustrum"
+          }
         }
       },
-      "albion": {
+      "Albion": {
         "avid_horizon": {
           "display_name": "Avid Horizon",
-          "port_type": "Station",
-          "ring_depth": "Outer",
-          "services_manifest": {
-            "has_fuel": false,
-            "has_supplies": true,
-            "has_bazaar": false,
-            "has_regional_bank_access": false,
-            "has_drydock_repairs": false,
-            "has_crew_recruitment": false
-          },
-          "export_goods_keys": ["dried_tea"],
-          "lore_snippet": "The grand, frozen gateway through which London originally migrated into the High Wilderness; it is now shut fast, chillingly quiet, and heavily guarded."
+          "type": "station",
+          "region": "Albion",
+          "ring_depth": "outer",
+          "lore_snippet": "The grand, frozen gateway through which London originally migrated into the High Wilderness; it is now shut fast, chillingly quiet, and heavily guarded.",
+          "data": {
+            "services": ["supplies"],
+            "export_goods": ["dried_tea"]
+          }
+        },
+        "avid_horizon_spectacle": {
+          "display_name": "The Avid Horizon",
+          "type": "spectacle",
+          "region": "Albion",
+          "ring_depth": "outer",
+          "lore_snippet": "In this place that is two places, the void turns blindingly pale and the high sky shudders with memories of the Unterzee.",
+          "data": {
+            "spectacle_category": "horror",
+            "waypoint_station": "avid_horizon"
+          }
+        },
+        "brabazon_workworld": {
+          "display_name": "The Brabazon Workworld",
+          "type": "station",
+          "region": "Albion",
+          "ring_depth": "inner",
+          "lore_snippet": "A massive, soot-blackened, free-floating industrial factory complex where the Empire's debtors and lower classes are relentlessly ground away to manufacture mass cargo.",
+          "data": {
+            "services": ["fuel"],
+            "export_goods": ["nostalgic_crockery"]
+          }
+        },
+        "clockwork_sun": {
+          "display_name": "The Clockwork Sun",
+          "type": "station",
+          "region": "Albion",
+          "ring_depth": "outer",
+          "lore_snippet": "London's monumental, artificial substitute for a dead Judgement, bathing the inner reaches of Albion in a sickly, mechanical gold light that threatens to drive onlookers mad.",
+          "data": {
+            "services": ["fuel"],
+            "export_goods": ["stained_glass"]
+          }
+        },
+        "clockwork_sun_spectacle": {
+          "display_name": "The Clockwork Sun",
+          "type": "spectacle",
+          "region": "Albion",
+          "ring_depth": "outer",
+          "lore_snippet": "The sun! The sun! THESUNTHESUNTHESUN! An artificial, gold-creamed glare throbbing against the glass with blinding, mind-shattering heat.",
+          "data": {
+            "spectacle_category": "horror",
+            "waypoint_station": "clockwork_sun"
+          }
+        },
+        "dead_sun": {
+          "display_name": "The Dead Sun",
+          "type": "spectacle",
+          "region": "Albion",
+          "ring_depth": "inner",
+          "lore_snippet": "The still-cooling corpse of the King of Hours shudders far below, its fires dead and blackened to mark Her Majesty's bloody victory.",
+          "data": {
+            "spectacle_category": "horror",
+            "waypoint_station": "most_serene_mausoleum"
+          }
+        },
+        "floating_parliament": {
+          "display_name": "The Floating Parliament",
+          "type": "station",
+          "region": "Albion",
+          "ring_depth": "outer",
+          "lore_snippet": "The Westminster government buildings, meticulously relocated from the subterranean Neath to the stars, only to be cast out to the windy fringes of Albion by Her Majesty.",
+          "data": {
+            "services": ["supplies"],
+            "export_goods": ["nostalgic_crockery"]
+          }
         },
         "london": {
           "display_name": "London",
-          "port_type": "Hub",
-          "ring_depth": "Center",
-          "services_manifest": {
-            "has_fuel": true,
-            "has_supplies": true,
-            "has_bazaar": true,
-            "has_regional_bank_access": true,
-            "has_drydock_repairs": true,
-            "has_crew_recruitment": true
-          },
-          "export_goods_keys": ["munitions", "approved_literature"],
-          "lore_snippet": "The smog-choked, industrial powerhouse capital of the British Empire-in-Exile, ruled over by Her Renewed Majesty from the Throne of Hours."
+          "type": "station",
+          "region": "Albion",
+          "ring_depth": "center",
+          "lore_snippet": "The smog-choked, industrial powerhouse capital of the British Empire-in-Exile, ruled over by Her Renewed Majesty from the Throne of Hours.",
+          "data": {
+            "services": ["fuel", "supplies", "bank", "shipyard", "recruitment"],
+            "export_goods": ["munitions", "approved_literature"]
+          }
+        },
+        "ministries": {
+          "display_name": "The Ministries",
+          "type": "platform",
+          "region": "Albion",
+          "ring_depth": "center",
+          "lore_snippet": "The bureaucratic extension of the crown anchored directly to London, processing the endless administrative taxes, censorship laws, and legal manifests of the Empire.",
+          "data": {
+            "parent_station": "london",
+            "faction_alignment": "the_crown",
+            "services": ["port_reports"],
+            "export_goods": []
+          }
+        },
+        "most_serene_mausoleum": {
+          "display_name": "The Most Serene Mausoleum",
+          "type": "station",
+          "region": "Albion",
+          "ring_depth": "inner",
+          "lore_snippet": "A quiet, hauntingly beautiful necropolis of drifting stone tombs, where Londoners inter their deceased amidst the soft chime of mourning gears.",
+          "data": {
+            "services": ["fuel", "supplies"],
+            "export_goods": ["stained_glass"]
+          }
+        },
+        "old_toms_well": {
+          "display_name": "Old Tom's Well",
+          "type": "spectacle",
+          "region": "Albion",
+          "ring_depth": "outer",
+          "lore_snippet": "A lightless, terrifying throat gaping in the western sky like an open wound, sighing with the cold void of an unstitched grave.",
+          "data": {
+            "spectacle_category": "horror",
+            "waypoint_station": "floating_parliament"
+          }
         },
         "perdurance": {
           "display_name": "Perdurance",
-          "port_type": "Station",
-          "ring_depth": "Outer",
-          "services_manifest": {
-            "has_fuel": false,
-            "has_supplies": false,
-            "has_bazaar": false,
-            "has_regional_bank_access": false,
-            "has_drydock_repairs": false,
-            "has_crew_recruitment": false
-          },
-          "export_goods_keys": ["approved_literature"],
-          "lore_snippet": "A beautiful, crystalline resort caught in a localized, engineered pocket of permanent time, where London's high society lives beautifully and endlessly without aging."
+          "type": "station",
+          "region": "Albion",
+          "ring_depth": "outer",
+          "lore_snippet": "A beautiful, crystalline resort caught in a localized, engineered pocket of permanent time, where London's high society lives beautifully and endlessly without aging.",
+          "data": {
+            "services": [],
+            "export_goods": ["approved_literature"]
+          }
         },
-        "the_brabazon_workworld": {
-          "display_name": "The Brabazon Workworld",
-          "port_type": "Station",
-          "ring_depth": "Inner",
-          "services_manifest": {
-            "has_fuel": true,
-            "has_supplies": false,
-            "has_bazaar": false,
-            "has_regional_bank_access": false,
-            "has_drydock_repairs": false,
-            "has_crew_recruitment": false
-          },
-          "export_goods_keys": ["nostalgic_crockery"],
-          "lore_snippet": "A massive, soot-blackened, free-floating industrial factory complex where the Empire's debtors and lower classes are relentlessly ground away to manufacture mass cargo."
-        },
-        "the_clockwork_sun": {
-          "display_name": "The Clockwork Sun",
-          "port_type": "Station",
-          "ring_depth": "Outer",
-          "services_manifest": {
-            "has_fuel": true,
-            "has_supplies": false,
-            "has_bazaar": false,
-            "has_regional_bank_access": false,
-            "has_drydock_repairs": false,
-            "has_crew_recruitment": false
-          },
-          "export_goods_keys": ["stained_glass"],
-          "lore_snippet": "London's monumental, artificial substitute for a dead Judgement, bathing the inner reaches of Albion in a sickly, mechanical gold light that threatens to drive onlookers mad."
-        },
-        "the_floating_parliament": {
-          "display_name": "The Floating Parliament",
-          "port_type": "Station",
-          "ring_depth": "Outer",
-          "services_manifest": {
-            "has_fuel": false,
-            "has_supplies": true,
-            "has_bazaar": false,
-            "has_regional_bank_access": false,
-            "has_drydock_repairs": false,
-            "has_crew_recruitment": false
-          },
-          "export_goods_keys": ["nostalgic_crockery"],
-          "lore_snippet": "The Westminster government buildings, meticulously relocated from the subterranean Neath to the stars, only to be cast out to the windy fringes of Albion by Her Majesty."
-        },
-        "the_ministries": {
-          "display_name": "The Ministries",
-          "port_type": "Platform",
-          "ring_depth": "Center",
-          "services_manifest": {
-            "has_fuel": false,
-            "has_supplies": false,
-            "has_bazaar": false,
-            "has_regional_bank_access": false,
-            "has_drydock_repairs": false,
-            "has_crew_recruitment": false
-          },
-          "export_goods_keys": [],
-          "lore_snippet": "The bureaucratic extension of the crown anchored directly to London, processing the endless administrative taxes, censorship laws, and legal manifests of the Empire."
-        },
-        "the_most_serene_mausoleum": {
-          "display_name": "The Most Serene Mausoleum",
-          "port_type": "Station",
-          "ring_depth": "Inner",
-          "services_manifest": {
-            "has_fuel": true,
-            "has_supplies": true,
-            "has_bazaar": false,
-            "has_regional_bank_access": false,
-            "has_drydock_repairs": false,
-            "has_crew_recruitment": false
-          },
-          "export_goods_keys": ["stained_glass"],
-          "lore_snippet": "A quiet, hauntingly beautiful necropolis of drifting stone tombs, where Londoners inter their deceased amidst the soft chime of mourning gears."
-        },
-        "the_royal_society": {
+        "royal_society": {
           "display_name": "The Royal Society",
-          "port_type": "Station",
-          "ring_depth": "Outer",
-          "services_manifest": {
-            "has_fuel": true,
-            "has_supplies": true,
-            "has_bazaar": false,
-            "has_regional_bank_access": false,
-            "has_drydock_repairs": false,
-            "has_crew_recruitment": false
-          },
-          "export_goods_keys": ["munitions"],
-          "lore_snippet": "The premier academic citadel of the High Wilderness, where eccentric scientists and state-sanctioned researchers explore dangerous frontiers of cosmic anatomy."
+          "type": "station",
+          "region": "Albion",
+          "ring_depth": "outer",
+          "lore_snippet": "The premier academic citadel of the High Wilderness, where eccentric scientists and state-sanctioned researchers explore dangerous frontiers of cosmic anatomy.",
+          "data": {
+            "services": ["fuel", "supplies"],
+            "export_goods": ["munitions"]
+          }
         },
-        "the_stair_to_the_sea": {
+        "skyhenge": {
+          "display_name": "Skyhenge",
+          "type": "spectacle",
+          "region": "Albion",
+          "ring_depth": "inner",
+          "lore_snippet": "Old, cold ruins standing in a deliberate ring like strokes on a clockface, enveloped by the frayed threads of unravelling time.",
+          "data": {
+            "spectacle_category": "horror",
+            "waypoint_station": "perdurance"
+          }
+        },
+        "st_anthonys_lighthouse": {
+          "display_name": "St Anthony's Lighthouse",
+          "type": "spectacle",
+          "region": "Albion",
+          "ring_depth": "outer",
+          "lore_snippet": "A slender grey pillar watching over the misty sea, casting a queasy, piercing beam that cuts through the fog like a drowned needle.",
+          "data": {
+            "spectacle_category": "horror",
+            "waypoint_station": "worlebury_juxta_mare"
+          }
+        },
+        "stair_to_the_sea": {
           "display_name": "The Stair to the Sea",
-          "port_type": "Platform",
-          "ring_depth": "Outer",
-          "services_manifest": {
-            "has_fuel": false,
-            "has_supplies": false,
-            "has_bazaar": false,
-            "has_regional_bank_access": false,
-            "has_drydock_repairs": false,
-            "has_crew_recruitment": false
-          },
-          "export_goods_keys": [],
-          "lore_snippet": "A colossal, plunging infrastructure that descends away into the lightless deeps, serving as a bleak checkpoint for those staring into Albion's watery underbelly."
+          "type": "platform",
+          "region": "Albion",
+          "ring_depth": "outer",
+          "lore_snippet": "A colossal, plunging infrastructure that descends away into the lightless deeps, serving as a bleak checkpoint for those staring into Albion's watery underbelly.",
+          "data": {
+            "parent_station": null,
+            "faction_alignment": "unaligned",
+            "services": [],
+            "export_goods": []
+          }
+        },
+        "tower_of_chimes": {
+          "display_name": "Tower of Chimes",
+          "type": "spectacle",
+          "region": "Albion",
+          "ring_depth": "outer",
+          "lore_snippet": "A fallen giant suspended in the mist—the very Biggest of Bens, whose rare, echoing chimes promise good luck to all aboard.",
+          "data": {
+            "spectacle_category": "wonder",
+            "waypoint_station": "floating_parliament"
+          }
         },
         "wit_and_vinegar_lumber_company": {
           "display_name": "Wit & Vinegar Lumber Company",
-          "port_type": "Platform",
-          "ring_depth": "Center",
-          "services_manifest": {
-            "has_fuel": false,
-            "has_supplies": false,
-            "has_bazaar": false,
-            "has_regional_bank_access": false,
-            "has_drydock_repairs": false,
-            "has_crew_recruitment": false
-          },
-          "export_goods_keys": ["illicit_literature"],
-          "lore_snippet": "An expansive processing platform connected to the London core, converting massive timber hauls into structural locomotive components."
+          "type": "platform",
+          "region": "Albion",
+          "ring_depth": "center",
+          "lore_snippet": "An expansive processing platform connected to the London core, converting massive timber hauls into structural locomotive components.",
+          "data": {
+            "parent_station": "london",
+            "faction_alignment": "smugglers",
+            "services": ["smuggling"],
+            "export_goods": ["illicit_literature"]
+          }
         },
         "worlebury_juxta_mare": {
           "display_name": "Worlebury-juxta-Mare",
-          "port_type": "Station",
-          "ring_depth": "Outer",
-          "services_manifest": {
-            "has_fuel": true,
-            "has_supplies": true,
-            "has_bazaar": false,
-            "has_regional_bank_access": false,
-            "has_drydock_repairs": false,
-            "has_crew_recruitment": false
-          },
-          "export_goods_keys": ["approved_literature"],
-          "lore_snippet": "A charming yet eerie seaside resort town cloaked in fog, where tourists walk boardwalks and play midway games over a sky that mimics an ocean."
+          "type": "station",
+          "region": "Albion",
+          "ring_depth": "outer",
+          "lore_snippet": "A charming yet eerie seaside resort town cloaked in fog, where tourists walk boardwalks and play midway games over a sky that mimics an ocean.",
+          "data": {
+            "services": ["fuel", "supplies"],
+            "export_goods": ["approved_literature"]
+          }
         }
       },
-      "eleutheria": {
+      "Eleutheria": {
         "achlys": {
           "display_name": "Achlys",
-          "port_type": "Station",
-          "ring_depth": "Outer",
-          "services_manifest": {
-            "has_fuel": true,
-            "has_supplies": true,
-            "has_bazaar": false,
-            "has_regional_bank_access": false,
-            "has_drydock_repairs": false,
-            "has_crew_recruitment": false
-          },
-          "export_goods_keys": ["caged_catch"],
-          "lore_snippet": "A damp, lawless shanty-market built over glowing marshes, thick with heavy violet mists where traders peddle illicit goods and narcotics like red honey."
+          "type": "station",
+          "region": "Eleutheria",
+          "ring_depth": "outer",
+          "lore_snippet": "A damp, lawless shanty-market built over glowing marshes, thick with heavy violet mists where traders peddle illicit goods and narcotics like red honey.",
+          "data": {
+            "services": ["fuel", "supplies"],
+            "export_goods": ["caged_catch"]
+          }
+        },
+        "brazen_brigade": {
+          "display_name": "The Brazen Brigade",
+          "type": "platform",
+          "region": "Eleutheria",
+          "ring_depth": "center",
+          "lore_snippet": "A military platform occupied by an army of rogue devils who have turned their backs on hell to wage an endless war of their own design.",
+          "data": {
+            "parent_station": "pan",
+            "faction_alignment": "republican_devils",
+            "services": [],
+            "export_goods": []
+          }
         },
         "caduceus": {
           "display_name": "Caduceus",
-          "port_type": "Station",
-          "ring_depth": "Outer",
-          "services_manifest": {
-            "has_fuel": true,
-            "has_supplies": true,
-            "has_bazaar": false,
-            "has_regional_bank_access": false,
-            "has_drydock_repairs": false,
-            "has_crew_recruitment": false
-          },
-          "export_goods_keys": ["chorister_nectar"],
-          "lore_snippet": "Known as the Grave of Roses, this is a beautiful, stone-pillared sanctuary where civilized devils tend to quiet gardens and gather cosmic secrets."
+          "type": "station",
+          "region": "Eleutheria",
+          "ring_depth": "outer",
+          "lore_snippet": "Known as the Grave of Roses, this is a beautiful, stone-pillared sanctuary where civilized devils tend to quiet gardens and gather cosmic secrets.",
+          "data": {
+            "services": ["fuel", "supplies"],
+            "export_goods": ["chorister_nectar"]
+          }
+        },
+        "domain_of_the_halved": {
+          "display_name": "Domain of the Halved",
+          "type": "spectacle",
+          "region": "Eleutheria",
+          "ring_depth": "outer",
+          "lore_snippet": "A black and seething star turned to night! When the gaze of the Halved turns upon the bridge, the crew wails as its impossible eye fills the glass.",
+          "data": {
+            "spectacle_category": "horror",
+            "waypoint_station": "house_of_rods_and_chains"
+          }
         },
         "eagle_provinces_empyrean": {
           "display_name": "Eagle's Empyrean",
-          "port_type": "Station",
-          "ring_depth": "Outer",
-          "services_manifest": {
-            "has_fuel": true,
-            "has_supplies": true,
-            "has_bazaar": false,
-            "has_regional_bank_access": false,
-            "has_drydock_repairs": true,
-            "has_crew_recruitment": true
-          },
-          "export_goods_keys": ["starshine"],
-          "lore_snippet": "The proud, neon-lit capital of the Eagle Khanate. Independent from London, it burns brightly in the deep darkness under the glow of their artificial moon."
+          "type": "station",
+          "region": "Eleutheria",
+          "ring_depth": "outer",
+          "lore_snippet": "The proud, neon-lit capital of the Eagle Khanate. Independent from London, it burns brightly in the deep darkness under the glow of their artificial moon.",
+          "data": {
+            "services": ["fuel", "supplies", "shipyard", "recruitment"],
+            "export_goods": ["starshine"]
+          }
         },
+        "gentlemen": {
+          "display_name": "The Gentlemen",
+          "type": "platform",
+          "region": "Eleutheria",
+          "ring_depth": "center",
+          "lore_snippet": "A suspicious, highly elite club house platform facilitating backroom deals, smugglers, and the distribution of forbidden materials.",
+          "data": {
+            "parent_station": "pan",
+            "faction_alignment": "smugglers",
+            "services": ["smuggling"],
+            "export_goods": ["red_honey", "starshine"]
+          }
+        },      
         "heart_catcher_gardens": {
           "display_name": "Heart-Catcher Gardens",
-          "port_type": "Platform",
-          "ring_depth": "Center",
-          "services_manifest": {
-            "has_fuel": false,
-            "has_supplies": false,
-            "has_bazaar": false,
-            "has_regional_bank_access": false,
-            "has_drydock_repairs": false,
-            "has_crew_recruitment": false
-          },
-          "export_goods_keys": [],
-          "lore_snippet": "A quiet, predatory platform drifting near Pan, covered in sprawling alien flora engineered to ensnare careless skyfarers."
+          "type": "platform",
+          "region": "Eleutheria",
+          "ring_depth": "center",
+          "lore_snippet": "A quiet, predatory platform drifting near Pan, covered in sprawling alien flora engineered to ensnare careless skyfarers.",
+          "data": {
+            "parent_station": "pan",
+            "faction_alignment": "heart_catchers",
+            "services": [],
+            "export_goods": []
+          }
+        },
+        "house_of_rods_and_chains": {
+          "display_name": "The House of Rods and Chains",
+          "type": "station",
+          "region": "Eleutheria",
+          "ring_depth": "outer",
+          "lore_snippet": "A ruined complex built directly upon the carcass of a massive, dead celestial Messenger that disobeyed the ancient judgment of the suns.",
+          "data": {
+            "services": ["fuel", "supplies"],
+            "export_goods": ["bombazine"]
+          }
         },
         "langley_hall": {
           "display_name": "Langley Hall",
-          "port_type": "Station",
-          "ring_depth": "Outer",
-          "services_manifest": {
-            "has_fuel": false,
-            "has_supplies": true,
-            "has_bazaar": false,
-            "has_regional_bank_access": false,
-            "has_drydock_repairs": false,
-            "has_crew_recruitment": false
-          },
-          "export_goods_keys": ["approved_literature"],
-          "lore_snippet": "A surreal, isolated estate lit by London-style lamp-posts, where an aristocratic lord lives out eccentric eccentricities amidst an untrustworthy staff."
+          "type": "station",
+          "region": "Eleutheria",
+          "ring_depth": "outer",
+          "lore_snippet": "A surreal, isolated estate lit by London-style lamp-posts, where an aristocratic lord lives out eccentric eccentricities amidst an untrustworthy staff.",
+          "data": {
+            "services": ["supplies"],
+            "export_goods": ["approved_literature"]
+          }
         },
         "pan": {
           "display_name": "Pan",
-          "port_type": "Hub",
-          "ring_depth": "Center",
-          "services_manifest": {
-            "has_fuel": true,
-            "has_supplies": true,
-            "has_bazaar": true,
-            "has_regional_bank_access": true,
-            "has_drydock_repairs": true,
-            "has_crew_recruitment": true
-          },
-          "export_goods_keys": ["caged_catch", "illicit_literature"],
-          "lore_snippet": "The wild, divided, and lawless central hub of Eleutheria, governed by the enigmatic Cypress King where storytelling is explicitly a crime."
+          "type": "station",
+          "region": "Eleutheria",
+          "ring_depth": "center",
+          "lore_snippet": "The wild, divided, and lawless central hub of Eleutheria, governed by the enigmatic Cypress King where storytelling is explicitly a crime.",
+          "data": {
+            "services": ["fuel", "supplies", "bank", "shipyard", "recruitment"],
+            "export_goods": ["caged_catch", "illicit_literature"]
+          }
         },
         "piranesi": {
           "display_name": "Piranesi",
-          "port_type": "Station",
-          "ring_depth": "Outer",
-          "services_manifest": {
-            "has_fuel": true,
-            "has_supplies": true,
-            "has_bazaar": false,
-            "has_regional_bank_access": false,
-            "has_drydock_repairs": false,
-            "has_crew_recruitment": false
-          },
-          "export_goods_keys": ["petrichor"],
-          "lore_snippet": "An architectural prison without doors or visible cells, where inmates wander beautiful, twisting mazes of stone, gradually losing their identities."
+          "type": "station",
+          "region": "Eleutheria",
+          "ring_depth": "outer",
+          "lore_snippet": "An architectural prison without doors or visible cells, where inmates wander beautiful, twisting mazes of stone, gradually losing their identities.",
+          "data": {
+            "services": ["fuel", "supplies"],
+            "export_goods": ["petrichor"]
+          }
         },
-        "the_brazen_brigade": {
-          "display_name": "The Brazen Brigade",
-          "port_type": "Platform",
-          "ring_depth": "Center",
-          "services_manifest": {
-            "has_fuel": false,
-            "has_supplies": false,
-            "has_bazaar": false,
-            "has_regional_bank_access": false,
-            "has_drydock_repairs": false,
-            "has_crew_recruitment": false
-          },
-          "export_goods_keys": [],
-          "lore_snippet": "A military platform occupied by an army of rogue devils who have turned their backs on hell to wage an endless war of their own design."
-        },
-        "the_gentlemen": {
-          "display_name": "The Gentlemen",
-          "port_type": "Platform",
-          "ring_depth": "Center",
-          "services_manifest": {
-            "has_fuel": false,
-            "has_supplies": false,
-            "has_bazaar": false,
-            "has_regional_bank_access": false,
-            "has_drydock_repairs": false,
-            "has_crew_recruitment": false
-          },
-          "export_goods_keys": ["red_honey"],
-          "lore_snippet": "A suspicious, highly elite club house platform facilitating backroom deals, smugglers, and the distribution of forbidden materials."
-        },
-        "the_house_of_rods_and_chains": {
-          "display_name": "The House of Rods and Chains",
-          "port_type": "Station",
-          "ring_depth": "Outer",
-          "services_manifest": {
-            "has_fuel": true,
-            "has_supplies": true,
-            "has_bazaar": false,
-            "has_regional_bank_access": false,
-            "has_drydock_repairs": false,
-            "has_crew_recruitment": false
-          },
-          "export_goods_keys": ["bombazine"],
-          "lore_snippet": "A ruined complex built directly upon the carcass of a massive, dead celestial Messenger that disobeyed the ancient judgment of the suns."
+        "well_of_wonders": {
+          "display_name": "The Well of Wonders",
+          "type": "spectacle",
+          "region": "Eleutheria",
+          "ring_depth": "outer",
+          "lore_snippet": "A shimmering tear in reality where colors unknown to earthly eyes bleed into the perpetual night.",
+          "data": {
+            "spectacle_category": "wonder",
+            "waypoint_station": "caduceus"
+          }
         },
         "winter_reside": {
           "display_name": "Winter's Reside",
-          "port_type": "Platform",
-          "ring_depth": "Center",
-          "services_manifest": {
-            "has_fuel": false,
-            "has_supplies": false,
-            "has_bazaar": false,
-            "has_regional_bank_access": false,
-            "has_drydock_repairs": false,
-            "has_crew_recruitment": false
-          },
-          "export_goods_keys": [],
-          "lore_snippet": "A cold, structural platform resting in the orbit of Pan, used by seasonal outcasts waiting out political shifts within the region."
+          "type": "platform",
+          "region": "Eleutheria",
+          "ring_depth": "center",
+          "lore_snippet": "A cold, structural platform resting in the orbit of Pan, used by seasonal outcasts waiting out political shifts within the region.",
+          "data": {
+            "parent_station": "pan",
+            "faction_alignment": "unaligned",
+            "services": [],
+            "export_goods": []
+          }
+        },
+        "xanthous_moon": {
+          "display_name": "The Xanthous Moon",
+          "type": "spectacle",
+          "region": "Eleutheria",
+          "ring_depth": "outer",
+          "lore_snippet": "A homemade moon forged at the Khan's decree, its vast steel lattice festooned with burning lamps that stain the velvet dark with warm, yellow light.",
+          "data": {
+            "spectacle_category": "wonder",
+            "waypoint_station": "eagle_provinces_empyrean"
+          }
         }
       },
-      "the_blue_kingdom": {
+      "The Blue Kingdom": {
         "deaths_door": {
           "display_name": "Death's Door",
-          "port_type": "Station",
-          "ring_depth": "Outer",
-          "services_manifest": {
-            "has_fuel": true,
-            "has_supplies": true,
-            "has_bazaar": false,
-            "has_regional_bank_access": false,
-            "has_drydock_repairs": false,
-            "has_crew_recruitment": false
-          },
-          "export_goods_keys": ["undistinguished_souls"],
-          "lore_snippet": "A bleak, deafening station where the dead are processed, sorted, and sent down deep trenches to tunnel toward their final metaphysical progression."
+          "type": "station",
+          "region": "The Blue Kingdom",
+          "ring_depth": "outer",
+          "lore_snippet": "A bleak, deafening station where the dead are processed, sorted, and sent down deep trenches to tunnel toward their final metaphysical progression.",
+          "data": {
+            "services": ["fuel", "supplies"],
+            "export_goods": ["undistinguished_souls"]
+          }
+        },
+        "forge_of_souls": {
+          "display_name": "The Forge of Souls",
+          "type": "station",
+          "region": "The Blue Kingdom",
+          "ring_depth": "outer",
+          "lore_snippet": "An immense, blinding industrial forge choked with gleaming white dust, where human spirits are fundamentally broken down, purified, or reforged.",
+          "data": {
+            "services": ["fuel"],
+            "export_goods": ["immaculate_souls"]
+          }
+        },
+        "horologion": {
+          "display_name": "Horologion",
+          "type": "spectacle",
+          "region": "The Blue Kingdom",
+          "ring_depth": "outer",
+          "lore_snippet": "The cosmic dial by which the silent servants of the Sapphir'd King govern every ritual, observance, and transit in the kingdom of the dead.",
+          "data": {
+            "spectacle_category": "wonder",
+            "waypoint_station": "shadow_of_the_sun"
+          }
+        },
+        "house_of_days": {
+          "display_name": "The House of Days",
+          "type": "station",
+          "region": "The Blue Kingdom",
+          "ring_depth": "outer",
+          "lore_snippet": "The radiant, overwhelming court of the Sun's Daughter, where souls can attempt to petition the cosmic bureaucracy of the Pansekritis.",
+          "data": {
+            "services": ["supplies"],
+            "export_goods": ["unseasoned_hours"]
+          }
+        },
+        "shadow_of_the_sun": {
+          "display_name": "The Shadow of the Sun",
+          "type": "platform",
+          "region": "The Blue Kingdom",
+          "ring_depth": "outer",
+          "lore_snippet": "A structural spire sitting under the gaze of the dead Judgement, holding the vaults and offices of the realm's rigid Arbiters.",
+          "data": {
+            "parent_station": null,
+            "faction_alignment": "arbiters",
+            "services": [],
+            "export_goods": []
+          }
         },
         "sky_barnet": {
           "display_name": "Sky Barnet",
-          "port_type": "Hub",
-          "ring_depth": "Outer",
-          "services_manifest": {
-            "has_fuel": true,
-            "has_supplies": true,
-            "has_bazaar": true,
-            "has_regional_bank_access": true,
-            "has_drydock_repairs": true,
-            "has_crew_recruitment": true
-          },
-          "export_goods_keys": ["unseasoned_hours"],
-          "lore_snippet": "London's fragile bureaucratic outpost established in the kingdom of the dead; it is the single port where living skyfarers outnumber the deceased."
-        },
-        "the_forge_of_souls": {
-          "display_name": "The Forge of Souls",
-          "port_type": "Station",
-          "ring_depth": "Outer",
-          "services_manifest": {
-            "has_fuel": true,
-            "has_supplies": false,
-            "has_bazaar": false,
-            "has_regional_bank_access": false,
-            "has_drydock_repairs": false,
-            "has_crew_recruitment": false
-          },
-          "export_goods_keys": ["immaculate_souls"],
-          "lore_snippet": "An immense, blinding industrial forge choked with gleaming white dust, where human spirits are fundamentally broken down, purified, or reforged."
-        },
-        "the_house_of_days": {
-          "display_name": "The House of Days",
-          "port_type": "Station",
-          "ring_depth": "Outer",
-          "services_manifest": {
-            "has_fuel": false,
-            "has_supplies": true,
-            "has_bazaar": false,
-            "has_regional_bank_access": false,
-            "has_drydock_repairs": false,
-            "has_crew_recruitment": false
-          },
-          "export_goods_keys": ["unseasoned_hours"],
-          "lore_snippet": "The radiant, overwhelming court of the Sun's Daughter, where souls can attempt to petition the cosmic bureaucracy of the Pansekritis."
-        },
-        "the_shadow_of_the_sun": {
-          "display_name": "The Shadow of the Sun",
-          "port_type": "Platform",
-          "ring_depth": "Outer",
-          "services_manifest": {
-            "has_fuel": false,
-            "has_supplies": false,
-            "has_bazaar": false,
-            "has_regional_bank_access": false,
-            "has_drydock_repairs": false,
-            "has_crew_recruitment": false
-          },
-          "export_goods_keys": [],
-          "lore_snippet": "A structural spire sitting under the gaze of the dead Judgement, holding the vaults and offices of the realm's rigid Arbiters."
-        },
-        "the_white_well": {
-          "display_name": "The White Well",
-          "port_type": "Station",
-          "ring_depth": "Outer",
-          "services_manifest": {
-            "has_fuel": true,
-            "has_supplies": true,
-            "has_bazaar": false,
-            "has_regional_bank_access": false,
-            "has_drydock_repairs": false,
-            "has_crew_recruitment": false
-          },
-          "export_goods_keys": ["gemstones"],
-          "lore_snippet": "A terrifying, deep cosmic drain where celestial judgement is pronounced and the condemned are cast into lightless, absolute erasure."
+          "type": "station",
+          "region": "The Blue Kingdom",
+          "ring_depth": "outer",
+          "lore_snippet": "London's fragile bureaucratic outpost established in the kingdom of the dead; it is the single port where living skyfarers outnumber the deceased.",
+          "data": {
+            "services": ["fuel", "supplies", "bank", "shipyard", "recruitment"],
+            "export_goods": ["unseasoned_hours"]
+          }
         },
         "wellmouth": {
           "display_name": "Wellmouth",
-          "port_type": "Platform",
-          "ring_depth": "Outer",
-          "services_manifest": {
-            "has_fuel": false,
-            "has_supplies": false,
-            "has_bazaar": false,
-            "has_regional_bank_access": false,
-            "has_drydock_repairs": false,
-            "has_crew_recruitment": false
-          },
-          "export_goods_keys": [],
-          "lore_snippet": "A high-security prison platform anchored directly to the lips of the White Well, used to hold and punish the erroneous dead before their final sentences."
+          "type": "platform",
+          "region": "The Blue Kingdom",
+          "ring_depth": "outer",
+          "lore_snippet": "A high-security prison platform anchored directly to the lips of the White Well, used to hold and punish the erroneous dead before their final sentences.",
+          "data": {
+            "parent_station": "white_well",
+            "faction_alignment": "arbiters",
+            "services": [],
+            "export_goods": []
+          }
+        },
+        "white_well": {
+          "display_name": "The White Well",
+          "type": "station",
+          "region": "The Blue Kingdom",
+          "ring_depth": "outer",
+          "lore_snippet": "A terrifying, deep cosmic drain where celestial judgement is pronounced and the condemned are cast into lightless, absolute erasure.",
+          "data": {
+            "services": ["fuel", "supplies"],
+            "export_goods": ["undistinguished_souls"]
+          }
         }
       }
     }
