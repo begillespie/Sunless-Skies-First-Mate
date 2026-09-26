@@ -1,12 +1,12 @@
 {
   "_metadata": {
     "file_type": "static_game_data",
-    "static_data_version": "0.3.0",
+    "static_data_version": "0.4.0",
     "supported_save_format": "sunless-skies-first-mate",
     "compatibility_contract": {
-      "rules_version_expected": "0.3.0",
-      "minimum_schema_version": "0.3.0",
-      "target_schema_version": "0.3.0",
+      "rules_version_expected": "0.4.0",
+      "minimum_schema_version": "0.4.0",
+      "target_schema_version": "0.4.0",
       "breaking_major": 0
     },
     "description": "Authoritative immutable game data, enums, schemas, and object blueprints for the Sunless Skies First Mate Engine."
@@ -148,8 +148,9 @@
         "xanthous_moon"
       ],
       "navigation_states": [
-        "docked",
+        "arriving",
         "departing",
+        "docked",
         "enroute"
       ],
       "officer_id_keys": [
