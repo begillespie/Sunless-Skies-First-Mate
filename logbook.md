@@ -1,8 +1,8 @@
 # 🚂 CAPTAIN'S LOG 🚀
 
-## 📅 [DATE] · ⚓ [PORT JUST LEFT]
+## 📅 [DATE] (Day [CURRENT_DAY_EPOCH]) · ⚓ [PORT JUST LEFT]
 
-**🗺️ Region:** [REGION NAME] | **👤 Captain:** [CAPTAIN NAME] | **🪙 Wallet:** [SOVEREIGNS] Sovereigns
+**🗺️ Region:** [REGION_NAME] | **👤 Captain:** [CAPTAIN_NAME] | **🪙 Wallet:** [SOVEREIGNS] Sovereigns
 
 **🚂 Current Engine:** [CURRENT_LOCOMOTIVE_NAME] ([CURRENT_LOCOMOTIVE])
 
@@ -40,7 +40,7 @@
 > [Tight, tactical synopsis combining routing reasoning, consumable spend predictions, resource pitfalls, and upcoming transit gate or contract warnings. Progress toward tactical, regional, and strategic goals.]
 
 ### 🧭 Active Trajectory:
-[CURRENT DOCK] ➔ 🟢 **[NEXT STOP]** ➔ 🟡 [UPCOMING LEG 2]
+[recent_history[-1].location] ➔ 🟢 **[itinerary[0].location]** ➔ 🟡 [itinerary[1].location] ➔ 🟡 [itinerary[n].location]
 
 ### ➡️ NEXT STOP: [NEXT PORT NAME]
 * 🎯 **AMBITION:** [MILESTONE_DESCRIPTION]. Items Needed: [ITEMS_REQUIRED_NEXT_TIER]
@@ -81,7 +81,6 @@
 
 *   **[ Officer Lexical Name]** ([Station Slot]) ➔ Deployed at: [Origin Port]  
     *   *Maturity Condition:* 🔒 **Locked Underway** · Unlocks after: [ Return-After Date ] (Current Ledger Date: [ Ledger Date ])  
-    *   *Pending Interaction Reward:* [ Reward ]
     
 *   **[ Officer Lexical Name]** ([Station Slot]) ➔ Deployed at: [Origin Port]  
     *   *Maturity Condition:* 🟢 **Ready**  

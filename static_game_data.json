@@ -64,7 +64,6 @@
         "albion_reach_relay",
         "apoidean_gardens",
         "avid_horizon",
-        "avid_horizon_spectacle",
         "blue_kingdom_reach_relay",
         "bone_orchard",
         "brabazon_workworld",
@@ -93,6 +92,7 @@
         "grave_of_the_silent_saint",
         "heart_catcher_gardens",
         "heart_of_the_mountain",
+        "home_office",
         "horologion",
         "house_of_days",
         "house_of_rods_and_chains",
@@ -253,7 +253,7 @@
             "description": "Persistent freeform scratchpad for player-driven tracking or quest reminders."
           },
           "bazaar": {
-            "type": "object",
+            "type": ["object", "null"],
             "required": ["reset_epoch", "available_bargains"],
             "additionalProperties": false,
             "properties": {
@@ -1218,17 +1218,6 @@
         }
       },
       "avid_horizon": {
-        "display_name": "Avid Horizon",
-        "region": "albion",
-        "type": "station",
-        "ring_depth": "outer",
-        "lore_snippet": "The grand, frozen gateway through which London originally migrated into the High Wilderness; it is now shut fast, chillingly quiet, and heavily guarded.",
-        "data": {
-          "services": ["supplies"],
-          "export_goods": ["dried_tea"]
-        }
-      },
-      "avid_horizon_spectacle": {
         "display_name": "The Avid Horizon",
         "region": "albion",
         "type": "spectacle",
@@ -1236,7 +1225,7 @@
         "lore_snippet": "In this place that is two places, the void turns blindingly pale and the high sky shudders with memories of the Unterzee.",
         "data": {
           "spectacle_category": "horror",
-          "waypoint_station": "avid_horizon"
+          "waypoint_station": "home_office"
         }
       },
       "blue_kingdom_reach_relay": {
@@ -1419,9 +1408,10 @@
           "toll_options": [
             {
               "method": "Trade stories to travel to Albion. The Whispering Deputy will accept the traditional currency of Eleutheria: mysteries.",
-              "costs": { "eleutherian_mystery": 3 },
+              "costs": {},
               "elapsed_days": 3,
-              "expected_terror_delta": 0
+              "expected_terror_delta": 0,
+              "note": "Requires 3 Eleutherian Mysteries."
             },
             {
               "method": "Spend sovereigns to travel to Albion. The cost is painful, but less than the longer route through the Reach.",
@@ -1545,6 +1535,17 @@
           "faction_alignment": "heart_catchers",
           "services": [],
           "export_goods": []
+        }
+      },
+      "home_office": {
+        "display_name": "The Home Office",
+        "region": "albion",
+        "type": "station",
+        "ring_depth": "outer",
+        "lore_snippet": "The grand, frozen gateway through which London originally migrated into the High Wilderness; it is now shut fast, chillingly quiet, and heavily guarded.",
+        "data": {
+          "services": ["supplies"],
+          "export_goods": ["dried_tea"]
         }
       },
       "horologion": {
@@ -1826,7 +1827,7 @@
           "toll_options": [
             {
               "method": "Travel to the Blue Kingdom, first class. These artefacts might have originated in the Blue Kingdom. As part of its concord with London, the relay's officials are obliged to accept them for passage into the Kingdom.",
-              "costs": { "otherworldly_artefact": 1 },
+              "costs": { "otherworldly_artifact": 1 },
               "elapsed_days": 2,
               "expected_terror_delta": -15
             },
@@ -1934,7 +1935,7 @@
         "ring_depth": "outer",
         "lore_snippet": "A structural spire sitting under the gaze of the dead Judgement, holding the vaults and offices of the realm's rigid Arbiters.",
         "data": {
-          "parent_station": null,
+          "parent_station": "deaths_door",
           "faction_alignment": "arbiters",
           "services": [],
           "export_goods": []
@@ -1980,7 +1981,7 @@
         "ring_depth": "outer",
         "lore_snippet": "A colossal, plunging infrastructure that descends away into the lightless deeps, serving as a bleak checkpoint for those staring into Albion's watery underbelly.",
         "data": {
-          "parent_station": null,
+          "parent_station": "home_office",
           "faction_alignment": "unaligned",
           "services": [],
           "export_goods": []
