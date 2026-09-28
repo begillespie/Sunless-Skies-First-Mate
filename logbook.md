@@ -4,7 +4,7 @@
 
 **🗺️ Region:** [REGION_NAME] | **👤 Captain:** [CAPTAIN_NAME] | **🪙 Wallet:** [SOVEREIGNS] Sovereigns
 
-**🚂 Current Engine:** [CURRENT_LOCOMOTIVE_NAME] ([CURRENT_LOCOMOTIVE])
+**🚂 Current Engine:** [LOCOMOTIVE.NAME] ([LOCOMOTIVE.MODEL])
 
 ---
 
