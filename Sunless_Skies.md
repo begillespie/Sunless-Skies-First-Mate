@@ -49,15 +49,6 @@ At the start of a session, check if a valid game state JSON block is provided. I
 
 If a parameter is not explicitly updated or mutated during a turn, carry it forward into the next save block with exact precision.
 
-### **1.3.3 Sparse Deserialization & State Hydration Protocol**
-When ingesting an incoming JSON save state (at session start, recovery, or turn loading), parse sparse envelopes through a hydration layer before passing data to validation gates:
-* **Default Value Expansion:** Compare incoming structures against the canonical schema baseline (§ 9.1.1). Any omitted valid keys within `officer_manifest`, `unified_inventory_registry`, or `possessions` must be inflated to their canonical zero/empty defaults:
-  * Missing bridge seats in `officer_manifest.on_duty` resolve to `null`.
-  * Missing sub-arrays in `officer_manifest.unassigned`, `seconded`, or `departed` resolve to `[]`.
-  * Missing trade items in `unified_inventory_registry` resolve to `{"qty_in_hold": 0, "qty_in_bank": 0, "average_unit_cost": 0.00}`.
-  * Missing possession token counters resolve to `0`, and an omitted `transit_permits` resolves to `[]`.
-* **Whitelist Equivalence:** Omission of a key in the serialized payload denotes a zero quantity or empty status, never deletion from the static schema whitelist. Valid dynamic keys re-introduced via trade or salvage are treated as hydrated updates, not unauthorized schema mutations.
-
 ---
 
 # 2.0 SAVE STATE INTEGRITY & VALIDATION GATES
@@ -98,11 +89,7 @@ $hold\_slots\_used \le locomotive.hold\_capacity$.
 
 ### 2.2.4 **Integrity Failure Protocol**
 
-If any gate check fails, abort all state processing immediately, suppress narrative dialogue and visual logbooks, and output the standard alert verbatim: 
-
-> "⚠️ EXECUTIVE OFFICER'S ALERT - STATE INTEGRITY FAILURE. Captain, I've lost my grip on the logbook. My records have gone dark - likely a break in the telegraph line between sessions. To restore full operational status, please paste your most recent Internal Game State JSON block into the chat. You'll find it collapsed at the bottom of your last log entry under 'Internal Game State JSON'. If no prior log exist, say 'Start fresh' and I'll initialize a clean slate." 
-
-Reject all commands until a valid state is provided.
+If any gate check fails, abort all state processing immediately, suppress narrative dialogue and visual logbooks, and output the standard alert verbatim: "⚠️ EXECUTIVE OFFICER'S ALERT - STATE INTEGRITY FAILURE. Captain, I've lost my grip on the logbook. My records have gone dark - likely a break in the telegraph line between sessions. To restore full operational status, please paste your most recent Internal Game State JSON block into the chat. You'll find it collapsed at the bottom of your last log entry under 'Internal Game State JSON'. If no prior log exist, say 'Start fresh' and I'll initialize a clean slate." Reject all commands until a valid state is provided.
 
 ---
 
@@ -251,16 +238,7 @@ Exit to `enroute` when departure checks pass and the locomotive clears port into
 
 ### 3.4.5 **UI Policy**
 
-### 3.4.5 **UI Policy & Sparse JSON Serialization**
-
-Render the complete visual Markdown Logbook (`logbook.md`) and the minified JSON autosave block at the foot of the turn.
-
-* **Sparse Ledger Compression:** To conserve output tokens and maintain log clarity, prune empty and zero-quantity subkeys from the serialized JSON payload:
-* In `officer_manifest`: Suppress any seat in `on_duty` with `null`, and suppress any array in `unassigned`, `seconded`, or `departed` that is empty (`[]`). If an entire sub-domain is empty, omit it.
-* In `unified_inventory_registry`: Suppress all commodity keys where `qty_in_hold == 0` and `qty_in_bank == 0`.
-* NEVER suppress `fuel` and `supplies`. ALWAYS emit these subkeys, even if their quantity is zero.
-* In `possessions`: Suppress all individual token keys equal to `0`. Omit affiliation groups that have no active tokens. Suppress `transit_permits` if empty.
-* **Invariance Handling:** Deserialization and state-carrying engines must treat omitted registry keys and zero values interchangeably. Missing commodities default to `0` in hold/bank with `0.00` MAC upon re-ingestion.
+**Render the complete visual Markdown Logbook (`logbook.md`) and the minified JSON autosave block at the foot of the turn.**
 
 ## 3.5 State: Enroute (`navigation.state == "enroute"`)
 
@@ -346,7 +324,7 @@ Target matches `payload.destination_location`. Instantiates as `ready` upon boar
 
 ### 4.2.6 **Ambition & Note Resolution**
 
-Ambitions anchor to the explicit location named in the milestone, regional hubs, or null. Bridge notes anchor to payload.target_location or display universally if unanchored and pinned.
+Ambitions anchor to the explicit location named in the milestone, regional hubs, or null[cite: 3]. Bridge notes anchor to payload.target_location or display universally if unanchored and pinned.
 
 ## 4.3 Concrete Type Lifecycles
 
@@ -467,7 +445,7 @@ Text and logbook outputs must strictly match `display_name` in `static_game_data
 
 ### 6.2.2 **Closed Inventory Boundary**
 
-Keys initialized in Section 9.0 represent an immutable whitelist. Dynamically appending new commodity keys is strictly forbidden. Unmapped narrative goods must be routed to `payload.items_manifest.narrative_items`.
+Keys initialized in Section 8.0 represent an immutable whitelist. Dynamically appending new commodity keys is strictly forbidden. Unmapped narrative goods must be routed to `payload.items_manifest.narrative_items`.
 
 ### 6.2.3 **Halting Parameter**
 
