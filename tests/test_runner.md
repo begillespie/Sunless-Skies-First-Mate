@@ -6,15 +6,15 @@ The First Mate Test Harness operates across four interconnected files within the
 
 | File Identifier | Classification | Authority & Functional Scope |
 | :--- | :--- | :--- |
-| `Sunless_Skies.md` | **System Core Under Test** | Master instruction set defining the First Mate persona, validation gates, kinetic loop state transitions, atomic inventory pipelines, and JSON envelope schemas[cite: 4]. |
-| `static_game_data.json` | **Immutable Reference Store** | Authoritative enums (locations, goods, possessions, officers), object blueprints, and port facilities[cite: 3]. |
-| `logbook.md` | **Presentation Template** | The visual Markdown reporting layout rendered strictly upon port departure[cite: 5]. |
-| `test_cases.md` | **QA Test Database** | Centralized repository containing the Master Test Suite Index and isolated test cases (TC1–TC19) with sandbox JSON seeds, prompts, and verification rubrics[cite: 1]. |
+| `Sunless_Skies.md` | **System Core Under Test** | Master instruction set defining the First Mate persona, validation gates, kinetic loop state transitions, atomic inventory pipelines, and JSON envelope schemas. |
+| `static_game_data.json` | **Immutable Reference Store** | Authoritative enums (locations, goods, possessions, officers), object blueprints, and port facilities. |
+| `logbook.md` | **Presentation Template** | The visual Markdown reporting layout rendered strictly upon port departure. |
+| `test_cases.md` | **QA Test Database** | Centralized repository containing the Master Test Suite Index and isolated test cases (TC1–TC19) with sandbox JSON seeds, prompts, and verification rubrics. |
 
 ### 1.1 Ingestion & File Access Rules
-1. **Target Lookup Isolation:** When commanded to execute a test or test package, the agent references `test_cases.md` to locate the target block[cite: 1, 2].
-2. **Blindfold Execution Guard:** The agent loads **only** the `### Input Prompt` and the input `dynamic_save_state` JSON from `test_cases.md`. It evaluates the prompt against `Sunless_Skies.md`, `static_game_data.json`, and `logbook.md` without conditioning its run on the `### Expected Verification` block in `test_cases.md`[cite: 1, 2, 3, 4, 5].
-3. **Post-Execution Assertion Pass:** Once the primary output is rendered, the agent loads `### Expected Verification` from `test_cases.md` to generate the evaluation scorecard[cite: 1, 2].
+1. **Target Lookup Isolation:** When commanded to execute a test or test package, the agent references `test_cases.md` to locate the target block.
+2. **Blindfold Execution Guard:** The agent loads **only** the `### Input Prompt` and the input `dynamic_save_state` JSON from `test_cases.md`. It evaluates the prompt against `Sunless_Skies.md`, `static_game_data.json`, and `logbook.md` without conditioning its run on the `### Expected Verification` block in `test_cases.md`.
+3. **Post-Execution Assertion Pass:** Once the primary output is rendered, the agent loads `### Expected Verification` from `test_cases.md` to generate the evaluation scorecard.
 
 ---
 
