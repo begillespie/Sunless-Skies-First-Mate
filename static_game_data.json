@@ -4,9 +4,9 @@
     "static_data_version": "0.4.0",
     "supported_save_format": "sunless-skies-first-mate",
     "compatibility_contract": {
-      "rules_version_expected": "0.4.0",
-      "minimum_schema_version": "0.4.0",
-      "target_schema_version": "0.4.0",
+      "rules_version_expected": "0.5.0",
+      "minimum_schema_version": "0.5.0",
+      "target_schema_version": "0.5.0",
       "breaking_major": 0
     },
     "description": "Authoritative immutable game data, enums, schemas, and object blueprints for the Sunless Skies First Mate Engine."
@@ -92,7 +92,7 @@
         "grave_of_the_silent_saint",
         "heart_catcher_gardens",
         "heart_of_the_mountain",
-        "home_office",
+        "home_bureau",
         "horologion",
         "house_of_days",
         "house_of_rods_and_chains",
@@ -237,7 +237,7 @@
     "object_blueprints": {
       "discovered_location_template": {
         "type": "object",
-        "required": ["clock_direction", "captains_notes", "bazaar"],
+        "required": ["clock_direction"],
         "additionalProperties": false,
         "properties": {
           "clock_direction": {
@@ -246,15 +246,9 @@
             "maximum": 12,
             "description": "Relative clock position (1-12) on the regional chart, or null if unobserved."
           },
-          "captains_notes": {
-            "type": "array",
-            "items": { "type": "string" },
-            "default": [],
-            "description": "Persistent freeform scratchpad for player-driven tracking or quest reminders."
-          },
           "bazaar": {
             "type": ["object", "null"],
-            "required": ["reset_epoch", "available_bargains"],
+            "required": ["reset_epoch"],
             "additionalProperties": false,
             "properties": {
               "reset_epoch": {
@@ -1225,7 +1219,7 @@
         "lore_snippet": "In this place that is two places, the void turns blindingly pale and the high sky shudders with memories of the Unterzee.",
         "data": {
           "spectacle_category": "horror",
-          "waypoint_station": "home_office"
+          "waypoint_station": "home_bureau"
         }
       },
       "blue_kingdom_reach_relay": {
@@ -1537,7 +1531,7 @@
           "export_goods": []
         }
       },
-      "home_office": {
+      "home_bureau": {
         "display_name": "The Home Office",
         "region": "albion",
         "type": "station",
@@ -1981,7 +1975,7 @@
         "ring_depth": "outer",
         "lore_snippet": "A colossal, plunging infrastructure that descends away into the lightless deeps, serving as a bleak checkpoint for those staring into Albion's watery underbelly.",
         "data": {
-          "parent_station": "home_office",
+          "parent_station": "home_bureau",
           "faction_alignment": "unaligned",
           "services": [],
           "export_goods": []

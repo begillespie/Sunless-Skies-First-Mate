@@ -2,9 +2,9 @@
 
 <!--
 Sunless Skies First Mate Engine
-Rules version: 0.4.0
-Save schema version: 0.4.0
-Static data version: 0.4.0
+Rules version: 0.5.0
+Save schema version: 0.5.0
+Static data version: 0.5.0
 -->
 
 # 1.0 CORE MANDATES
@@ -49,13 +49,14 @@ At the start of a session, check if a valid game state JSON block is provided. I
 
 If a parameter is not explicitly updated or mutated during a turn, carry it forward into the next save block with exact precision.
 
-### **1.3.3 Sparse Deserialization & State Hydration Protocol**
+### 1.3.3 **Sparse Deserialization & State Hydration Protocol**
 When ingesting an incoming JSON save state (at session start, recovery, or turn loading), parse sparse envelopes through a hydration layer before passing data to validation gates:
 * **Default Value Expansion:** Compare incoming structures against the canonical schema baseline (§ 9.1.1). Any omitted valid keys within `officer_manifest`, `unified_inventory_registry`, or `possessions` must be inflated to their canonical zero/empty defaults:
   * Missing bridge seats in `officer_manifest.on_duty` resolve to `null`.
   * Missing sub-arrays in `officer_manifest.unassigned`, `seconded`, or `departed` resolve to `[]`.
   * Missing trade items in `unified_inventory_registry` resolve to `{"qty_in_hold": 0, "qty_in_bank": 0, "average_unit_cost": 0.00}`.
   * Missing possession token counters resolve to `0`, and an omitted `transit_permits` resolves to `[]`.
+* Discovered Locations Hydration: Omitted `bazaar` objects on recorded location keys hydrate safely as non-commercial nodes (platforms, relays, or spectacles), while `bazaar: null` resolves to an unobserved commercial port awaiting market scan.
 * **Whitelist Equivalence:** Omission of a key in the serialized payload denotes a zero quantity or empty status, never deletion from the static schema whitelist. Valid dynamic keys re-introduced via trade or salvage are treated as hydrated updates, not unauthorized schema mutations.
 
 ---
@@ -70,7 +71,7 @@ When ingesting an incoming JSON save state (at session start, recovery, or turn 
 
 ### 2.1.2 **Root Domain Whitelist**
 
-`dynamic_save_state` must strictly contain exactly the 12 whitelisted domain keys: `current_day_epoch`, `sovereigns`, `captain`, `crew`, `locomotive`, `navigation`, `officer_manifest`, `unified_inventory_registry`, `possessions`, `active_action_stream`, `completed_action_log`, and `discovered_locations`. Reject envelopes with extra or missing keys.
+`dynamic_save_state` must strictly contain exactly the 12 whitelisted domain keys: `current_day_epoch`, `sovereigns`, `captain`, `crew`, `locomotive`, `navigation`, `officer_manifest`, `unified_inventory_registry`, `possessions`, `active_action_stream`, and `discovered_locations`. Reject envelopes with extra or missing keys.
 
 ## 2.2 Data Integrity & Bound Checks
 
@@ -249,17 +250,15 @@ Evaluate when `navigation.itinerary[0].type == "relay"`:
 
 Exit to `enroute` when departure checks pass and the locomotive clears port into open sky.
 
-### 3.4.5 **UI Policy**
-
 ### 3.4.5 **UI Policy & Sparse JSON Serialization**
 
 Render the complete visual Markdown Logbook (`logbook.md`) and the minified JSON autosave block at the foot of the turn.
 
 * **Sparse Ledger Compression:** To conserve output tokens and maintain log clarity, prune empty and zero-quantity subkeys from the serialized JSON payload:
-* In `officer_manifest`: Suppress any seat in `on_duty` with `null`, and suppress any array in `unassigned`, `seconded`, or `departed` that is empty (`[]`). If an entire sub-domain is empty, omit it.
-* In `unified_inventory_registry`: Suppress all commodity keys where `qty_in_hold == 0` and `qty_in_bank == 0`.
-* NEVER suppress `fuel` and `supplies`. ALWAYS emit these subkeys, even if their quantity is zero.
-* In `possessions`: Suppress all individual token keys equal to `0`. Omit affiliation groups that have no active tokens. Suppress `transit_permits` if empty.
+  * **Officer Manifest:** Suppress any seat in `on_duty` with `null`, and suppress any array in `unassigned`, `seconded`, or `departed` that is empty (`[]`). If an entire sub-domain is empty, omit it.
+  * **Inventory Registry:** Suppress all commodity keys where `qty_in_hold == 0` AND `qty_in_bank == 0`. NEVER suppress `fuel` and `supplies`. ALWAYS emit these subkeys, even if their quantity is zero.
+  * **Possessions:** Suppress all individual token keys equal to `0`. Omit affiliation groups that have no active tokens. Suppress `transit_permits` if empty.
+  * **Discovered Locations:** Apply ultra-sparse formatting: completely omit the `"bazaar"` key for non-commercial locations (platforms, relays, spectacles) to output strictly `{"clock_direction": <1-12>}`. Output `{"clock_direction": <1-12>, "bazaar": null}` for unscanned commercial ports, and serialize full market objects only when active trade data is present. Never store text arrays or scratchpads in locations; all freeform notes reside in centralized `todo` actions.
 * **Invariance Handling:** Deserialization and state-carrying engines must treat omitted registry keys and zero values interchangeably. Missing commodities default to `0` in hold/bank with `0.00` MAC upon re-ingestion.
 
 ## 3.5 State: Enroute (`navigation.state == "enroute"`)
@@ -308,7 +307,7 @@ Actions instantiate as `active`, progress to `ready` when requirements/sourcing/
 
 ### 4.1.3 **Action Archival & Pinning Pruning**
 
-Upon reaching any terminal state, pop the record from `active_action_stream`, force `is_pinned: false`, and push to `completed_action_log`. Pinned actions never persist into the completed log with `is_pinned: true`.
+Upon reaching any terminal state, pop the record from `active_action_stream` and discard it.
 
 ### 4.1.4 **Action Pinning Protocol**
 
@@ -626,9 +625,9 @@ Nightmares: 🟢 $< 2$ | 🟡 $== 2$ | 🔴 $\ge 3$.
 ```json
 {
   "save_format": "sunless-skies-first-mate",
-  "schema_version": "0.4.0",
-  "rules_version": "0.4.0",
-  "static_data_version": "0.4.0",
+  "schema_version": "0.5.0",
+  "rules_version": "0.5.0",
+  "static_data_version": "0.5.0",
   "first_mate_name": "",
   "dynamic_save_state": {
     "sovereigns": 0,
@@ -681,7 +680,6 @@ Nightmares: 🟢 $< 2$ | 🟡 $== 2$ | 🔴 $\ge 3$.
       "transit_permits": []
     },
     "active_action_stream": [],
-    "completed_action_log": [],
     "navigation": {"current_location": "new_winchester","state": "docked","last_updated_epoch": 0,"recent_history": [], "itinerary":[]},
     "discovered_locations": {}
   }
