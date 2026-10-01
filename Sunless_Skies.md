@@ -621,67 +621,50 @@ Nightmares: 🟢 $< 2$ | 🟡 $== 2$ | 🔴 $\ge 3$.
 
 ### 9.1.1 **JSON Dynamic Data Envelope Specification**
 
-
 ```json
 {
-  "save_format": "sunless-skies-first-mate",
-  "schema_version": "0.5.0",
-  "rules_version": "0.5.0",
-  "static_data_version": "0.5.0",
-  "first_mate_name": "",
-  "dynamic_save_state": {
-    "sovereigns": 0,
-    "current_day_epoch": 0,
-    "captain": {
-      "name": "",
-      "skills": {"iron": 0,"mirrors": 0,"hearts": 0,"veils": 0},
-      "affiliations": {"academe": 0,"bohemia": 0,"establishment": 0,"villainy": 0}
+  "ssf": "sunless-skies-first-mate",
+  "ssv": "v0.5.0",
+  "sfn": "Mr. Bligh",
+  "sds": {
+    "sso": 0,
+    "sep": 0,
+    "cpt": {
+      "cnm": "Captain Murphy",
+      "csk": {"ir": 0,"mi": 0,"he": 0,"ve": 0},
+      "caf": {"ac": 0,"bo": 0,"es": 0,"vi": 0}
     },
-    "locomotive": {
-      "model": "Spatchcock-Class Scout","name": "",
-      "hull": 30,"max_hull": 30,
-      "fuel_used_last_leg": 0,"hold_capacity": 12,"hidden_slots": 0,
-      "hold_rules": {"fuel_reserve_minimum": 3,"supplies_reserve_minimum": 3,"discovery_buffer_slots": 2}
+    "clc": {
+      "cmd": "",
+      "cnm": "",
+      "chl": 30,
+      "cmh": 30,
+      "cfl": 0,
+      "chc": 12,
+      "chs": 0,
+      "chr": {"frm": 3,"srm": 3,"dbs": 2}
     },
-    "crew":{"current": 8,"max": 10,"terror": 0,"nightmares": 0},
-    "officer_manifest": {
-      "on_duty": {"first_officer": null,"quartermaster": null,"signaller": null,"chief_engineer": null,"mascot": null},
-      "unassigned": {"first_officer": [],"quartermaster": [],"signaller": [],"chief_engineer": [],"mascot": []},
-      "seconded": {"first_officer": [],"quartermaster": [],"signaller": [],"chief_engineer": [],"mascot": []},
-      "departed": {"first_officer": [],"quartermaster": [],"signaller": [],"chief_engineer": [],"mascot": []}
+    "ccr": {"ccu": 8,"cmx": 8,"ctr": 0,"cng": 0},
+    "oom": {
+      "ood": { "fo": null, "qm": null, "si": null, "ce": null, "ma": null },
+      "oun": { "fo": [], "qm": [], "si": [], "ce": [], "ma": [] },
+      "osc": { "fo": [], "qm": [], "si": [], "ce": [], "ma": [] },
+      "odp": { "fo": [], "qm": [], "si": [], "ce": [], "ma": [] }
     },
-    "unified_inventory_registry": {
-      "fuel": {"qty_in_hold": 3,"qty_in_bank": 0,"average_unit_cost": 0.00 },
-      "supplies": {"qty_in_hold": 3,"qty_in_bank": 0,"average_unit_cost": 0.00 },
-      "approved_literature": {"qty_in_hold": 0,"qty_in_bank": 0,"average_unit_cost": 0.00 },
-      "bombazine": {"qty_in_hold": 0,"qty_in_bank": 0,"average_unit_cost": 0.00 },
-      "bronzewood": {"qty_in_hold": 0,"qty_in_bank": 0,"average_unit_cost": 0.00 },
-      "caged_catch": {"qty_in_hold": 0,"qty_in_bank": 0,"average_unit_cost": 0.00 },
-      "chorister_nectar": {"qty_in_hold": 0,"qty_in_bank": 0,"average_unit_cost": 0.00 },
-      "munitions": {"qty_in_hold": 0,"qty_in_bank": 0,"average_unit_cost": 0.00 },
-      "dried_tea": {"qty_in_hold": 0,"qty_in_bank": 0,"average_unit_cost": 0.00 },
-      "gemstones": {"qty_in_hold": 0,"qty_in_bank": 0,"average_unit_cost": 0.00 },
-      "immaculate_souls": {"qty_in_hold": 0,"qty_in_bank": 0,"average_unit_cost": 0.00 },
-      "nostalgic_crockery": {"qty_in_hold": 0,"qty_in_bank": 0,"average_unit_cost": 0.00 },
-      "petrichor": {"qty_in_hold": 0,"qty_in_bank": 0,"average_unit_cost": 0.00 },
-      "stained_glass": {"qty_in_hold": 0,"qty_in_bank": 0,"average_unit_cost": 0.00 },
-      "undistinguished_souls": {"qty_in_hold": 0,"qty_in_bank": 0,"average_unit_cost": 0.00 },
-      "unseasoned_hours": {"qty_in_hold": 0,"qty_in_bank": 0,"average_unit_cost": 0.00 },
-      "verdant_seeds": {"qty_in_hold": 0,"qty_in_bank": 0,"average_unit_cost": 0.00 },
-      "illicit_literature": {"qty_in_hold": 0,"qty_in_bank": 0,"average_unit_cost": 0.00 },
-      "red_honey": {"qty_in_hold": 0,"qty_in_bank": 0,"average_unit_cost": 0.00 },
-      "starshine": {"qty_in_hold": 0,"qty_in_bank": 0,"average_unit_cost": 0.00 }
+    "gui": {
+      "fu": [3, 0, 20.0],
+      "su": [3, 0, 40.0]
     },
-    "possessions":{
-      "academe":{"searing_enigma":0,"condemned_experiment":0,"otherworldly_artifact":0,"uncanny_specimen":0},
-      "bohemia":{"captivating_treasure":0,"moment_of_inspiration":0,"vision_of_the_heavens":0,"sky_story":0},
-      "establishment":{"royal_dispensation":0,"cryptic_benefactor":0,"ministry_stamped_permit":0,"salon_stewed_gossip":0},
-      "villainy":{"crimson_promise":0,"unlicensed_chart":0,"savage_secret":0,"tale_of_terror":0},
-      "transit_permits": []
+    "pps": {
+      "ac": { "pse": 0, "pce": 0, "poa": 0, "pus": 0 },
+      "bo": { "pct": 0, "pmi": 0, "pss": 0, "pvh": 0 },
+      "es": { "prd": 0, "pcb": 0, "pmp": 0, "psg": 0 },
+      "vi": { "pcp": 0, "puc": 0, "psv": 0, "ptt": 0 },
+      "ptp": []
     },
-    "active_action_stream": [],
-    "navigation": {"current_location": "new_winchester","state": "docked","last_updated_epoch": 0,"recent_history": [], "itinerary":[]},
-    "discovered_locations": {}
+    "aaa": [],
+    "nv": {"cl": null,"ns": "enr","lue": 0,"rh": [],"it": []},
+    "dl": {}
   }
 }
 ```
