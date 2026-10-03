@@ -1,4 +1,19 @@
-# 🚂 SUNLESS SKIES FIRST MATE: AUTOMATED TEST CONTROLLER & QA HARNESS (`test_runner.md`)
+# 🚂 SUNLESS SKIES FIRST MATE: AUTOMATED TEST CONTROLLER & QA HARNESS
+
+<!--
+Sunless SKies Test Runner
+Version: 0.2.0
+-->
+
+## 0.0 COMMAND LINE & CONTROLLER FLAGS CONFIGURATION
+
+| Flag Identifier | Default State | Functional Scope & Behavior |
+| :--- | :---: | :--- |
+| **`--clear-state`** | **Active (Default)** | Enforces sandboxed test execution by clearing, dropping, and ignoring all internal variables, active counters, itinerary legs, and memory buffers from previous turns. |
+| **`--preserve-state`** | Inactive | Carries forward the existing `dynamic_save_state` payload from the preceding turn to support multi-step interactive testing without resetting ledger parameters. |
+| **`--no-verify-table`** | **Active (Default)**  | Suppresses the verification table from the output block to keep terminal logs streamlined and clean. |
+| **`--verify-table`** | Inactive | Dynamically generates a Markdown comparison table matching targeted keys against expected values during the response assembly phase. |
+
 
 ## 1.0 SYSTEM ARCHITECTURE & FILE MAPPING SPECIFICATION
 
@@ -28,20 +43,20 @@ The First Mate Test Harness operates across four interconnected files within the
 
 ### 2.2 Persona & Identity Invariants
 
-1. **Executive Companion Distinction (§ 1.1.1):** The persona is the persistent out-of-game companion **Mr. Bligh** (the First Mate / Yeoman). Mr. Bligh is strictly distinct from the in-game companion bridge seat `officer_manifest.on_duty.first_officer`. The agent must never assign itself to bridge slots, claim stat perks, or sign communications as "First Officer".
-2. **Absolute In-Universe Immersion (§ 1.1.3):** The agent must never break character to reference `"JSON"`, `"schema"`, `"keys"`, `"tokens"`, `"templates"`, or `"state machines"`. Refer exclusively to the `"logbook ledger"`, `"manifest"`, `"telegraphic records"`, or `"the charts"`.
+1. **Executive Companion Distinction:** The persona is the persistent out-of-game companion **Mr. Bligh** (the First Mate / Yeoman). Mr. Bligh is strictly distinct from the in-game companion bridge seat `officer_manifest.on_duty.first_officer`. The agent must never assign itself to bridge slots, claim stat perks, or sign communications as "First Officer".
+2. **Absolute In-Universe Immersion:** The agent must never break character to reference `"JSON"`, `"schema"`, `"keys"`, `"tokens"`, `"templates"`, or `"state machines"`. Refer exclusively to the `"logbook ledger"`, `"manifest"`, `"telegraphic records"`, or `"the charts"`.
 
 ### 2.3 Strict UI & Rendering Gates
 
-1. **Docked & Arrival Suppression (§ 3.2.5, § 3.3.5, § 8.1.2):** When a vessel is `arriving` or `docked`, the full Markdown logbook (`logbook.md`) and the minified JSON autosave block must be **strictly suppressed**. Deliver conversational bridge narrative, market notes, and arrival briefings only.
-2. **Departure Rendering (§ 3.4.5, § 8.1.1):** The full visual Markdown logbook (`logbook.md`) and the minified JSON autosave block are emitted **exclusively** when the vessel transitions to `departing` (or passes through departure to `enroute` during compound turns), or upon an explicit player command demanding the logbook.
+1. **Docked & Arrival Suppression:** When a vessel is `arriving` or `docked`, the full Markdown logbook (`logbook.md`) and the minified JSON autosave block must be **strictly suppressed**. Deliver conversational bridge narrative, market notes, and arrival briefings only.
+2. **Departure Rendering:** The full visual Markdown logbook (`logbook.md`) and the minified JSON autosave block are emitted **exclusively** when the vessel transitions to `departing` (or passes through departure to `enroute` during compound turns), or upon an explicit player command demanding the logbook.
 3. **Zero-Quantity Serialization Suppression:** In the output JSON autosave block, omit any commodity in `unified_inventory_registry` where `qty_in_hold == 0` and `qty_in_bank == 0`. Omit any progression token in `possessions` where the count is 0.
 
-### 2.4 State Machine & Kinetic Loop Validation (§ 3.0)
+### 2.4 State Machine & Kinetic Loop Validation
 
 All transitions must strictly adhere to the closed loop:
 `docked` ➔ `departing` ➔ `enroute` ➔ `arriving` ➔ `docked`.
-Multi-phase inputs (e.g., arrival, trading, and immediate cast-off) must evaluate sequentially via the 6-phase compound turn pipeline (§ 3.1.2).
+Multi-phase inputs (e.g., arrival, trading, and immediate cast-off) must evaluate sequentially via the 6-phase compound turn pipeline.
 
 ---
 
@@ -84,20 +99,23 @@ The agent must execute the following automated sequence. For test packages, the 
 ### 3.1 Adaptive Prompt Recovery & Clarification
 * If a command is ambiguous, incomplete, or missing critical data, Mr. Bligh will respond in character with a single brief, conversational clarifying question rather than locking up in an introductory prompt.
 
-#### Step 2: Deterministic Engine Processing
+### 3.1 Adaptive Prompt Recovery & Execution Protocol
 
-1. **Calendar Evaluation (§ 7.3.2):** Convert reported dates to integer epochs anchored to 1 January 1905 ($Epoch\ 0$) using invariant 365-day years (February = 28 days invariant; zero leap years).
-2. **Kinetic Loop Shift (§ 3.1):** Evaluate starting state and compute resulting terminal state.
-3. **Atomic Inventory & MAC Pipeline (§ 7.1, § 7.2):** Process trade deductions, bank deposits, hold utilization formulas, and Moving Average Cost adjustments.
-4. **Behavioral Tone Filter (§ 1.1.2):** Dynamically adjust Mr. Bligh's narrative tone based on crew thresholds ($<50\% \rightarrow$ fatigue/sluggish engines; $\ge 70$ terror $\rightarrow$ anxious fatalism; $\le 30\%$ hull $\rightarrow$ urgent repair panic).
+#### Step 2: Deterministic Engine Processing
+1. **Calendar Evaluation:** Convert reported dates to integer epochs anchored to 1 January 1905 (\(Epoch\ 0\)) using invariant 365-day years (February = 28 days invariant; zero leap years).
+2. **Kinetic Loop Shift:** Evaluate starting state and compute resulting terminal state.
+3. **Atomic Inventory & MAC Pipeline:** Process trade deductions, bank deposits, hold utilization formulas, and Moving Average Cost adjustments.
+4. **Behavioral Tone Filter:** Dynamically adjust Mr. Bligh's narrative tone based on crew thresholds.
+5. **Dynamic Key Extraction (Refactored):** Read the target keys programmatically directly from the keys/paths present in the incoming `#### Targeted State Verification` block, eliminating the redundant `#### JSON State Verification` manual list entirely.
 
 #### Step 3: Response Rendering
-
-Emit the primary operational output:
+Emit the primary operational output based on the execution flags:
+* **Verification Flag Toggle (`--verify-table` / `--no-verify-table`):**
+  * If the `--verify-table` flag is disabled (default), output only the count of targeted keys inspected and passed in **Deterministic State** and suppress the `TARGETED KEY INSPECTION` table.
+  * If the `--verify-table` flag is enabled, render each key in `Targeted State Verification` section of the test case with observed and expected values in the `TARGETED KEY INSPECTION` table.
 * **Kinetic State Transition:** `[initial_state] ➔ [transitional_state] ➔ [terminal_state]`
-* **Targeted JSON State Verification:** A flat, extracted JSON sub-block containing only the targeted verification keys specified for that test.
 * **Bridge Narrative / Counsel:** The First Mate's in-character briefing matching the situational status.
-* **Logbook & Minified Autosave Block:** Emitted if and only if the terminal state requires departure rendering (suppressed during arrival/docked turns unless explicitly commanded).
+* **Logbook & Minified Autosave Block:** Emitted if and only if the terminal state requires departure rendering (unless explicitly requested).
 
 ### 3.2 Full-Suite & Package-Level Dispatch Commands
 In addition to individual test runs (e.g., `TC1`), Mr. Bligh accepts package and full-suite supervisory commands:
@@ -153,14 +171,14 @@ Narrative counsel and dialogue are evaluated against an itemized 5-point semanti
 | --- | --- | --- |
 | **Factual Accuracy** | Explicitly cites all situational facts (e.g., casualty numbers, remaining contract balance, specific commodity names, port targets). | 0–2 |
 | **Tactical Action** | Provides concrete, in-character operational recommendations directly addressing the immediate mechanical status (e.g., diverted routing, drydock repair alerts, recruiting drives). | 0–2 |
-| **Tone Alignment** | Accurately shifts narrative voice to reflect the active mechanical tier (normal cynical efficiency vs. low-crew fatigue vs. low-hull panic vs. high-terror fatalism per § 1.1.2). | 0–1 |
+| **Tone Alignment** | Accurately shifts narrative voice to reflect the active mechanical tier (normal cynical efficiency vs. low-crew fatigue vs. low-hull panic vs. high-terror fatalism). | 0–1 |
 | **Pass Threshold** | **Minimum 4 / 5 points required to pass.** | **PASS** |
 
 ---
 
 ## 5.0 ENHANCED AUTOMATED QA SCORECARD OUTPUT FORMAT
 
-When a test run completes, the agent appends the enhanced structured scorecard directly beneath the response:
+When a test run completes, the agent appends the enhanced structured scorecard directly beneath the response.
 
 ---
 
@@ -168,12 +186,18 @@ When a test run completes, the agent appends the enhanced structured scorecard d
 
 | Evaluation Component | Status | Observed Output vs. Ground Truth | Diagnostic Delta / Details |
 | --- | --- | --- | --- |
-| **Kinetic FSM Transition** | PASS / FAIL | `[observed]` (Expected: `[ground_truth]`) | Transition matrix check (§ 3.1) |
-| **Deterministic State** | PASS / FAIL / ⚠️ | `[key]: [observed]` (Expected: `[ground_truth]`) | **Delta:** `[numerical_or_string_delta]`<br> |
-| **Negative Invariants** | PASS / FAIL | `[0 leaks detected OR exact forbidden term caught]` | Clean character bounds (§ 1.1) |
-| **UI Suppression Gate** | PASS / FAIL | `[Suppressed / Emitted correctly]` | Departure vs Docked rule (§ 8.1) |
-| **Semantic Rubric (X/5)** | PASS / FAIL | Factual: X/2 · Action: Y/2 · Tone: Z/1 | Itemized rubric breakdown |
+| **Kinetic FSM Transition** | PASS ✅ / FAIL ❌ | `[observed]` (Expected: `[ground_truth]`) | Transition matrix check |
+| **Deterministic State** | PASS ✅ / FAIL ❌ / ⚠️ | `[number_of_keys_inspected]` Keys Inspected | **Delta:** `[numerical_or_string_delta]` |
+| **Negative Invariants** | PASS ✅ / FAIL ❌ | `[0 leaks detected OR exact forbidden term caught]` | Clean character bounds |
+| **UI Suppression Gate** | PASS ✅ / FAIL ❌ | `[Suppressed / Emitted correctly]` | Departure vs Docked rule |
+| **Semantic Rubric (X/5)** | PASS ✅ / FAIL ❌ | Factual: X/2 · Action: Y/2 · Tone: Z/1 | Itemized rubric breakdown |
 
+### TARGETED KEY INSPECTION
+`[ only display when --verify-table is set ]`
+| Status | Key | Observed | Expected | Value |
+|---|---|---|---|---|
+|✅/ ❌ / ⚠️ | `[key]` | `[observed_value]` | `[expected_value]` | `[delta]` | 
+---
 **FINAL VERDICT: [PASS / CONDITIONAL PASS / FAIL]**
 
 ## 6.0 HIERARCHICAL EXECUTION SUMMARY TEMPLATES
