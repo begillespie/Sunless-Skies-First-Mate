@@ -3,8 +3,8 @@
     "compatibility_contract": {
       "breaking_major": 0,
       "minimum_schema_version": "0.5.0",
-      "rules_version_expected": "0.5.0",
-      "target_schema_version": "0.5.0"
+      "target_schema_version": "0.5.1",
+      "rules_version_expected": "0.6.0"
     },
     "description": "Authoritative immutable game data, enums, schemas, and object blueprints for the Sunless Skies First Mate Engine.",
     "file_type": "static_game_data",
@@ -1563,7 +1563,10 @@
             "type": "string"
           },
           "ant": {
-            "type": "string"
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "aol": {
             "enum": {

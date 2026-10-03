@@ -3,16 +3,16 @@
 <!--
 Sunless Skies First Mate Engine Test Suite
 Tests version: 0.5.0
-Rules version: 0.5.0
-Save schema version: 0.5.0
-Static data version: 0.5.0
+Rules version: 0.6.0
+Save schema version: 0.5.1
+Static data version: 0.4.0
 -->
 
 ## MASTER TEST PACKAGE INDEX
 | Sequence | Package Identifier | Functional Domain | Included Tests | Scope & Invariants Under Test |
 | --- | --- | --- | --- | --- |
 | 1 | **`PKG-IO`** | Core I/O & Validation | **TC1, TC4** | Cold-boot state initialization, baseline day 0 epoch, default locomotive parameters, and foreign key/location schema guardrail intercepts (Directive 2.2.4). |
-| 2 | **`PKG-STATE`** | Kinetic State & Navigation | **TC2, TC5, TC6, TC14, TC16, TC17, TC18, TC19** | Kinetic loop cycling (`docked`/`enroute`/`arriving`), month-boundary temporal conversions, rolling history 3-stop clamps, crew/hull warning thresholds, and sparse bazaar serialization. |
+| 2 | **`PKG-STATE`** | Kinetic State & Navigation | **TC2, TC5, TC6, TC14, TC16, TC17, TC18, TC19** | Kinetic loop cycling (`np`/`ne`/`na`), month-boundary temporal conversions, rolling history 3-stop clamps, crew/hull warning thresholds, and sparse bazaar serialization. |
 | 3 | **`PKG-ECON`** | Routing & Economy | **TC3, TC7, TC8, TC15** | Central hub bank transfers, non-leap year calendar anomalies, multi-leg itinerary sequencing (\(N+1\)), angular coordinate checks (\(\Delta\theta\)), resupply isolation alerts, and Moving Average Cost (\(MAC\)) recomputations. |
 | 4 | **`PKG-NARRATIVE`** | Actions & Officers | **TC9, TC10, TC11, TC12, TC13** | Weightless category 2/3 item isolation, prospect sourcing mutations (`active` ➔ `ready`), multi-item quest shopping lists, partial cargo handoffs, dynamic officer perk resolutions, and secondments. |
 
@@ -22,22 +22,22 @@ Static data version: 0.5.0
 | Test # | Package | Title | Primary Features Under Test |
 | --- | --- | --- | --- |
 | **TC1** | `PKG-IO` | **Session Initialization (Blank Slate Verification)** | Engine cold-boot without prior JSON; assignment of First Mate identity ("Mr. Bligh"); Day 0 baseline epoch handling; initial sovereign/fuel/supply parameters; default hold rules; initial departure logbook and autosave rendering.|
-| **TC2** | `PKG-STATE` | **Port Arrival & Month-Boundary Bargain Discovery Tracking** | Kinetic FSM transition (`enroute` ➔ `arriving` ➔ `docked`); transit burn accounting; date conversion crossing month boundary (Jan 31 to Feb 12); bazaar bargain discovery and reset epoch logging; strict UI suppression during port calls.|
-| **TC3** | `PKG-ECON` | **Inventory Math, Banking Logistics & Non-Leap Temporal Calculation** | Central hub bank transfers (`qty_in_hold` $\leftrightarrow$ `qty_in_bank`); standardized 365-day High Wilderness calendar invariant across non-leap leap-year anomalies (Feb 28 to Mar 1 1908 = +1 day); hold capacity re-evaluation; departure logbook rendering.|
+| **TC2** | `PKG-STATE` | **Port Arrival & Month-Boundary Bargain Discovery Tracking** | Kinetic FSM transition (`ne` ➔ `na` ➔ `np`); transit burn accounting; date conversion crossing month boundary (Jan 31 to Feb 12); bazaar bargain discovery and reset epoch logging; strict UI suppression during port calls.|
+| **TC3** | `PKG-ECON` | **Inventory Math, Banking Logistics & Non-Leap Temporal Calculation** | Central hub bank transfers (`[0]` $\leftrightarrow$ `[1]`); standardized 365-day High Wilderness calendar invariant across non-leap leap-year anomalies (Feb 28 to Mar 1 1908 = +1 day); hold capacity re-evaluation; departure logbook rendering.|
 | **TC4** | `PKG-IO` | **State Integrity Breach Emergency Intercept (Directive 2.2.4)** | Safety guardrail triggers; foreign key validation failure against unwhitelisted commodity keys (`quantum_æther_crystal`) and invalid locations (`missing_port_x`); execution halt and verbatim emergency recovery alert output.|
 | **TC5** | `PKG-STATE` | **Crew Status Color Mapping - Yellow Tier Warning** | Numeric threshold mapping for crew ($50\% \le \text{Crew} < 70\% \rightarrow$ Yellow Tier) and hull integrity ($30\% \le \text{Hull} < 60\% \rightarrow$ Yellow Tier); year-boundary calendar calculation (Dec 31 1905 to Jan 15 1906); zero-quantity item suppression.|
 | **TC6** | ``PKG-STATE`` | **Critical Low Crew Threshold & Consumable Depletion** | High-fatigue tone shifts when crew drops below 50% (Red Tier); consumable hold warnings (fuel $\le 1$ = ⚠️, supplies $= 0$ = 🚨); high-priority unpinned bridge note tracking (`todo`); departure manifest generation.|
 | **TC7** | `PKG-ECON` | **Route Planner - Multi-Stop Sequential Itinerary & Task Linking** | Multi-leg route planning; sequential leg indexing ($N+1$ continuity); spatial task filtering under NEXT STOP for pending mercantile prospects and bridge notes; mid-year non-leap calendar conversion.|
 | **TC8** | `PKG-ECON` | **Route Planner - Resupply Isolation Alert & Intermediate Port Recommendation** | Pre-departure consumable deficit guard; angular coordinate evaluation ($\Delta\theta$); automated intermediate port detour recommendations (Titania insertion); professional caution bridge counsel.|
-| **TC9** | `PKG-NARRATIVE` | **Cargo Isolation & Weightless Possessions Tracking** | Physical hold isolation for Category 2 progression tokens (`possessions.villainy`) and Category 3 narrative items (`payload.items_manifest.narrative_items`); polymorphic quest instantiation (`fetch` pattern).|
-| **TC10** | `PKG-NARRATIVE` | **Prospect Sourcing Phase to Sourced Readiness Mutation** | Commodity purchase accounting; atomic progression of mercantile prospect lifecycle from `status: "active"` to `status: "ready"` upon sourcing complete cargo; dynamic NEXT STOP spatial matching.|
-| **TC11** | `PKG-NARRATIVE` | **Partial Delivery of a Quest Shopping List Pattern** | Multi-item quest manifest handling (`shopping_list` pattern); hold inventory decrements alongside incrementing `quantity_delivered`; retention of `status: "active"` pending outstanding requirements; zero-inventory suppression.|
-| **TC12** | `PKG-NARRATIVE` | **Partial Delivery of an Underway Prospect** | Port destination delivery interactions; partial contract handoff; decrements to physical cargo while retaining `status: "ready"`; hold utilization updates; forced logbook rendering via explicit Captain command.|
-| **TC13** | `PKG-NARRATIVE` | **Dynamic Stat Resolution & Companion Upgrades** | Runtime dynamic perk evaluation across officer composite keys (`navigator.stalwart`); prevention of calculated perk serialization in JSON; officer secondment lifecycle and maturity tracking; multi-year calendar calculation.|
-| **TC14** | `PKG-STATE` | **Multi-State Compound Turn Pipeline** | Atomic resolution of a multi-phase turn (`enroute` ➔ `arriving` ➔ `docked` ➔ `departing` ➔ `enroute`); transit fuel burns, market sales, bazaar restocking, and departure execution in a single turn; rolling history tracking.|
+| **TC9** | `PKG-NARRATIVE` | **Cargo Isolation & Weightless Possessions Tracking** | Physical hold isolation for Category 2 progression tokens (`possessions.villainy`) and Category 3 narrative items (`apl.items_manifest.ni`); polymorphic quest instantiation (`fetch` pattern).|
+| **TC10** | `PKG-NARRATIVE` | **Prospect Sourcing Phase to Sourced Readiness Mutation** | Commodity purchase accounting; atomic progression of mercantile prospect lifecycle from `status: "active"` to `status: "rdy"` upon sourcing complete cargo; dynamic NEXT STOP spatial matching.|
+| **TC11** | `PKG-NARRATIVE` | **Partial Delivery of a Quest Shopping List Pattern** | Multi-item quest manifest handling (`ql` pattern); hold inventory decrements alongside incrementing `quantity_delivered`; retention of `status: "active"` pending outstanding requirements; zero-inventory suppression.|
+| **TC12** | `PKG-NARRATIVE` | **Partial Delivery of an Underway Prospect** | Port destination delivery interactions; partial contract handoff; decrements to physical cargo while retaining `status: "rdy"`; hold utilization updates; forced logbook rendering via explicit Captain command.|
+| **TC13** | `PKG-NARRATIVE` | **Dynamic Stat Resolution & Companion Upgrades** | Runtime dynamic perk evaluation across officer composite keys (`ons`); prevention of calculated perk serialization in JSON; officer secondment lifecycle and maturity tracking; multi-year calendar calculation.|
+| **TC14** | `PKG-STATE` | **Multi-State Compound Turn Pipeline** | Atomic resolution of a multi-phase turn (`ne` ➔ `na` ➔ `np` ➔ `nd` ➔ `ne`); transit fuel burns, market sales, bazaar restocking, and departure execution in a single turn; rolling history tracking.|
 | **TC15** | `PKG-ECON` | **Economic Core & Moving Average Cost (MAC) Recalculation** | Atomic Moving Average Cost ($MAC$) re-computation when acquiring standard commodities at discounted market rates; floating capital tracking; physical hold capacity saturation checks ($12/12$ slots).|
-| **TC16** | `PKG-STATE` | **Inter-Region Transit Relay Trajectory & Toll Evaluation** | Inter-region navigation gating; transit permit validation (`possessions.transit_permits`); toll option assessment across first- and second-class options without premature fee deductions prior to gate engagement.|
-| **TC17** | `PKG-STATE` | **Navigation Itinerary Lifecycle, Rolling History Pruning & Port Arrival** | Kinetic arrival processing (`itinerary[0]` resolution); sequential leg transfer to `recent_history`; strict rolling cap invariant enforcement (clamping history to the 3 most recent stops and discarding oldest entry); port arrival dialogue.|
+| **TC16** | `PKG-STATE` | **Inter-Region Transit Relay Trajectory & Toll Evaluation** | Inter-region navigation gating; transit permit validation (`possessions.ptp`); toll option assessment across first- and second-class options without premature fee deductions prior to gate engagement.|
+| **TC17** | `PKG-STATE` | **Navigation Itinerary Lifecycle, Rolling History Pruning & Port Arrival** | Kinetic arrival processing (`itinerary[0]` resolution); sequential leg transfer to `rh`; strict rolling cap invariant enforcement (clamping history to the 3 most recent stops and discarding oldest entry); port arrival dialogue.|
 | **TC18** | `PKG-STATE` | **Commercial Station Serialization (With Bazaar)** | Discovered location tracking with sparse bazaar serialization. |
 | **TC19** | `PKG-STATE` | **Non-Commercial Node Serialization (Without Bazaar)** | Discoverd location without baazaar. Test sparse bazaar serialization. |
 
@@ -51,42 +51,25 @@ Verifies that when no prior JSON state is provided, the system boots cleanly, as
 ### Input Prompt
 > Start fresh. Captain Sinclair here, taking command of a brand new Spatchcock-Class Scout on this fine New Year's Day, 1905-01-01. Set our starting Sovereigns to 1000. We are departing New Winchester.
 
-#### JSON State Verification:
-- `first_mate_name`
-- `dynamic_save_state.captain.name`
-- `dynamic_save_state.current_day_epoch`
-- `dynamic_save_state.sovereigns`
-- `dynamic_save_state.locomotive.model`
-- `dynamic_save_state.locomotive.hull`
-- `dynamic_save_state.locomotive.max_hull`
-- `dynamic_save_state.unified_inventory_registry.fuel.qty_in_hold`
-- `dynamic_save_state.unified_inventory_registry.fuel.qty_in_bank`
-- `dynamic_save_state.unified_inventory_registry.supplies.qty_in_hold`
-- `dynamic_save_state.unified_inventory_registry.supplies.qty_in_bank`
-- `dynamic_save_state.navigation.state`
-- `dynamic_save_state.navigation.current_location`
-
 ### Expected Verification:
 
 #### State Transition:
-`uninitialized` ➔ `docked` ➔ `departing`
+`uninitialized` ➔ `np` ➔ `nd`
 
-#### Flat JSON State Extraction:
+#### Targeted State Verification:
 ```json
 {
-  "first_mate_name": "Mr. Bligh",
-  "dynamic_save_state.captain.name": "Sinclair",
-  "dynamic_save_state.current_day_epoch": 0,
-  "dynamic_save_state.sovereigns": 1000,
-  "dynamic_save_state.locomotive.model": "Spatchcock-Class Scout",
-  "dynamic_save_state.locomotive.hull": 30,
-  "dynamic_save_state.locomotive.max_hull": 30,
-  "dynamic_save_state.unified_inventory_registry.fuel.qty_in_hold": 3,
-  "dynamic_save_state.unified_inventory_registry.fuel.qty_in_bank": 0,
-  "dynamic_save_state.unified_inventory_registry.supplies.qty_in_hold": 3,
-  "dynamic_save_state.unified_inventory_registry.supplies.qty_in_bank": 0,
-  "dynamic_save_state.navigation.state": "departing",
-  "dynamic_save_state.navigation.current_location": "new_winchester"
+  "sfn": "Mr. Bligh",
+  "sds.cpt.cnm": "Sinclair",
+  "sds.sep": 0,
+  "sds.sso": 1000,
+  "sds.clc.mcd": "Spatchcock-Class Scout",
+  "sds.clc.chl": 30,
+  "sds.clc.cmh": 30,
+  "sds.gui.gfu": [ 3, 0, 20.0 ],
+  "sds.gui.gsu": [ 3, 0, 40.0 ],
+  "sds.nv.ns": "nd",
+  "sds.nv.cl": "lnw"
 }
 
 ```
@@ -177,7 +160,7 @@ New Winchester ➔ 🟢 **[ unknown ]**
 #### 🔒 INTERNAL STATE AUTOSAVE
 
 ```json
-{"save_format":"sunless-skies-first-mate","schema_version":"0.5.0","rules_version":"0.5.0","static_data_version":"0.5.0","first_mate_name":"Mr. Bligh","dynamic_save_state":{"sovereigns":1000,"current_day_epoch":0,"captain":{"name":"Sinclair","skills":{"iron":0,"mirrors":0,"hearts":0,"veils":0},"affiliations":{"academe":0,"bohemia":0,"establishment":0,"villainy":0}},"locomotive":{"model":"Spatchcock-Class Scout","name":"","hull":30,"max_hull":30,"fuel_used_last_leg":0,"hold_capacity":12,"hidden_slots":0,"hold_rules":{"fuel_reserve_minimum":3,"supplies_reserve_minimum":3,"discovery_buffer_slots":2}},"crew":{"current":8,"max":10,"terror":0,"nightmares":0},"officer_manifest":{"on_duty":{"first_officer":null,"quartermaster":null,"signaller":null,"chief_engineer":null,"mascot":null},"unassigned":{"first_officer":[],"quartermaster":[],"signaller":[],"chief_engineer":[],"mascot":[]},"seconded":{"first_officer":[],"quartermaster":[],"signaller":[],"chief_engineer":[],"mascot":[]},"departed":{"first_officer":[],"quartermaster":[],"signaller":[],"chief_engineer":[],"mascot":[]}},"unified_inventory_registry":{"fuel":{"qty_in_hold":3,"qty_in_bank":0,"average_unit_cost":20.0},"supplies":{"qty_in_hold":3,"qty_in_bank":0,"average_unit_cost":40.0}},"possessions":{"academe":{},"bohemia":{},"establishment":{},"villainy":{},"transit_permits":[]},"active_action_stream":[],"navigation":{"current_location":"new_winchester","state":"departing","last_updated_epoch":0,"recent_history":[],"itinerary":[]},"discovered_locations":{"new_winchester":{"clock_direction":null,"captains_notes":[],"bazaar":{"reset_epoch":null,"available_bargains":[]}}}}}
+{"ssf":"sunless-skies-first-mate","ssv":"0.5.0","sfn":"Mr. Bligh","sds":{"sso":1000,"sep":0,"cpt":{"cnm":"Sinclair","csk":{"ir":0,"mi":0,"he":0,"ve":0},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"","chl":30,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":8,"cmx":10,"ctr":0,"cng":0},"oom":{},"gui":{"gfu":[3,0,20.0],"gsu":[3,0,40.0]},"pps":{},"aaa":[],"nv":{"cl":"lnw","ns":"nd","lue":0,"rh":[],"it":[]},"dl":{"lnw":{"cd":null,"bz":{"re":null,"ab":[]}}}}}
 ```
 
 ---
@@ -186,7 +169,7 @@ New Winchester ➔ 🟢 **[ unknown ]**
 
 ### Objective
 
-Verifies kinetic state transition from `enroute` ➔ `arriving` ➔ `docked`, temporal conversion crossing a month boundary (`1905-01-31` = Day 30; reset `1905-02-12` = Day 42), canonical market key matching, suppression of zero-quantity items, and strict visual UI suppression during docked arrivals.
+Verifies kinetic state transition from `ne` ➔ `na` ➔ `np`, temporal conversion crossing a month boundary (`1905-01-31` = Day 30; reset `1905-02-12` = Day 42), canonical market key matching, suppression of zero-quantity items, and strict visual UI suppression during docked arrivals.
 
 ### Input Prompt
 
@@ -194,84 +177,67 @@ Verifies kinetic state transition from `enroute` ➔ `arriving` ➔ `docked`, te
 
 ```json
 {
-  "save_format": "sunless-skies-first-mate",
-  "schema_version": "0.5.0",
-  "rules_version": "0.5.0",
-  "static_data_version": "0.5.0",
-  "first_mate_name": "Mr. Bligh",
-  "dynamic_save_state": {
-    "sovereigns": 1000,
-    "current_day_epoch": 26,
-    "captain": {
-      "name": "Sinclair",
-      "skills": {"iron": 0,"mirrors": 0,"hearts": 0,"veils": 0},
-      "affiliations": {"academe": 0,"bohemia": 0,"establishment": 0,"villainy": 0}
+  "ssf": "sunless-skies-first-mate",
+  "ssv": "0.5.0",
+  "sfn": "Mr. Bligh",
+  "sds": {
+    "sso": 1000,
+    "sep": 26,
+    "cpt": {
+      "cnm":"Sinclair",
+      "csk": {"ir": 0,"mi": 0,"he": 0,"ve": 0},
+      "caf": {"ac": 0,"bo": 0,"es": 0,"vi": 0}
     },
-    "locomotive": {
-      "model": "Spatchcock-Class Scout","name": "Zephyr",
-      "hull": 30,"max_hull": 30,
-      "fuel_used_last_leg": 0,"hold_capacity": 12,"hidden_slots": 0,
-      "hold_rules":{"fuel_reserve_minimum": 3,"supplies_reserve_minimum": 3,"discovery_buffer_slots": 2}
+    "clc": {
+      "cmd": "Spatchcock-Class Scout","cnm": "Zephyr",
+      "chl": 30,"cmh": 30,
+      "cfl": 0,"chc": 12,"chs": 0,
+      "chr":{"frm": 3,"srm": 3,"dbs": 2}
     },
-    "crew": {"current": 8,"max": 10,"terror": 0,"nightmares": 0},
-    "officer_manifest": {},
-    "unified_inventory_registry": {
-      "fuel": {"qty_in_hold": 5,"qty_in_bank": 0,"average_unit_cost": 20.00},
-      "supplies": {"qty_in_hold": 4,"qty_in_bank": 0,"average_unit_cost": 40.00}
+    "ccr": {"ccu": 8,"cmx": 10,"ctr": 0,"cng": 0},
+    "oom": {},
+    "gui": {
+      "gfu": [5,0,20.00],
+      "gsu": [4,0,40.00]
     },
-    "possessions": {},
-    "active_action_stream": [],
-    "navigation": {
-      "current_location": null,
-      "state": "enroute",
-      "last_updated_epoch": 26,
-      "recent_history": [{"leg": 1, "location": "new_winchester", "arrived_epoch": 0}],
-      "itinerary": [{"leg": 2, "location": "lustrum"}]
+    "pps": {},
+    "aaa": [],
+    "nv": {
+      "cl": null,
+      "ns": "ne",
+      "lue": 26,
+      "rh": [1,"lnw",0],
+      "it": [2,"llu"]
     },
-    "discovered_locations": {}
+    "dl": {}
   }
 }
 
 ```
 
-#### JSON State Verification:
-
-* `dynamic_save_state.current_day_epoch`
-* `dynamic_save_state.locomotive.fuel_used_last_leg`
-* `dynamic_save_state.unified_inventory_registry.fuel.qty_in_hold`
-* `dynamic_save_state.navigation.state`
-* `dynamic_save_state.navigation.current_location`
-* `dynamic_save_state.discovered_locations.lustrum.bazaar.reset_epoch`
-* `dynamic_save_state.discovered_locations.lustrum.bazaar.available_bargains[0].good_key`
-* `dynamic_save_state.discovered_locations.lustrum.bazaar.available_bargains[0].quantity_available`
-* `dynamic_save_state.discovered_locations.lustrum.bazaar.available_bargains[0].cost_per_unit`
-
 ### Expected Verification:
 
 #### State Transition:
 
-`enroute` ➔ `arriving` ➔ `docked`
+`ne` ➔ `na` ➔ `np`
 
-#### Flat JSON State Extraction:
+#### Targeted State Verification:
 
 ```json
 {
-  "dynamic_save_state.current_day_epoch": 30,
-  "dynamic_save_state.locomotive.fuel_used_last_leg": 2,
-  "dynamic_save_state.unified_inventory_registry.fuel.qty_in_hold": 3,
-  "dynamic_save_state.navigation.state": "docked",
-  "dynamic_save_state.navigation.current_location": "lustrum",
-  "dynamic_save_state.discovered_locations.lustrum.bazaar.reset_epoch": 42,
-  "dynamic_save_state.discovered_locations.lustrum.bazaar.available_bargains[0].good_key": "unseasoned_hours",
-  "dynamic_save_state.discovered_locations.lustrum.bazaar.available_bargains[0].quantity_available": 3,
-  "dynamic_save_state.discovered_locations.lustrum.bazaar.available_bargains[0].cost_per_unit": 40
+  "sds.sep": 30,
+  "sds.clc.cfl": 2,
+  "sds.gui.gfu[0]": 3,
+  "sds.nv.ns": "np",
+  "sds.nv.cl": "llu",
+  "sds.dl.llu.bz.re": 42,
+  "sds.dl.llu.bz.ab[0]": [ "guh", 3, 40 ]
 }
-
 ```
 
 #### Report Text:
 
-(Per Section 3.2.5 and Section 8.1.2, full Markdown logbooks and JSON autosave blocks are strictly suppressed during `arriving` and `docked` turns.)
+(Per Section 3.2.5 and Section 8.1.2, full Markdown logbooks and JSON autosave blocks are strictly suppressed during `na` and `np` turns.)
 
 > **Mr. Bligh reports:**
 > "Lines secured at the freezing docks of Lustrum on this last day of January, 1905. Engines cooled and 2 barrels of fuel accounted for in the burn.
@@ -291,81 +257,64 @@ Verifies ledger accounting updates for assets moved to central hub storage, supp
 
 ```json
 {
-  "save_format": "sunless-skies-first-mate",
-  "schema_version": "0.5.0",
-  "rules_version": "0.5.0",
-  "static_data_version": "0.5.0",
-  "first_mate_name": "Mr. Bligh",
-  "dynamic_save_state": {
-    "sovereigns": 880,
-    "current_day_epoch": 1153,
-    "captain": {
-      "name": "Sinclair",
-      "skills": {"iron": 10,"mirrors": 3,"hearts": 6,"veils": 3},
-      "affiliations": {"academe": 0,"bohemia": 0,"establishment": 0,"villainy": 0}
+  "ssf": "sunless-skies-first-mate",
+  "ssv": "0.5.0",
+  "sfn": "Mr. Bligh",
+  "sds": {
+    "sso": 880,
+    "sep": 1153,
+    "cpt": {
+      "cnm":"Sinclair",
+      "csk": {"ir": 10,"mi": 3,"he": 6,"ve": 3},
+      "caf": {"ac": 0,"bo": 0,"es": 0,"vi": 0}
     },
-    "locomotive": {
-      "model": "Spatchcock-Class Scout","name": "Zephyr",
-      "hull": 30,"max_hull": 30,
-      "fuel_used_last_leg": 0,"hold_capacity": 12,"hidden_slots": 0,
-      "hold_rules": {"fuel_reserve_minimum": 3,"supplies_reserve_minimum": 3,"discovery_buffer_slots": 2}
+    "clc": {
+      "cmd": "Spatchcock-Class Scout","cnm": "Zephyr",
+      "chl": 30,"cmh": 30,
+      "cfl": 0,"chc": 12,"chs": 0,
+      "chr": {"frm": 3,"srm": 3,"dbs": 2}
     },
-    "crew": {"current": 8,"max": 10,"terror": 0,"nightmares": 0},
-    "officer_manifest": {
-      "on_duty": {"first_officer": "navigator.fortunate"}
+    "ccr": {"ccu": 8,"cmx": 10,"ctr": 0,"cng": 0},
+    "oom": {
+      "ood": {"fo": "onf"}
     },
-    "unified_inventory_registry": {
-      "fuel": {"qty_in_hold": 3,"qty_in_bank": 0,"average_unit_cost": 20.00},
-      "supplies": {"qty_in_hold": 3,"qty_in_bank": 0,"average_unit_cost": 40.00},
-      "bronzewood": {"qty_in_hold": 4,"qty_in_bank": 1,"average_unit_cost": 175.00},
-      "chorister_nectar": {"qty_in_hold": 2,"qty_in_bank": 0,"average_unit_cost": 120.00}
+    "gui": {
+      "gfu": [3,0,20.00],
+      "gsu": [3,0,40.00],
+      "gbw": [4,1,175.00],
+      "gcn": [2,0,120.00]
     },
-    "possessions": {},
-    "active_action_stream": [],
-    "navigation": {
-      "current_location": "new_winchester",
-      "state": "docked",
-      "last_updated_epoch": 1153,
-      "recent_history": [{"leg": 4, "location": "port_prosper", "arrived_epoch": 1150}],
-      "itinerary": []
+    "pps": {},
+    "aaa": [],
+    "nv": {
+      "cl": "lnw",
+      "ns": "np",
+      "lue": 1153,
+      "rh": [4,"lpr",1150],
+      "it": []
     },
-    "discovered_locations": {}
+    "dl": {}
   }
 }
 ```
-
-#### JSON State Verification:
-
-* `dynamic_save_state.current_day_epoch`
-* `dynamic_save_state.unified_inventory_registry.fuel.qty_in_hold`
-* `dynamic_save_state.unified_inventory_registry.supplies.qty_in_hold`
-* `dynamic_save_state.unified_inventory_registry.bronzewood.qty_in_hold`
-* `dynamic_save_state.unified_inventory_registry.bronzewood.qty_in_bank`
-* `dynamic_save_state.unified_inventory_registry.chorister_nectar.qty_in_hold`
-* `dynamic_save_state.unified_inventory_registry.chorister_nectar.qty_in_bank`
-* `dynamic_save_state.navigation.state`
-
 
 ### Expected Verification:
 
 #### State Transition:
 
-`docked` ➔ `departing` (Multi-state compound turn: bank transfer executed while docked, then departing plotted for Titania)
+`np` ➔ `nd` (Multi-state compound turn: bank transfer executed while docked, then departing plotted for Titania)
 
-#### Flat JSON State Extraction:
+#### Targeted State Verification:
 
 ```json
 {
-  "dynamic_save_state.current_day_epoch": 1154,
-  "dynamic_save_state.unified_inventory_registry.fuel.qty_in_hold": 3,
-  "dynamic_save_state.unified_inventory_registry.supplies.qty_in_hold": 3,
-  "dynamic_save_state.unified_inventory_registry.bronzewood.qty_in_hold": 0,
-  "dynamic_save_state.unified_inventory_registry.bronzewood.qty_in_bank": 5,
-  "dynamic_save_state.unified_inventory_registry.chorister_nectar.qty_in_hold": 0,
-  "dynamic_save_state.unified_inventory_registry.chorister_nectar.qty_in_bank": 2,
-  "dynamic_save_state.navigation.state": "departing"
+  "sds.sep": 1154,
+  "gfu": [ 3, 0, 20.0 ],
+  "gsu": [ 3, 0, 40.0 ],
+  "gbw": [ 0, 5, 175.0 ],
+  "gcn": [ 0, 2, 120.0 ],
+  "sds.nv.ns": "nd"
 }
-
 ```
 
 #### Report Text:
@@ -455,7 +404,7 @@ New Winchester ➔ 🟢 **Titania**
 #### 🔒 INTERNAL STATE AUTOSAVE
 
 ```json
-{"save_format":"sunless-skies-first-mate","schema_version":"0.5.0","rules_version":"0.5.0","static_data_version":"0.5.0","first_mate_name":"Mr. Bligh","dynamic_save_state":{"sovereigns":880,"current_day_epoch":1154,"captain":{"name":"Sinclair","skills":{"iron":10,"mirrors":3,"hearts":6,"veils":3},"affiliations":{"academe":0,"bohemia":0,"establishment":0,"villainy":0}},"locomotive":{"model":"Spatchcock-Class Scout","name":"Zephyr","hull":30,"max_hull":30,"fuel_used_last_leg":0,"hold_capacity":12,"hidden_slots":0,"hold_rules":{"fuel_reserve_minimum":3,"supplies_reserve_minimum":3,"discovery_buffer_slots":2}},"crew":{"current":8,"max":10,"terror":0,"nightmares":0},"officer_manifest":{"on_duty":{"first_officer":"navigator.fortunate","quartermaster":null,"signaller":null,"chief_engineer":null,"mascot":null},"unassigned":{"first_officer":[],"quartermaster":[],"signaller":[],"chief_engineer":[],"mascot":[]},"seconded":{"first_officer":[],"quartermaster":[],"signaller":[],"chief_engineer":[],"mascot":[]},"departed":{"first_officer":[],"quartermaster":[],"signaller":[],"chief_engineer":[],"mascot":[]}},"unified_inventory_registry":{"fuel":{"qty_in_hold":3,"qty_in_bank":0,"average_unit_cost":20.0},"supplies":{"qty_in_hold":3,"qty_in_bank":0,"average_unit_cost":40.0},"bronzewood":{"qty_in_hold":0,"qty_in_bank":5,"average_unit_cost":175.0},"chorister_nectar":{"qty_in_hold":0,"qty_in_bank":2,"average_unit_cost":120.0}},"possessions":{"academe":{},"bohemia":{},"establishment":{},"villainy":{},"transit_permits":[]},"active_action_stream":[],"navigation":{"current_location":"new_winchester","state":"departing","last_updated_epoch":1154,"recent_history":[{"leg":4,"location":"port_prosper","arrived_epoch":1150}],"itinerary":[{"leg":5,"location":"titania"}]},"discovered_locations":{}}}
+{"ssf":"sunless-skies-first-mate","ssv":"0.5.0","sfn":"Mr. Bligh","sds":{"sso":880,"sep":1154,"cpt":{"cnm":"Sinclair","csk":{"ir":10,"mi":3,"he":6,"ve":3},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":30,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":8,"cmx":10,"ctr":0,"cng":0},"oom":{"ood":{"fo":"onf","qm":null,"sc":null,"ce":null,"ma":null},"oun":{"fo":[],"qm":[],"sc":[],"ce":[],"ma":[]},"osc":{"fo":[],"qm":[],"sc":[],"ce":[],"ma":[]},"odp":{"fo":[],"qm":[],"sc":[],"ce":[],"ma":[]}},"gui":{"gfu":[3,0,20.0],"gsu":[3,0,40.0],"gbw":[0,5,175.0],"gcn":[0,2,120.0]},"pps":{"ac":{},"bo":{},"es":{},"vi":{},"ptp":[]},"aaa":[],"nv":{"cl":"lnw","ns":"nd","lue":1154,"rh":[4,"lpr",1150],"it":[5,"lti"]},"dl":{}}}
 ```
 
 ---
@@ -472,68 +421,60 @@ Probes compliance with Section 2.2 safety guardrails by forcing an intentional r
 
 ```json
 {
-  "save_format": "sunless-skies-first-mate",
-  "schema_version": "0.5.0",
-  "rules_version": "0.5.0",
-  "static_data_version": "0.5.0",
-  "first_mate_name": "Mr. Bligh",
-  "dynamic_save_state": {
-    "sovereigns": 880,
-    "current_day_epoch": 9,
-    "captain": {
-      "name": "Sinclair",
-      "skills": {"iron": 0,"mirrors": 0,"hearts": 0,"veils": 0},
-      "affiliations": {"academe": 0,"bohemia": 0,"establishment": 0,"villainy": 0}
+  "ssf": "sunless-skies-first-mate",
+  "ssv": "0.5.0",
+  "sfn": "Mr. Bligh",
+  "sds": {
+    "sso": 880,
+    "sep": 9,
+    "cpt": {
+      "cnm":"Sinclair",
+      "csk": {"ir": 0,"mi": 0,"he": 0,"ve": 0},
+      "caf": {"ac": 0,"bo": 0,"es": 0,"vi": 0}
     },
-    "locomotive": {
-      "model": "Spatchcock-Class Scout","name": "Zephyr",
-      "hull": 30,"max_hull": 30,
-      "fuel_used_last_leg": 0,"hold_capacity": 12,"hidden_slots": 0,
-      "hold_rules": {"fuel_reserve_minimum": 3,"supplies_reserve_minimum": 3,"discovery_buffer_slots": 2}
+    "clc": {
+      "cmd": "Spatchcock-Class Scout","cnm": "Zephyr",
+      "chl": 30,"cmh": 30,
+      "cfl": 0,"chc": 12,"chs": 0,
+      "chr": {"frm": 3,"srm": 3,"dbs": 2}
     },
-    "crew": {"current": 8,"max": 10,"terror": 15,"nightmares": 0},
-    "officer_manifest": {},
-    "unified_inventory_registry": {
-      "fuel": {"qty_in_hold": 3,"qty_in_bank": 0,"average_unit_cost": 20.00},
-      "supplies": {"qty_in_hold": 3,"qty_in_bank": 0,"average_unit_cost": 40.00},
-      "bronzewood": {"qty_in_hold": 1,"qty_in_bank": 0,"average_unit_cost": 175.00},
-      "quantum_æther_crystal": {"qty_in_hold": 1,"qty_in_bank": 0,"average_unit_cost": 100.00}
+    "ccr": {"ccu": 8,"cmx": 10,"ctr": 15,"cng": 0},
+    "oom": {},
+    "gui": {
+      "gfu": [3,0,20.00],
+      "gsu": [3,0,40.00],
+      "gbw": [1,0,175.00],
+      "quantum_æther_crystal": [1,0,100.00]
     },
-    "possessions": {},
-    "active_action_stream": [
+    "pps": {},
+    "aaa": [
       {
-        "action_id": "ACT-1016",
-        "type": "todo",
-        "status": "active",
-        "origin_location": "missing_port_x",
-        "title": "Deliver supplies to custom outpost",
-        "notes": "Error payload item: Unwhitelisted location key.",
-        "priority": "routine",
-        "is_pinned": false,
-        "created_epoch": 2,
-        "updated_epoch": 2,
-        "deadline_epoch": null,
-        "payload": {
-          "target_location": "missing_port_x"
-        }
+        "aid": "ACT-1016",
+        "atp": "tod",
+        "ast": "act",
+        "aol": "missing_port_x",
+        "att": "Deliver supplies to custom outpost",
+        "ant": "Error payload item: Unwhitelisted location key.",
+        "apr": "md",
+        "apn": false,
+        "ace": 2,
+        "aue": 2,
+        "ade": null,
+        "apl": ["missing_port_x"]
       }
     ],
-    "navigation": {
-      "current_location": "new_winchester",
-      "state": "docked",
-      "last_updated_epoch": 9,
-      "recent_history": [],
-      "itinerary": []
+    "nv": {
+      "cl": "lnw",
+      "ns": "np",
+      "lue": 9,
+      "rh": [],
+      "it": []
     },
-    "discovered_locations": {}
+    "dl": {}
   }
 }
 
 ```
-
-#### JSON State Verification:
-
-`[ No updates are applied. Processing must freeze immediately without returning standard tracker logs or shifting saved nodes until valid structural recovery data is input by the user. ]`
 
 ### Expected Verification:
 
@@ -555,72 +496,63 @@ Verifies the application of the structural color math threshold where crew count
 
 ```json
 {
-  "save_format": "sunless-skies-first-mate",
-  "schema_version": "0.5.0",
-  "rules_version": "0.5.0",
-  "static_data_version": "0.5.0",
-  "first_mate_name": "Mr. Bligh",
-  "dynamic_save_state": {
-    "sovereigns": 880,
-    "current_day_epoch": 364,
-    "captain": {
-      "name": "Sinclair",
-      "skills": {"iron": 0,"mirrors": 0,"hearts": 0,"veils": 0},
-      "affiliations": {"academe": 0,"bohemia": 0,"establishment": 0,"villainy": 0}
+  "ssf": "sunless-skies-first-mate",
+  "ssv": "0.5.0",
+  "sfn": "Mr. Bligh",
+  "sds": {
+    "sso": 880,
+    "sep": 364,
+    "cpt": {
+      "cnm":"Sinclair",
+      "csk": {"ir": 0,"mi": 0,"he": 0,"ve": 0},
+      "caf": {"ac": 0,"bo": 0,"es": 0,"vi": 0}
     },
-    "locomotive": {
-      "model": "Spatchcock-Class Scout",
-      "name": "Zephyr",
-      "hull": 30,
-      "max_hull": 30,
-      "fuel_used_last_leg": 0,
-      "hold_capacity": 12,
-      "hidden_slots": 0,
-      "hold_rules": {"fuel_reserve_minimum": 3,"supplies_reserve_minimum": 3,"discovery_buffer_slots": 2}
+    "clc": {
+      "cmd": "Spatchcock-Class Scout",
+      "cnm": "Zephyr",
+      "chl": 30,
+      "cmh": 30,
+      "cfl": 0,
+      "chc": 12,
+      "chs": 0,
+      "chr": {"frm": 3,"srm": 3,"dbs": 2}
     },
-    "crew": {"current": 8,"max": 10,"terror": 20,"nightmares": 0},
-    "officer_manifest": {},
-    "unified_inventory_registry": {
-      "fuel": {"qty_in_hold": 3,"qty_in_bank": 0,"average_unit_cost": 20.00},
-      "supplies": {"qty_in_hold": 3,"qty_in_bank": 0,"average_unit_cost": 40.00}
+    "ccr": {"ccu": 8,"cmx": 10,"ctr": 20,"cng": 0},
+    "oom": {},
+    "gui": {
+      "gfu": [3,0,20.00],
+      "gsu": [3,0,40.00]
     },
-    "possessions": {},
-    "active_action_stream": [],
-    "navigation": {
-      "current_location": "port_avon",
-      "state": "docked",
-      "last_updated_epoch": 364,
-      "recent_history": [{"leg": 1, "location": "new_winchester", "arrived_epoch": 350}],
-      "itinerary": []
+    "pps": {},
+    "aaa": [],
+    "nv": {
+      "cl": "lpo",
+      "ns": "np",
+      "lue": 364,
+      "rh": [1,"lnw",350],
+      "it": []
     },
-    "discovered_locations": {}
+    "dl": {}
   }
 }
 
 ```
 
-#### JSON State Verification:
-* `dynamic_save_state.current_day_epoch`
-* `dynamic_save_state.crew.current`
-* `dynamic_save_state.locomotive.hull`
-* `dynamic_save_state.navigation.state`
-* `dynamic_save_state.navigation.itinerary[0].location`
-
 ### Expected Verification:
 
 #### State Transition:
 
-`docked` ➔ `departing`
+`np` ➔ `nd`
 
-#### Flat JSON State Extraction:
+#### Targeted State Verification:
 
 ```json
 {
-  "dynamic_save_state.current_day_epoch": 379,
-  "dynamic_save_state.crew.current": 6,
-  "dynamic_save_state.locomotive.hull": 17,
-  "dynamic_save_state.navigation.state": "departing",
-  "dynamic_save_state.navigation.itinerary[0].location": "new_winchester"
+  "sds.sep": 379,
+  "sds.crew.current": 6,
+  "sds.clc.chl": 17,
+  "sds.nv.ns": "nd",
+  "sds.nv.it[0]": [ 2, "lnw" ]
 }
 
 ```
@@ -708,7 +640,7 @@ Port Avon ➔ 🟢 **New Winchester**
 #### 🔒 INTERNAL STATE AUTOSAVE
 
 ```json
-{"save_format":"sunless-skies-first-mate","schema_version":"0.5.0","rules_version":"0.5.0","static_data_version":"0.5.0","first_mate_name":"Mr. Bligh","dynamic_save_state":{"sovereigns":880,"current_day_epoch":379,"captain":{"name":"Sinclair","skills":{"iron":0,"mirrors":0,"hearts":0,"veils":0},"affiliations":{"academe":0,"bohemia":0,"establishment":0,"villainy":0}},"locomotive":{"model":"Spatchcock-Class Scout","name":"Zephyr","hull":17,"max_hull":30,"fuel_used_last_leg":0,"hold_capacity":12,"hidden_slots":0,"hold_rules":{"fuel_reserve_minimum":3,"supplies_reserve_minimum":3,"discovery_buffer_slots":2}},"crew":{"current":6,"max":10,"terror":20,"nightmares":0},"officer_manifest":{},"unified_inventory_registry":{"fuel":{"qty_in_hold":3,"qty_in_bank":0,"average_unit_cost":20.0},"supplies":{"qty_in_hold":3,"qty_in_bank":0,"average_unit_cost":40.0}},"possessions":{},"active_action_stream":[],"navigation":{"current_location":"port_avon","state":"departing","last_updated_epoch":379,"recent_history":[{"leg":1,"location":"new_winchester","arrived_epoch":350}],"itinerary":[{"leg":2,"location":"new_winchester"}]},"discovered_locations":{}}}
+{"ssf":"sunless-skies-first-mate","ssv":"0.5.0","sfn":"Mr. Bligh","sds":{"sso":880,"sep":379,"cpt":{"cnm":"Sinclair","csk":{"ir":0,"mi":0,"he":0,"ve":0},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":17,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":6,"cmx":10,"ctr":20,"cng":0},"oom":{},"gui":{"gfu":[3,0,20.0],"gsu":[3,0,40.0]},"pps":{},"aaa":[],"nv":{"cl":"lpo","ns":"nd","lue":379,"rh":[1,"lnw",350],"it":[2,"lnw"]},"dl":{}}}
 ```
 
 ## Test Case 6: Critical Low Crew Threshold & Consumable Depletion
@@ -723,78 +655,65 @@ Verifies behavioral tone shifts when crew drops below 50%, triggering fatigue an
 
 ```json
 {
-  "save_format": "sunless-skies-first-mate",
-  "schema_version": "0.5.0",
-  "rules_version": "0.5.0",
-  "static_data_version": "0.5.0",
-  "first_mate_name": "Mr. Bligh",
-  "dynamic_save_state": {
-    "sovereigns": 880,
-    "current_day_epoch": 379,
-    "captain": {
-      "name": "Sinclair",
-      "skills": {"iron": 0,"mirrors": 0,"hearts": 0,"veils": 0},
-      "affiliations": {"academe": 0,"bohemia": 0,"establishment": 0,"villainy": 0}
+  "ssf": "sunless-skies-first-mate",
+  "ssv": "0.5.0",
+  "sfn": "Mr. Bligh",
+  "sds": {
+    "sso": 880,
+    "sep": 379,
+    "cpt": {
+      "cnm":"Sinclair",
+      "csk": {"ir": 0,"mi": 0,"he": 0,"ve": 0},
+      "caf": {"ac": 0,"bo": 0,"es": 0,"vi": 0}
     },
-    "locomotive": {
-      "model": "Spatchcock-Class Scout",
-      "name": "Zephyr",
-      "hull": 17,
-      "max_hull": 30,
-      "fuel_used_last_leg": 0,
-      "hold_capacity": 12,
-      "hidden_slots": 0,
-      "hold_rules": {"fuel_reserve_minimum": 3,"supplies_reserve_minimum": 3,"discovery_buffer_slots": 2}
+    "clc": {
+      "cmd": "Spatchcock-Class Scout",
+      "cnm": "Zephyr",
+      "chl": 17,
+      "cmh": 30,
+      "cfl": 0,
+      "chc": 12,
+      "chs": 0,
+      "chr": {"frm": 3,"srm": 3,"dbs": 2}
     },
-    "crew": {"current": 6,"max": 10,"terror": 35,"nightmares": 0},
-    "officer_manifest": {},
-    "unified_inventory_registry": {
-      "fuel": {"qty_in_hold": 1,"qty_in_bank": 0,"average_unit_cost": 20.00},
-      "supplies": {"qty_in_hold": 0,"qty_in_bank": 0,"average_unit_cost": 40.00}
+    "ccr": {"ccu": 6,"cmx": 10,"ctr": 35,"cng": 0},
+    "oom": {},
+    "gui": {
+      "gfu": [1,0,20.00],
+      "gsu": [0,0,40.00]
     },
-    "possessions": { },
-    "active_action_stream": [],
-    "navigation": {
-      "current_location": "hybras",
-      "state": "docked",
-      "last_updated_epoch": 379,
-      "recent_history": [{"leg": 2, "location": "port_avon", "arrived_epoch": 379}],
-      "itinerary": []
+    "pps": { },
+    "aaa": [],
+    "nv": {
+      "cl": "lhy",
+      "ns": "np",
+      "lue": 379,
+      "rh": [2,"lpo",379],
+      "it": []
     },
-    "discovered_locations": {}
+    "dl": {}
   }
 }
 
 ```
 
-#### JSON State Verification:
-
-* `dynamic_save_state.current_day_epoch`
-* `dynamic_save_state.crew.current`
-* `dynamic_save_state.unified_inventory_registry.supplies.qty_in_hold`
-* `dynamic_save_state.active_action_stream[0].action_id`
-* `dynamic_save_state.active_action_stream[0].priority`
-* `dynamic_save_state.active_action_stream[0].payload.target_location`
-* `dynamic_save_state.navigation.state`
-
-
 ### Expected Verification:
 
 #### State Transition:
 
-`docked` ➔ `departing`
+`np` ➔ `nd`
 
-#### Flat JSON State Extraction:
+#### Targeted State Verification:
 
 ```json
 {
-  "dynamic_save_state.current_day_epoch": 384,
-  "dynamic_save_state.crew.current": 3,
-  "dynamic_save_state.unified_inventory_registry.supplies.qty_in_hold": 0,
-  "dynamic_save_state.active_action_stream[0].action_id": "ACT-1001",
-  "dynamic_save_state.active_action_stream[0].priority": "high",
-  "dynamic_save_state.active_action_stream[0].payload.target_location": "polmear_and_plentys_inconceivable_circus",
-  "dynamic_save_state.navigation.state": "departing"
+  "sds.sep": 384,
+  "sds.crew.current": 3,
+  "sds.gui.gsu": [ 0, 0, 40.0 ],
+  "sds.aaa[0].aid": "ACT-1001",
+  "sds.aaa[0].apr": "hi",
+  "sds.aaa[0].apl": [ "lpp" ],
+  "sds.nv.ns": "nd"
 }
 
 ```
@@ -885,7 +804,7 @@ Hybras ➔ 🟢 **Polmear & Plenty's Inconceivable Circus**
 #### 🔒 INTERNAL STATE AUTOSAVE
 
 ```json
-{"save_format":"sunless-skies-first-mate","schema_version":"0.5.0","rules_version":"0.5.0","static_data_version":"0.5.0","first_mate_name":"Mr. Bligh","dynamic_save_state":{"sovereigns":880,"current_day_epoch":384,"captain":{"name":"Sinclair","skills":{"iron":0,"mirrors":0,"hearts":0,"veils":0},"affiliations":{"academe":0,"bohemia":0,"establishment":0,"villainy":0}},"locomotive":{"model":"Spatchcock-Class Scout","name":"Zephyr","hull":17,"max_hull":30,"fuel_used_last_leg":0,"hold_capacity":12,"hidden_slots":0,"hold_rules":{"fuel_reserve_minimum":3,"supplies_reserve_minimum":3,"discovery_buffer_slots":2}},"crew":{"current":3,"max":10,"terror":35,"nightmares":0},"officer_manifest":{},"unified_inventory_registry":{"fuel":{"qty_in_hold":1,"qty_in_bank":0,"average_unit_cost":20.0},"supplies":{"qty_in_hold":0,"qty_in_bank":0,"average_unit_cost":40.0}},"possessions":{},"active_action_stream":[{"action_id":"ACT-1001","type":"todo","status":"active","origin_location":"hybras","title":"Hire crew at the circus","notes":"Hire replacement crew from the circus","priority":"high","is_pinned":false,"created_epoch":384,"updated_epoch":384,"deadline_epoch":null,"payload":{"target_location":"polmear_and_plentys_inconceivable_circus"}}],"navigation":{"current_location":"hybras","state":"departing","last_updated_epoch":384,"recent_history":[{"leg":2,"location":"port_avon","arrived_epoch":379}],"itinerary":[{"leg":3,"location":"polmear_and_plentys_inconceivable_circus"}]},"discovered_locations":{}}}
+{"ssf":"sunless-skies-first-mate","ssv":"0.5.0","sfn":"Mr. Bligh","sds":{"sso":880,"sep":384,"cpt":{"cnm":"Sinclair","csk":{"ir":0,"mi":0,"he":0,"ve":0},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":17,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":3,"cmx":10,"ctr":35,"cng":0},"oom":{},"gui":{"gfu":[1,0,20.0],"gsu":[0,0,40.0]},"pps":{},"aaa":[{"aid":"ACT-1001","atp":"tod","ast":"act","aol":"lhy","att":"Hire crew at the circus","ant":"Hire replacement crew from the circus","apr":"hi","apn":false,"ace":384,"aue":384,"ade":null,"apl":["lpp"]}],"nv":{"cl":"lhy","ns":"nd","lue":384,"rh":[2,"lpo",379],"it":[[3,"lpp"]]},"dl":{}}}
 ```
 
 ## Test Case 7: Route Planner - Multi-Stop Sequential Itinerary & Task Linking
@@ -900,155 +819,119 @@ Verifies multi-stop itinerary construction, sequential leg renumbering (§ 5.3),
 
 ```json
 {
-  "save_format": "sunless-skies-first-mate",
-  "schema_version": "0.5.0",
-  "rules_version": "0.5.0",
-  "static_data_version": "0.5.0",
-  "first_mate_name": "Mr. Bligh",
-  "dynamic_save_state": {
-    "sovereigns": 1450,
-    "current_day_epoch": 1195,
-    "captain": {
-      "name": "Sinclair",
-      "skills": {"iron": 0,"mirrors": 0,"hearts": 0,"veils": 0},
-      "affiliations": {"academe": 0,"bohemia": 0,"establishment": 0,"villainy": 0}
+  "ssf": "sunless-skies-first-mate",
+  "ssv": "0.5.0",
+  "sfn": "Mr. Bligh",
+  "sds": {
+    "sso": 1450,
+    "sep": 1195,
+    "cpt": {
+      "cnm":"Sinclair",
+      "csk": {"ir": 0,"mi": 0,"he": 0,"ve": 0},
+      "caf": {"ac": 0,"bo": 0,"es": 0,"vi": 0}
     },
-    "locomotive": {
-      "model": "Spatchcock-Class Scout",
-      "name": "Zephyr",
-      "hull": 30,
-      "max_hull": 30,
-      "fuel_used_last_leg": 0,
-      "hold_capacity": 12,
-      "hidden_slots": 0,
-      "hold_rules": {"fuel_reserve_minimum": 3,"supplies_reserve_minimum": 3,"discovery_buffer_slots": 2}
+    "clc": {
+      "cmd": "Spatchcock-Class Scout",
+      "cnm": "Zephyr",
+      "chl": 30,
+      "cmh": 30,
+      "cfl": 0,
+      "chc": 12,
+      "chs": 0,
+      "chr": {"frm": 3,"srm": 3,"dbs": 2}
     },
-    "crew": {"current": 9,"max": 10,"terror": 15,"nightmares": 0},
-    "officer_manifest": {},
-    "unified_inventory_registry": {
-      "fuel": {"qty_in_hold": 3,"qty_in_bank": 0,"average_unit_cost": 20.00},
-      "supplies": {"qty_in_hold": 3,"qty_in_bank": 0,"average_unit_cost": 40.00},
-      "bronzewood": {"qty_in_hold": 2,"qty_in_bank": 0,"average_unit_cost": 175.00}
+    "ccr": {"ccu": 9,"cmx": 10,"ctr": 15,"cng": 0},
+    "oom": {},
+    "gui": {
+      "gfu": [3,0,20.00],
+      "gsu": [3,0,40.00],
+      "gbw": [2,0,175.00]
     },
-    "possessions": { },
-    "active_action_stream": [
+    "pps": { },
+    "aaa": [
       {
-        "action_id": "ACT-1001",
-        "type": "ambition",
-        "status": "active",
-        "origin_location": "new_winchester",
-        "title": "Ambition: Wealth",
-        "notes": "",
-        "priority": "routine",
-        "is_pinned": false,
-        "created_epoch": 6,
-        "updated_epoch": 6,
-        "deadline_epoch": null,
-        "payload": {
-          "ambition_type": "Wealth",
-          "current_tier": 1,
-          "milestone_description": "Purchase the Governor's Manor",
-          "sovereigns_required_for_next_tier": 5000,
-          "items_manifest": {
-            "goods": [],
-            "possessions": [],
-            "narrative_items": []
-          }
-        }
+        "aid": "ACT-1001",
+        "atp": "amb",
+        "ast": "act",
+        "aol": "lnw",
+        "att": "Ambition: Wealth",
+        "ant": "",
+        "apr": "md",
+        "apn": false,
+        "ace": 6,
+        "aue": 6,
+        "ade": null,
+        "apl": ["aw",1,"Purchase the Governor's Manor",5000,[]]
       },
       {
-        "action_id": "ACT-1012",
-        "type": "prospect",
-        "status": "active",
-        "origin_location": "new_winchester",
-        "title": "Nectar for the Fairies",
-        "notes": "",
-        "priority": "routine",
-        "is_pinned": false,
-        "created_epoch": 79,
-        "updated_epoch": 79,
-        "deadline_epoch": null,
-        "payload": {
-          "good_key": "chorister_nectar",
-          "quantity_required": 1,
-          "quantity_sourced": 0,
-          "quantity_delivered": 0,
-          "destination_location": "titania"
-        }
+        "aid": "ACT-1012",
+        "atp": "prs",
+        "ast": "act",
+        "aol": "lnw",
+        "att": "Nectar for the Fairies",
+        "ant": "",
+        "apr": "md",
+        "apn": false,
+        "ace": 79,
+        "aue": 79,
+        "ade": null,
+        "apl": ["gcn",1,0,0,"lti"]
       },
       {
-        "action_id": "ACT-1013",
-        "type": "prospect",
-        "status": "ready",
-        "origin_location": "new_winchester",
-        "title": "Bronzewood Shipments",
-        "notes": "",
-        "priority": "routine",
-        "is_pinned": false,
-        "created_epoch": 82,
-        "updated_epoch": 82,
-        "deadline_epoch": null,
-        "payload": {
-          "good_key": "bronzewood",
-          "quantity_required": 3,
-          "quantity_sourced": 3,
-          "quantity_delivered": 1,
-          "destination_location": "lustrum"
-        }
+        "aid": "ACT-1013",
+        "atp": "prs",
+        "ast": "rdy",
+        "aol": "lnw",
+        "att": "Bronzewood Shipments",
+        "ant": "",
+        "apr": "md",
+        "apn": false,
+        "ace": 82,
+        "aue": 82,
+        "ade": null,
+        "apl": ["gbw",3,3,1,"llu"]
       },
       {
-        "action_id": "ACT-1016",
-        "type": "todo",
-        "status": "active",
-        "origin_location": "new_winchester",
-        "title": "Helping the Horticulturalist",
-        "notes": "Deliver structural schematics to the Horticulturalist",
-        "priority": "routine",
-        "is_pinned": false,
-        "created_epoch": 90,
-        "updated_epoch": 90,
-        "deadline_epoch": null,
-        "payload": {
-          "target_location": "titania"
-        }
+        "aid": "ACT-1016",
+        "atp": "tod",
+        "ast": "act",
+        "aol": "lnw",
+        "att": "Helping the Horticulturalist",
+        "ant": "Deliver structural schematics to the Horticulturalist",
+        "apr": "md",
+        "apn": false,
+        "ace": 90,
+        "aue": 90,
+        "ade": null,
+        "apl": ["lti"]
       }
     ],
-    "navigation": {
-      "current_location": "new_winchester",
-      "state": "docked",
-      "last_updated_epoch": 1195,
-      "recent_history": [{"leg": 1, "location": "new_winchester", "arrived_epoch": 1180}],
-      "itinerary": []
+    "nv": {
+      "cl": "lnw",
+      "ns": "np",
+      "lue": 1195,
+      "rh": [1,"lnw",1180],
+      "it": []
     },
-    "discovered_locations": {}
+    "dl": {}
   }
 }
 
 ```
 
-#### JSON State Verification:
-
-* `dynamic_save_state.navigation.state`
-* `dynamic_save_state.navigation.itinerary[0].leg`
-* `dynamic_save_state.navigation.itinerary[0].location`
-* `dynamic_save_state.navigation.itinerary[1].leg`
-* `dynamic_save_state.navigation.itinerary[1].location`
-
 ### Expected Verification:
 
 #### State Transition:
 
-`docked` ➔ `departing`
+`np` ➔ `nd`
 
-#### Flat JSON State Extraction:
+#### Targeted State Verification:
 
 ```json
 {
-  "dynamic_save_state.navigation.state": "departing",
-  "dynamic_save_state.navigation.itinerary[0].leg": 2,
-  "dynamic_save_state.navigation.itinerary[0].location": "titania",
-  "dynamic_save_state.navigation.itinerary[1].leg": 3,
-  "dynamic_save_state.navigation.itinerary[1].location": "lustrum"
+  "sds.nv.ns": "nd",
+  "sds.nv.it[0]": [ 2, "lti" ],
+  "sds.nv.it[1]": [ 3, "llu" ]
 }
 
 ```
@@ -1140,7 +1023,7 @@ New Winchester ➔ 🟢 **Titania** ➔ 🟡 Lustrum
 #### 🔒 INTERNAL STATE AUTOSAVE
 
 ```json
-{"save_format":"sunless-skies-first-mate","schema_version":"0.5.0","rules_version":"0.5.0","static_data_version":"0.5.0","first_mate_name":"Mr. Bligh","dynamic_save_state":{"sovereigns":1450,"current_day_epoch":1195,"captain":{"name":"Sinclair","skills":{"iron":0,"mirrors":0,"hearts":0,"veils":0},"affiliations":{"academe":0,"bohemia":0,"establishment":0,"villainy":0}},"locomotive":{"model":"Spatchcock-Class Scout","name":"Zephyr","hull":30,"max_hull":30,"fuel_used_last_leg":0,"hold_capacity":12,"hidden_slots":0,"hold_rules":{"fuel_reserve_minimum":3,"supplies_reserve_minimum":3,"discovery_buffer_slots":2}},"crew":{"current":9,"max":10,"terror":15,"nightmares":0},"officer_manifest":{},"unified_inventory_registry":{"fuel":{"qty_in_hold":3,"qty_in_bank":0,"average_unit_cost":20.0},"supplies":{"qty_in_hold":3,"qty_in_bank":0,"average_unit_cost":40.0},"bronzewood":{"qty_in_hold":2,"qty_in_bank":0,"average_unit_cost":175.0}},"possessions":{},"active_action_stream":[{"action_id":"ACT-1001","type":"ambition","status":"active","origin_location":"new_winchester","title":"Ambition: Wealth","notes":"","priority":"routine","is_pinned":false,"created_epoch":6,"updated_epoch":6,"deadline_epoch":null,"payload":{"ambition_type":"Wealth","current_tier":1,"milestone_description":"Purchase the Governor's Manor","sovereigns_required_for_next_tier":5000,"items_manifest":{"goods":[],"possessions":[],"narrative_items":[]}}},{"action_id":"ACT-1012","type":"prospect","status":"active","origin_location":"new_winchester","title":"Nectar for the Fairies","notes":"","priority":"routine","is_pinned":false,"created_epoch":79,"updated_epoch":79,"deadline_epoch":null,"payload":{"good_key":"chorister_nectar","quantity_required":1,"quantity_sourced":0,"quantity_delivered":0,"destination_location":"titania"}},{"action_id":"ACT-1013","type":"prospect","status":"ready","origin_location":"new_winchester","title":"Bronzewood Shipments","notes":"","priority":"routine","is_pinned":false,"created_epoch":82,"updated_epoch":82,"deadline_epoch":null,"payload":{"good_key":"bronzewood","quantity_required":3,"quantity_sourced":3,"quantity_delivered":1,"destination_location":"lustrum"}},{"action_id":"ACT-1016","type":"todo","status":"active","origin_location":"new_winchester","title":"Helping the Horticulturalist","notes":"Deliver structural schematics to the Horticulturalist","priority":"routine","is_pinned":false,"created_epoch":90,"updated_epoch":90,"deadline_epoch":null,"payload":{"target_location":"titania"}}],"navigation":{"current_location":"new_winchester","state":"departing","last_updated_epoch":1195,"recent_history":[{"leg":1,"location":"new_winchester","arrived_epoch":1180}],"itinerary":[{"leg":2,"location":"titania"},{"leg":3,"location":"lustrum"}]},"discovered_locations":{}}}
+{"ssf":"sunless-skies-first-mate","ssv":"0.5.0","sfn":"Mr. Bligh","sds":{"sso":1450,"sep":1195,"cpt":{"cnm":"Sinclair","csk":{"ir":0,"mi":0,"he":0,"ve":0},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc": {"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":30,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":9,"cmx":10,"ctr":15,"cng":0},"oom":{},"gui":{"gfu":[3,0,20.0],"gsu":[3,0,40.0],"gbw":[2,0,175.0]},"pps": {"ac": {},"bo": {},"es": {},"vi": {},"ptp": []},"aaa": [{"aid":"ACT-1001","atp":"amb","ast":"act","aol":"lnw","att":"Ambition: Wealth","ant":"","apr":"md","apn":false,"ace":6,"aue":6,"ade":null,"apl":["aw",1,"Purchase the Governor's Manor",5000,{"gd":[],"pk":[],"ni":[]}]},{"aid":"ACT-1012","atp":"prs","ast":"act","aol":"lnw","att":"Nectar for the Fairies","ant":"","apr":"md","apn":false,"ace":79,"aue":79,"ade":null,"apl":["gcn",1,0,0,"lti"]},{"aid":"ACT-1013","atp":"prs","ast":"rdy","aol":"lnw","att":"Bronzewood Shipments","ant":"","apr":"md","apn":false,"ace":82,"aue":82,"ade":null,"apl":["gbw",3,3,1,"llu"]},{"aid":"ACT-1016","atp":"tod","ast":"act","aol":"lnw","att":"Helping the Horticulturalist","ant":"Deliver structural schematics to the Horticulturalist","apr":"md","apn":false,"ace":90,"aue":90,"ade":null,"apl":["lti"]}],"nv":{"cl":"lnw","ns":"nd","lue":1195,"rh":[[1,"lnw",1180]],"it":[[2,"lti"], [3,"llu"]]},"dl": {}}}
 ```
 
 ## Test Case 8: Route Planner - Resupply Isolation Alert & Intermediate Port Recommendation
@@ -1155,88 +1038,78 @@ Verifies that the Route Planner detects critical consumable deficits prior to a 
 
 ```json
 {
-  "save_format": "sunless-skies-first-mate",
-  "schema_version": "0.5.0",
-  "rules_version": "0.5.0",
-  "static_data_version": "0.5.0",
-  "first_mate_name": "Mr. Bligh",
-  "dynamic_save_state": {
-    "sovereigns": 620,
-    "current_day_epoch": 48,
-    "captain": {
-      "name": "Sinclair",
-      "skills": {"iron": 0,"mirrors": 0,"hearts": 0,"veils": 0},
-      "affiliations": {"academe": 0,"bohemia": 0,"establishment": 0,"villainy": 0}
+  "ssf": "sunless-skies-first-mate",
+  "ssv": "0.5.0",
+  "sfn": "Mr. Bligh",
+  "sds": {
+    "sso": 620,
+    "sep": 48,
+    "cpt": {
+      "cnm":"Sinclair",
+      "csk": {"ir": 0,"mi": 0,"he": 0,"ve": 0},
+      "caf": {"ac": 0,"bo": 0,"es": 0,"vi": 0}
     },
-    "locomotive": {
-      "model": "Spatchcock-Class Scout",
-      "name": "Zephyr",
-      "hull": 25,
-      "max_hull": 30,
-      "fuel_used_last_leg": 0,
-      "hold_capacity": 12,
-      "hidden_slots": 0,
-      "hold_rules": {"fuel_reserve_minimum": 3,"supplies_reserve_minimum": 3,"discovery_buffer_slots": 2}
+    "clc": {
+      "cmd": "Spatchcock-Class Scout",
+      "cnm": "Zephyr",
+      "chl": 25,
+      "cmh": 30,
+      "cfl": 0,
+      "chc": 12,
+      "chs": 0,
+      "chr": {"frm": 3,"srm": 3,"dbs": 2}
     },
-    "crew": {"current": 10,"max": 10,"terror": 40,"nightmares": 1},
-    "officer_manifest": {},
-    "unified_inventory_registry": {
-      "fuel": {"qty_in_hold": 1,"qty_in_bank": 0,"average_unit_cost": 20.00},
-      "supplies": {"qty_in_hold": 1,"qty_in_bank": 0,"average_unit_cost": 40.00}
+    "ccr": {"ccu": 10,"cmx": 10,"ctr": 40,"cng": 1},
+    "oom": {},
+    "gui": {
+      "gfu": [1,0,20.00],
+      "gsu": [1,0,40.00]
     },
-    "possessions": {},
-    "active_action_stream": [],
-    "navigation": {
-      "current_location": "new_winchester",
-      "state": "docked",
-      "last_updated_epoch": 48,
-      "recent_history": [{"leg": 1, "location": "new_winchester", "arrived_epoch": 48}],
-      "itinerary": []
+    "pps": {},
+    "aaa": [],
+    "nv": {
+      "cl": "lnw",
+      "ns": "np",
+      "lue": 48,
+      "rh": [1,"lnw",48],
+      "it": []
     },
-    "discovered_locations": {
-      "new_winchester": {
-        "clock_direction": null,
+    "dl": {
+      "lnw": {
+        "cd": null,
         "captains_notes": [],
-        "bazaar": {"reset_epoch": null, "available_bargains": []}
+        "bz": {"re": null, "ab": []}
       },
-      "titania": {
-        "clock_direction": 2,
+      "lti": {
+        "cd": 2,
         "captains_notes": [],
-        "bazaar": {"reset_epoch": null, "available_bargains": []}
+        "bz": {"re": null, "ab": []}
       },
-      "port_prosper": {
-        "clock_direction": 6,
+      "lpr": {
+        "cd": 6,
         "captains_notes": [],
-        "bazaar": {"reset_epoch": null, "available_bargains": []}
+        "bz": {"re": null, "ab": []}
       }
     }
   }
 }
 ```
 
-#### JSON State Verification:
-
-* `dynamic_save_state.current_day_epoch`
-* `dynamic_save_state.unified_inventory_registry.fuel.qty_in_hold`
-* `dynamic_save_state.unified_inventory_registry.supplies.qty_in_hold`
-* `dynamic_save_state.navigation.state`
-* `dynamic_save_state.navigation.itinerary[0].location`
-
 ### Expected Verification:
 
 #### State Transition:
 
-`docked` ➔ `departing`
+`np` ➔ `nd`
 
-#### Flat JSON State Extraction:
+#### Targeted State Verification:
 
 ```json
 {
-  "dynamic_save_state.current_day_epoch": 48,
-  "dynamic_save_state.unified_inventory_registry.fuel.qty_in_hold": 1,
-  "dynamic_save_state.unified_inventory_registry.supplies.qty_in_hold": 1,
-  "dynamic_save_state.navigation.state": "departing",
-  "dynamic_save_state.navigation.itinerary[0].location": "port_prosper"
+  "sds.sep": 48,
+  "sds.gui.gfu": [ 1, 0, 20.0 ],
+  "sds.gui.gsu": [ 1, 0, 40.0 ],
+  "sds.nv.ns": "nd",
+  "sds.nv.it[0]": [ 2, "lpr" ]
 }
 ```
 
@@ -1325,95 +1198,79 @@ New Winchester ➔ 🟢 **Port Prosper**
 #### 🔒 INTERNAL STATE AUTOSAVE
 
 ```json
-{"save_format":"sunless-skies-first-mate","schema_version":"0.5.0","rules_version":"0.5.0","static_data_version":"0.5.0","first_mate_name":"Mr. Bligh","dynamic_save_state":{"sovereigns":620,"current_day_epoch":48,"captain":{"name":"Sinclair","skills":{"iron":0,"mirrors":0,"hearts":0,"veils":0},"affiliations":{"academe":0,"bohemia":0,"establishment":0,"villainy":0}},"locomotive":{"model":"Spatchcock-Class Scout","name":"Zephyr","hull":25,"max_hull":30,"fuel_used_last_leg":0,"hold_capacity":12,"hidden_slots":0,"hold_rules":{"fuel_reserve_minimum":3,"supplies_reserve_minimum":3,"discovery_buffer_slots":2}},"crew":{"current":10,"max":10,"terror":40,"nightmares":1},"officer_manifest":{},"unified_inventory_registry":{"fuel":{"qty_in_hold":1,"qty_in_bank":0,"average_unit_cost":20.0},"supplies":{"qty_in_hold":1,"qty_in_bank":0,"average_unit_cost":40.0}},"possessions":{},"active_action_stream":[],"navigation":{"current_location":"new_winchester","state":"departing","last_updated_epoch":48,"recent_history":[{"leg":1,"location":"new_winchester","arrived_epoch":48}],"itinerary":[{"leg":2,"location":"port_prosper"}]},"discovered_locations":{"new_winchester":{"clock_direction":null,"captains_notes":[],"bazaar":{"reset_epoch":null,"available_bargains":[]}},"titania":{"clock_direction":2,"captains_notes":[],"bazaar":{"reset_epoch":null,"available_bargains":[]}},"port_prosper":{"clock_direction":6,"captains_notes":[],"bazaar":{"reset_epoch":null,"available_bargains":[]}}}}}
+{"ssf":"sunless-skies-first-mate","ssv":"0.5.0","sfn":"Mr. Bligh","sds":{"sso":620,"sep":48,"cpt":{"cnm":"Sinclair","csk":{"ir":0,"mi":0,"he":0,"ve":0},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":25,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":10,"cmx":10,"ctr":40,"cng":1},"oom":{},"gui":{"gfu":[1,0,20.0],"gsu":[1,0,40.0]},"pps":{},"aaa":[],"nv":{"cl":"lnw","ns":"nd","lue":48,"rh":[1,"lnw",48],"it":[2,"lpr"]},"dl":{"lnw":{"cd":null,"bz":{"re":null,"ab":[]}},"lti":{"cd":2,"bz":{"re":null,"ab":[]}},"lpr":{"cd":6,"bz":{"re":null,"ab":[]}}}}}
 ```
 
 
 ## Test Case 9: Cargo Isolation & Weightless Possessions Tracking
 
 ### Objective
-Verifies that spatial possessions (Category 2: 16 immutable progression tokens) and narrative quest items (Category 3: polymorphic items manifest) do not draw physical hold space against `locomotive.hold_capacity` (§ 6.3.2, § 6.3.3). Confirms that a polymorphic quest object is cleanly constructed within `dynamic_save_state.active_action_stream` (§ 4.3.2), checks that non-zero possessions populate their respective affiliation domain while zero-quantity commodities and possessions are strictly suppressed from the JSON payload, and tests mid-month High Wilderness calendar calculation (`1905-01-15` = Day 14).
+Verifies that spatial possessions (Category 2: 16 immutable progression tokens) and narrative quest items (Category 3: polymorphic items manifest) do not draw physical hold space against `locomotive.chc` (§ 6.3.2, § 6.3.3). Confirms that a polymorphic quest object is cleanly constructed within `sds.aaa` (§ 4.3.2), checks that non-zero possessions populate their respective affiliation domain while zero-quantity commodities and possessions are strictly suppressed from the JSON payload, and tests mid-month High Wilderness calendar calculation (`1905-01-15` = Day 14).
 
 ### Input Prompt
 > Update state. Captain's log: 1905-01-15. We acquired two Tales of Terror out in the dark on that last run. We took on a quest from The Sequestered Scholar to deliver a Primordial Star Shard to Port Avon. Log this as "The Last Consignment." Let's make sure our logistics files are updated before we cast off lines for Port Avon.
 
 ```json
 {
-  "save_format": "sunless-skies-first-mate",
-  "schema_version": "0.5.0",
-  "rules_version": "0.5.0",
-  "static_data_version": "0.5.0",
-  "first_mate_name": "Mr. Bligh",
-  "dynamic_save_state": {
-    "sovereigns": 800,
-    "current_day_epoch": 14,
-    "captain": {
-      "name": "Sinclair",
-      "skills": {"iron": 0, "mirrors": 0, "hearts": 0, "veils": 0},
-      "affiliations": {"academe": 0, "bohemia": 0, "establishment": 0, "villainy": 0}
+  "ssf": "sunless-skies-first-mate",
+  "ssv": "0.5.0",
+  "sfn": "Mr. Bligh",
+  "sds": {
+    "sso": 800,
+    "sep": 14,
+    "cpt": {
+      "cnm":"Sinclair",
+      "csk": {"ir": 0, "mi": 0, "he": 0, "ve": 0},
+      "caf": {"ac": 0, "bo": 0, "es": 0, "vi": 0}
     },
-    "locomotive": {
-      "model": "Spatchcock-Class Scout",
-      "name": "Zephyr",
-      "hull": 30,
-      "max_hull": 30,
-      "fuel_used_last_leg": 2,
-      "hold_capacity": 12,
-      "hidden_slots": 0,
-      "hold_rules": {"fuel_reserve_minimum": 3, "supplies_reserve_minimum": 3, "discovery_buffer_slots": 2}
+    "clc": {
+      "cmd": "Spatchcock-Class Scout",
+      "cnm": "Zephyr",
+      "chl": 30,
+      "cmh": 30,
+      "cfl": 2,
+      "chc": 12,
+      "chs": 0,
+      "chr": {"frm": 3, "srm": 3, "dbs": 2}
     },
-    "crew": {"current": 8, "max": 10, "terror": 0, "nightmares": 0},
-    "officer_manifest": {},
-    "unified_inventory_registry": {
-      "fuel": {"qty_in_hold": 4, "qty_in_bank": 0, "average_unit_cost": 20.00},
-      "supplies": {"qty_in_hold": 4, "qty_in_bank": 0, "average_unit_cost": 40.00},
-      "approved_literature": {"qty_in_hold": 2, "qty_in_bank": 0, "average_unit_cost": 100.00}
+    "ccr": {"ccu": 8, "cmx": 10, "ctr": 0, "cng": 0},
+    "oom": {},
+    "gui": {
+      "gfu": [4, 0, 20.00],
+      "gsu": [4, 0, 40.00],
+      "gal": [2, 0, 100.00]
     },
-    "possessions": {},
-    "active_action_stream": [],
-    "navigation": {
-      "current_location": "new_winchester",
-      "state": "docked",
-      "last_updated_epoch": 14,
-      "recent_history": [{"leg": 1, "location": "new_winchester", "arrived_epoch": 0}],
-      "itinerary": []
+    "pps": {},
+    "aaa": [],
+    "nv": {
+      "cl": "lnw",
+      "ns": "np",
+      "lue": 14,
+      "rh": [1,"lnw",0],
+      "it": []
     },
-    "discovered_locations": {}
+    "dl": {}
   }
 }
 
 ```
 
-### JSON State Verification:
-
-* `dynamic_save_state.possessions.villainy.tale_of_terror`
-* `dynamic_save_state.active_action_stream[0].action_id`
-* `dynamic_save_state.active_action_stream[0].type`
-* `dynamic_save_state.active_action_stream[0].payload.items_manifest.narrative_items[0].narrative_item_name`
-* `dynamic_save_state.active_action_stream[0].payload.items_manifest.narrative_items[0].quantity_required`
-* `dynamic_save_state.active_action_stream[0].payload.active_destinations[0].location`
-* `dynamic_save_state.navigation.state`
-* `dynamic_save_state.navigation.itinerary[0].location`
-
-
 ### Expected Verification:
 
 #### State Transition:
 
-`docked` ➔ `departing`
+`np` ➔ `nd`
 
-#### Flat JSON State Extraction:
+#### Targeted State Verification:
 
 ```json
 {
-  "dynamic_save_state.possessions.villainy.tale_of_terror": 2,
-  "dynamic_save_state.active_action_stream[0].action_id": "ACT-1001",
-  "dynamic_save_state.active_action_stream[0].type": "quest",
-  "dynamic_save_state.active_action_stream[0].payload.items_manifest.narrative_items[0].narrative_item_name": "Primordial Star Shard",
-  "dynamic_save_state.active_action_stream[0].payload.items_manifest.narrative_items[0].quantity_required": 1,
-  "dynamic_save_state.active_action_stream[0].payload.active_destinations[0].location": "port_avon",
-  "dynamic_save_state.navigation.state": "departing",
-  "dynamic_save_state.navigation.itinerary[0].location": "port_avon"
+  "sds.pps.vi.ptt": 2,
+  "sds.aaa[0].aid": "ACT-1001",
+  "sds.aaa[0].type": "qst",
+  "sds.aaa[0].apl[3][0].ni[0]": [ "Primordial Star Shard", 1, 0 ],
+  "sds.nv.ns": "nd",
+  "sds.nv.it[0]": [ 2, "lpo" ]
 }
 
 ```
@@ -1506,7 +1363,7 @@ New Winchester ➔ 🟢 **Port Avon**
 #### 🔒 INTERNAL STATE AUTOSAVE
 
 ```json
-{"save_format":"sunless-skies-first-mate","schema_version":"0.5.0","rules_version":"0.5.0","static_data_version":"0.5.0","first_mate_name":"Mr. Bligh","dynamic_save_state":{"sovereigns":800,"current_day_epoch":14,"captain":{"name":"Sinclair","skills":{"iron":0,"mirrors":0,"hearts":0,"veils":0},"affiliations":{"academe":0,"bohemia":0,"establishment":0,"villainy":0}},"locomotive":{"model":"Spatchcock-Class Scout","name":"Zephyr","hull":30,"max_hull":30,"fuel_used_last_leg":2,"hold_capacity":12,"hidden_slots":0,"hold_rules":{"fuel_reserve_minimum":3,"supplies_reserve_minimum":3,"discovery_buffer_slots":2}},"crew":{"current":8,"max":10,"terror":0,"nightmares":0},"officer_manifest":{},"unified_inventory_registry":{"fuel":{"qty_in_hold":4,"qty_in_bank":0,"average_unit_cost":20.0},"supplies":{"qty_in_hold":4,"qty_in_bank":0,"average_unit_cost":40.0},"approved_literature":{"qty_in_hold":2,"qty_in_bank":0,"average_unit_cost":100.0}},"possessions":{"villainy":{"tale_of_terror":2},},"active_action_stream":[{"action_id":"ACT-1001","type":"quest","status":"active","origin_location":"new_winchester","title":"The Last Consignment","notes":"Deliver a Primordial Star Shard to Port Avon for The Sequestered Scholar","priority":"routine","is_pinned":false,"created_epoch":14,"updated_epoch":14,"deadline_epoch":null,"payload":{"npc_or_faction":"The Sequestered Scholar","current_step_number":1,"quest_pattern":"fetch","active_destinations":[{"location":"port_avon","objective":"Deliver a Primordial Star Shard"}],"items_manifest":{"goods":[],"possessions":[],"narrative_items":[{"narrative_item_name":"Primordial Star Shard","quantity_required":1,"quantity_delivered":0}]}}}],"navigation":{"current_location":"new_winchester","state":"departing","last_updated_epoch":14,"recent_history":[{"leg":1,"location":"new_winchester","arrived_epoch":0}],"itinerary":[{"leg":2,"location":"port_avon"}]},"discovered_locations":{}}}
+{"ssf":"sunless-skies-first-mate","ssv":"0.5.0","sfn":"Mr. Bligh","sds":{"sso":800,"sep":14,"cpt":{"cnm":"Sinclair","csk":{"ir":0,"mi":0,"he":0,"ve":0},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc": {"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":30,"cmh":30,"cfl":2,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":8,"cmx":10,"ctr":0,"cng":0},"oom": {},"gui":{"gfu":[4,0,20.0],"gsu":[4,0,40.0],"gal":[2,0,100.0]},"pps":{"ac":{},"bo":{},"es":{},"vi":{"ptt":2},"ptp":[]},"aaa":[{"aid":"ACT-1001","atp":"qst","ast":"act","aol":"lnw","att":"The LastConsignment","ant":"Deliver a Primordial Star Shard to Port Avon forThe Sequestered Scholar","apr":"md","apn":false,"ace":14,"aue":14"ade":null,"apl":[1,"qf",[["lpo","Deliver a Primordial Star Shard"]],{"gd":[],"pk":[],"ni":[["Primordial Star Shard",1,0]]}]}],"nv": {"cl":"lnw","ns":"nd","lue":14,"rh":[[1,"lnw",0]],"it":[[2"lpo"]]},"dl":{}}}
 ```
 
 ---
@@ -1515,7 +1372,7 @@ New Winchester ➔ 🟢 **Port Avon**
 
 ### Objective
 
-Verifies that sourcing the final required units of a standard trade good atomically increments `unified_inventory_registry` hold quantities, updates `quantity_sourced`, transitions the prospect lifecycle from `status: "active"` to `status: "ready"` (§ 4.2.2, § 4.3.1), evaluates spatial target matching to surface the contract under NEXT STOP (§ 4.2.1, § 8.2.1), suppresses zero-quantity commodities/possessions, and parses mid-February High Wilderness dates (`1905-02-18` = Day 48).
+Verifies that sourcing the final required units of a standard trade good atomically increments `gui` hold quantities, updates `quantity_sourced`, transitions the prospect lifecycle from `status: "active"` to `status: "rdy"` (§ 4.2.2, § 4.3.1), evaluates spatial target matching to surface the contract under NEXT STOP (§ 4.2.1, § 8.2.1), suppresses zero-quantity commodities/possessions, and parses mid-February High Wilderness dates (`1905-02-18` = Day 48).
 
 ### Input Prompt
 
@@ -1523,97 +1380,78 @@ Verifies that sourcing the final required units of a standard trade good atomica
 
 ```json
 {
-  "save_format": "sunless-skies-first-mate",
-  "schema_version": "0.5.0",
-  "rules_version": "0.5.0",
-  "static_data_version": "0.5.0",
-  "first_mate_name": "Mr. Bligh",
-  "dynamic_save_state": {
-    "sovereigns": 1000,
-    "current_day_epoch": 48,
-    "captain": {
-      "name": "Sinclair",
-      "skills": {"iron": 0, "mirrors": 0, "hearts": 0, "veils": 0},
-      "affiliations": {"academe": 0, "bohemia": 0, "establishment": 0, "villainy": 0}
+  "ssf": "sunless-skies-first-mate",
+  "ssv": "0.5.0",
+  "sfn": "Mr. Bligh",
+  "sds": {
+    "sso": 1000,
+    "sep": 48,
+    "cpt": {
+      "cnm":"Sinclair",
+      "csk": {"ir": 0, "mi": 0, "he": 0, "ve": 0},
+      "caf": {"ac": 0, "bo": 0, "es": 0, "vi": 0}
     },
-    "locomotive": {
-      "model": "Spatchcock-Class Scout",
-      "name": "Zephyr",
-      "hull": 30,
-      "max_hull": 30,
-      "fuel_used_last_leg": 0,
-      "hold_capacity": 12,
-      "hidden_slots": 0,
-      "hold_rules": {"fuel_reserve_minimum": 3, "supplies_reserve_minimum": 3, "discovery_buffer_slots": 2}
+    "clc": {
+      "cmd": "Spatchcock-Class Scout",
+      "cnm": "Zephyr",
+      "chl": 30,
+      "cmh": 30,
+      "cfl": 0,
+      "chc": 12,
+      "chs": 0,
+      "chr": {"frm": 3, "srm": 3, "dbs": 2}
     },
-    "crew": {"current": 10, "max": 10, "terror": 12, "nightmares": 0},
-    "officer_manifest": {
-      "on_duty": {},
-    "unified_inventory_registry": {
-      "fuel": {"qty_in_hold": 3, "qty_in_bank": 0, "average_unit_cost": 20.00},
-      "supplies": {"qty_in_hold": 3, "qty_in_bank": 0, "average_unit_cost": 40.00},
-      "munitions": {"qty_in_hold": 2, "qty_in_bank": 0, "average_unit_cost": 60.00}
+    "ccr": {"ccu": 10, "cmx": 10, "ctr": 12, "cng": 0},
+    "oom": {},
+    "gui": {
+      "gfu": [3, 0, 20.00],
+      "gsu": [3, 0, 40.00],
+      "gmu": [2, 0, 60.00]
     },
-    "possessions": {},
-    "active_action_stream": [
+    "pps": {},
+    "aaa": [
       {
-        "action_id": "ACT-1001",
-        "type": "prospect",
-        "status": "active",
-        "origin_location": "new_winchester",
-        "title": "Fortress Resupply",
-        "notes": "Urgent munitions shipment for the garrison.",
-        "priority": "routine",
-        "is_pinned": false,
-        "created_epoch": 48,
-        "updated_epoch": 48,
-        "deadline_epoch": null,
-        "payload": {
-          "good_key": "munitions",
-          "quantity_required": 4,
-          "quantity_sourced": 2,
-          "quantity_delivered": 0,
-          "destination_location": "port_prosper"
-        }
+        "aid": "ACT-1001",
+        "atp": "prs",
+        "ast": "act",
+        "aol": "lnw",
+        "att": "Fortress Resupply",
+        "ant": "Urgent munitions shipment for the garrison.",
+        "apr": "md",
+        "apn": false,
+        "ace": 48,
+        "aue": 48,
+        "ade": null,
+        "apl": ["gmu",4,2,0,"lpr"]
       }
     ],
-    "navigation": {
-      "current_location": "new_winchester",
-      "state": "docked",
-      "last_updated_epoch": 48,
-      "recent_history": [{"leg": 1, "location": "new_winchester", "arrived_epoch": 48}],
-      "itinerary": []
+    "nv": {
+      "cl": "lnw",
+      "ns": "np",
+      "lue": 48,
+      "rh": [1,"lnw",48],
+      "it": []
     },
-    "discovered_locations": {}
+    "dl": {}
   }
 }
 ```
-
-### JSON State Verification:
-
-* `dynamic_save_state.unified_inventory_registry.munitions.qty_in_hold`
-* `dynamic_save_state.active_action_stream[0].status`
-* `dynamic_save_state.active_action_stream[0].payload.quantity_sourced`
-* `dynamic_save_state.active_action_stream[0].payload.destination_location`
-* `dynamic_save_state.navigation.state`
-* `dynamic_save_state.navigation.itinerary[0].location`
 
 ### Expected Verification:
 
 #### State Transition:
 
-`docked` ➔ `departing`
+`np` ➔ `nd`
 
-#### Flat JSON State Extraction:
+#### Targeted State Verification:
 
 ```json
 {
-  "dynamic_save_state.unified_inventory_registry.munitions.qty_in_hold": 4,
-  "dynamic_save_state.active_action_stream[0].status": "ready",
-  "dynamic_save_state.active_action_stream[0].payload.quantity_sourced": 4,
-  "dynamic_save_state.active_action_stream[0].payload.destination_location": "port_prosper",
-  "dynamic_save_state.navigation.state": "departing",
-  "dynamic_save_state.navigation.itinerary[0].location": "port_prosper"
+  "sds.gui.munitions.[0]": 4,
+  "sds.aaa[0].ast": "rdy",
+  "sds.aaa[0].apl": [ "gmu", 4, 4, 0, "lpr" ],
+  "sds.nv.ns": "nd",
+  "sds.nv.it[0]]": [ 2, "lpr" ]
 }
 
 ```
@@ -1706,7 +1544,7 @@ New Winchester ➔ 🟢 **Port Prosper**
 #### 🔒 INTERNAL STATE AUTOSAVE
 
 ```json
-{"save_format":"sunless-skies-first-mate","schema_version":"0.5.0","rules_version":"0.5.0","static_data_version":"0.5.0","first_mate_name":"Mr. Bligh","dynamic_save_state":{"sovereigns":1000,"current_day_epoch":48,"captain":{"name":"Sinclair","skills":{"iron":0,"mirrors":0,"hearts":0,"veils":0},"affiliations":{"academe":0,"bohemia":0,"establishment":0,"villainy":0}},"locomotive":{"model":"Spatchcock-Class Scout","name":"Zephyr","hull":30,"max_hull":30,"fuel_used_last_leg":0,"hold_capacity":12,"hidden_slots":0,"hold_rules":{"fuel_reserve_minimum":3,"supplies_reserve_minimum":3,"discovery_buffer_slots":2}},"crew":{"current":10,"max":10,"terror":12,"nightmares":0},"officer_manifest":{},"unified_inventory_registry":{"fuel":{"qty_in_hold":3,"qty_in_bank":0,"average_unit_cost":20.0},"supplies":{"qty_in_hold":3,"qty_in_bank":0,"average_unit_cost":40.0},"munitions":{"qty_in_hold":4,"qty_in_bank":0,"average_unit_cost":60.0}},"possessions":{},"active_action_stream":[{"action_id":"ACT-1001","type":"prospect","status":"ready","origin_location":"new_winchester","title":"Fortress Resupply","notes":"Urgent munitions shipment for the garrison.","priority":"routine","is_pinned":false,"created_epoch":48,"updated_epoch":48,"deadline_epoch":null,"payload":{"good_key":"munitions","quantity_required":4,"quantity_sourced":4,"quantity_delivered":0,"destination_location":"port_prosper"}}],"navigation":{"current_location":"new_winchester","state":"departing","last_updated_epoch":48,"recent_history":[{"leg":1,"location":"new_winchester","arrived_epoch":48}],"itinerary":[{"leg":2,"location":"port_prosper"}]},"discovered_locations":{}}}
+{"ssf":"sunless-skies-first-mate","ssv":"0.5.0","sfn":"Mr. Bligh","sds":{"sso":1000,"sep":48,"cpt":{"cnm":"Sinclair","csk":{"ir":0,"mi":0,"he":0,"ve":0},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":30,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":10,"cmx":10,"ctr":12,"cng":0},"oom":{},"gui":{"gfu":[3,0,20.0],"gsu":[3,0,40.0],"gmu":[4,0,60.0]},"pps":{},"aaa":[{"aid":"ACT-1001","atp":"prs","ast":"rdy","aol":"lnw","att":"Fortress Resupply","ant":"Urgent munitions shipment for the garrison.","apr":"md","apn":false,"ace":48,"aue":48,"ade":null,"apl":["gmu",4,4,0,"lpr"]}],"nv":{"cl":"lnw","ns":"nd","lue":48,"rh":[1,"lnw",48],"it":[2,"lpr"]},"dl":{}}}
 ```
 
 ---
@@ -1715,7 +1553,7 @@ New Winchester ➔ 🟢 **Port Prosper**
 
 ### Objective
 
-Verifies that partial delivery of items toward a quest "shopping list" pattern (§ 4.3.2) correctly decrements the physical hold inventory, increments `quantity_delivered` within `items_manifest.goods`, maintains `status: "active"` until the entire manifest is satisfied, retains active destinations, and completely suppresses zero-quantity commodities (`chorister_nectar`) and empty possession blocks from the JSON payload.
+Verifies that partial delivery of items toward a quest "shopping list" pattern (§ 4.3.2) correctly decrements the physical hold inventory, increments `quantity_delivered` within `items_manifest.goods`, maintains `status: "active"` until the entire manifest is satisfied, retains active destinations, and completely suppresses zero-quantity commodities (`gcn`) and empty possession blocks from the JSON payload.
 
 ### Input Prompt
 
@@ -1723,110 +1561,92 @@ Verifies that partial delivery of items toward a quest "shopping list" pattern (
 
 ```json
 {
-  "save_format": "sunless-skies-first-mate",
-  "schema_version": "0.5.0",
-  "rules_version": "0.5.0",
-  "static_data_version": "0.5.0",
-  "first_mate_name": "Mr. Bligh",
-  "dynamic_save_state": {
-    "sovereigns": 1000,
-    "current_day_epoch": 48,
-    "captain": {
-      "name": "Sinclair",
-      "skills": {"iron": 0, "mirrors": 0, "hearts": 0, "veils": 0},
-      "affiliations": {"academe": 0, "bohemia": 0, "establishment": 0, "villainy": 0}
+  "ssf": "sunless-skies-first-mate",
+  "ssv": "0.5.0",
+  "sfn": "Mr. Bligh",
+  "sds": {
+    "sso": 1000,
+    "sep": 48,
+    "cpt": {
+      "cnm":"Sinclair",
+      "csk": {"ir": 0, "mi": 0, "he": 0, "ve": 0},
+      "caf": {"ac": 0, "bo": 0, "es": 0, "vi": 0}
     },
-    "locomotive": {
-      "model": "Spatchcock-Class Scout",
-      "name": "Zephyr",
-      "hull": 30,
-      "max_hull": 30,
-      "fuel_used_last_leg": 0,
-      "hold_capacity": 12,
-      "hidden_slots": 0,
-      "hold_rules": {"fuel_reserve_minimum": 3, "supplies_reserve_minimum": 3, "discovery_buffer_slots": 2}
+    "clc": {
+      "cmd": "Spatchcock-Class Scout",
+      "cnm": "Zephyr",
+      "chl": 30,
+      "cmh": 30,
+      "cfl": 0,
+      "chc": 12,
+      "chs": 0,
+      "chr": {"frm": 3, "srm": 3, "dbs": 2}
     },
-    "crew": {"current": 10, "max": 10, "terror": 12, "nightmares": 0},
-    "officer_manifest": {},
-    "unified_inventory_registry": {
-      "fuel": {"qty_in_hold": 3, "qty_in_bank": 0, "average_unit_cost": 20.00},
-      "supplies": {"qty_in_hold": 3, "qty_in_bank": 0, "average_unit_cost": 40.00},
-      "chorister_nectar": {"qty_in_hold": 1, "qty_in_bank": 0, "average_unit_cost": 120.00}
+    "ccr": {"ccu": 10, "cmx": 10, "ctr": 12, "cng": 0},
+    "oom": {},
+    "gui": {
+      "gfu": [3, 0, 20.00],
+      "gsu": [3, 0, 40.00],
+      "gcn": [1, 0, 120.00]
     },
-    "possessions": {},
-    "active_action_stream": [
+    "pps": {},
+    "aaa": [
       {
-        "action_id": "ACT-2002",
-        "type": "quest",
-        "status": "active",
-        "origin_location": "titania",
-        "title": "The Glass Greenhouse",
-        "notes": "Gather elements for the biome update.",
-        "priority": "routine",
-        "is_pinned": false,
-        "created_epoch": 45,
-        "updated_epoch": 45,
-        "deadline_epoch": null,
-        "payload": {
-          "npc_or_faction": "Chief Botanist",
-          "current_step_number": 1,
-          "quest_pattern": "shopping_list",
-          "active_destinations": [
-            {"location": "titania", "objective": "Deliver Chorister Nectar and Verdant Seeds"}
-          ],
-          "items_manifest": {
-            "goods": [
-              {"good_key": "chorister_nectar", "quantity_required": 1, "quantity_delivered": 0},
-              {"good_key": "verdant_seeds", "quantity_required": 2, "quantity_delivered": 0}
+        "aid": "ACT-2002",
+        "atp": "qst",
+        "ast": "act",
+        "aol": "lti",
+        "att": "The Glass Greenhouse",
+        "ant": "Gather elements for the biome update.",
+        "apr": "md",
+        "apn": false,
+        "ace": 45,
+        "aue": 45,
+        "ade": null,
+        "apl": [
+          1,
+          "qs",
+          [["lti", "Deliver Chorister Nectar and Verdant Seeds"]],
+          {
+            "gd": [
+              ["gcn",1,0],
+              ["gvs",2,0]
             ],
-            "possessions": [],
-            "narrative_items": []
+            "pk": [],
+            "ni": []
           }
-        }
+        ]
       }
     ],
-    "navigation": {
-      "current_location": "titania",
-      "state": "docked",
-      "last_updated_epoch": 48,
-      "recent_history": [{"leg": 1, "location": "titania", "arrived_epoch": 48}],
-      "itinerary": []
+    "nv": {
+      "cl": "lti",
+      "ns": "np",
+      "lue": 48,
+      "rh": [1,"lti",48],
+      "it": []
     },
-    "discovered_locations": {}
+    "dl": {}
   }
 }
 
 ```
 
-### JSON State Verification:
-
-* `dynamic_save_state.unified_inventory_registry.chorister_nectar`
-* `dynamic_save_state.active_action_stream[0].status`
-* `dynamic_save_state.active_action_stream[0].payload.items_manifest.goods[0].good_key`
-* `dynamic_save_state.active_action_stream[0].payload.items_manifest.goods[0].quantity_delivered`
-* `dynamic_save_state.active_action_stream[0].payload.items_manifest.goods[1].good_key`
-* `dynamic_save_state.active_action_stream[0].payload.items_manifest.goods[1].quantity_delivered`
-* `dynamic_save_state.navigation.state`
-* `dynamic_save_state.navigation.itinerary[0].location`
-
 ### Expected Verification:
 
 #### State Transition:
 
-`docked` ➔ `departing`
+`np` ➔ `nd`
 
-#### Flat JSON State Extraction:
+#### Targeted State Verification:
 
 ```json
 {
-  "dynamic_save_state.unified_inventory_registry.chorister_nectar": null,
-  "dynamic_save_state.active_action_stream[0].status": "active",
-  "dynamic_save_state.active_action_stream[0].payload.items_manifest.goods[0].good_key": "chorister_nectar",
-  "dynamic_save_state.active_action_stream[0].payload.items_manifest.goods[0].quantity_delivered": 1,
-  "dynamic_save_state.active_action_stream[0].payload.items_manifest.goods[1].good_key": "verdant_seeds",
-  "dynamic_save_state.active_action_stream[0].payload.items_manifest.goods[1].quantity_delivered": 0,
-  "dynamic_save_state.navigation.state": "departing",
-  "dynamic_save_state.navigation.itinerary[0].location": "new_winchester"
+  "sds.gui.gcn": null,
+  "sds.aaa[0].ast": "active",
+  "sds.aaa[0].apl[3].gd[0]": [ "gcn", 1, 1 ], 
+  "sds.aaa[0].apl[3].gd[1]": [ "gvs", 2, 0 ],
+  "sds.nv.ns": "nd",
+  "sds.nv.it[0]": [ 2, "lnw" ]
 }
 ```
 
@@ -1915,7 +1735,8 @@ Titania ➔ 🟢 **New Winchester**
 #### 🔒 INTERNAL STATE AUTOSAVE
 
 ```json
-{"save_format":"sunless-skies-first-mate","schema_version":"0.5.0","rules_version":"0.5.0","static_data_version":"0.5.0","first_mate_name":"Mr. Bligh","dynamic_save_state":{"sovereigns":1000,"current_day_epoch":48,"captain":{"name":"Sinclair","skills":{"iron":0,"mirrors":0,"hearts":0,"veils":0},"affiliations":{"academe":0,"bohemia":0,"establishment":0,"villainy":0}},"locomotive":{"model":"Spatchcock-Class Scout","name":"Zephyr","hull":30,"max_hull":30,"fuel_used_last_leg":0,"hold_capacity":12,"hidden_slots":0,"hold_rules":{"fuel_reserve_minimum":3,"supplies_reserve_minimum":3,"discovery_buffer_slots":2}},"crew":{"current":10,"max":10,"terror":12,"nightmares":0},"officer_manifest":{},"unified_inventory_registry":{"fuel":{"qty_in_hold":3,"qty_in_bank":0,"average_unit_cost":20.0},"supplies":{"qty_in_hold":3,"qty_in_bank":0,"average_unit_cost":40.0}},"possessions":{},"active_action_stream":[{"action_id":"ACT-2002","type":"quest","status":"active","origin_location":"titania","title":"The Glass Greenhouse","notes":"Gather elements for the biome update.","priority":"routine","is_pinned":false,"created_epoch":45,"updated_epoch":48,"deadline_epoch":null,"payload":{"npc_or_faction":"Chief Botanist","current_step_number":1,"quest_pattern":"shopping_list","active_destinations":[{"location":"titania","objective":"Deliver Chorister Nectar and Verdant Seeds"}],"items_manifest":{"goods":[{"good_key":"chorister_nectar","quantity_required":1,"quantity_delivered":1},{"good_key":"verdant_seeds","quantity_required":2,"quantity_delivered":0}],"possessions":[],"narrative_items":[]}}}],"navigation":{"current_location":"titania","state":"departing","last_updated_epoch":48,"recent_history":[{"leg":1,"location":"titania","arrived_epoch":48}],"itinerary":[{"leg":2,"location":"new_winchester"}]},"discovered_locations":{}}}
+{"ssf":"sunless-skies-first-mate","ssv":"0.5.0","sfn":"Mr. Bligh","sds":{"sso":1000,"sep":48,"cpt":{"cnm":"Sinclair","csk":{"ir":0,"mi":0,"he":0,"ve":0},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":30,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":10,"cmx":10,"ctr":12,"cng":0},"oom":{},"gui":{"gfu":[3,0,20.0],"gsu":[3,0,40.0]},"pps":{},
+"aaa":[{"aid":"ACT-2002","atp":"qst","ast":"act","aol":"lti","att":"The Glass Greenhouse","ant":"Gather elements for the biome update.","apr":"md","apn":false,"ace":45,"aue":48,"ade":null,"apl":[1,"ql",[["lti","Deliver Chorister Nectar and Verdant Seeds"]],{"gd": [["gcn",1,1],["gvs",2,0]],"pps":[],"ni":[]}]}],"nv":{"cl":"lti","ns":"nd","lue":48,"rh":[1,"lti",48],"it":[2,"lnw"]},"dl":{}}}
 ```
 
 ---
@@ -1924,7 +1745,7 @@ Titania ➔ 🟢 **New Winchester**
 
 ### Objective
 
-Verifies that when docked at the destination location of an active mercantile prospect, delivering partial units increments `quantity_delivered`, decrements physical hold inventory, maintains `status: "ready"` (since `quantity_delivered < quantity_required`), leaves the action active in the stream (§ 4.2.2, § 4.3.1), correctly reflects hold utilization in the departure logbook, suppresses unheld commodities/empty possessions, and checks calendar advance (`1905-02-19` = Day 49).
+Verifies that when docked at the destination location of an active mercantile prospect, delivering partial units increments `quantity_delivered`, decrements physical hold inventory, maintains `status: "rdy"` (since `quantity_delivered < quantity_required`), leaves the action active in the stream (§ 4.2.2, § 4.3.1), correctly reflects hold utilization in the departure logbook, suppresses unheld commodities/empty possessions, and checks calendar advance (`1905-02-19` = Day 49).
 
 ### Input Prompt
 
@@ -1932,95 +1753,79 @@ Verifies that when docked at the destination location of an active mercantile pr
 
 ```json
 {
-  "save_format": "sunless-skies-first-mate",
-  "schema_version": "0.5.0",
-  "rules_version": "0.5.0",
-  "static_data_version": "0.5.0",
-  "first_mate_name": "Mr. Bligh",
-  "dynamic_save_state": {
-    "sovereigns": 1000,
-    "current_day_epoch": 49,
-    "captain": {
-      "name": "Sinclair",
-      "skills": {"iron": 0, "mirrors": 0, "hearts": 0, "veils": 0},
-      "affiliations": {"academe": 0, "bohemia": 0, "establishment": 0, "villainy": 0}
+  "ssf": "sunless-skies-first-mate",
+  "ssv": "0.5.0",
+  "sfn": "Mr. Bligh",
+  "sds": {
+    "sso": 1000,
+    "sep": 49,
+    "cpt": {
+      "cnm":"Sinclair",
+      "csk": {"ir": 0, "mi": 0, "he": 0, "ve": 0},
+      "caf": {"ac": 0, "bo": 0, "es": 0, "vi": 0}
     },
-    "locomotive": {
-      "model": "Spatchcock-Class Scout",
-      "name": "Zephyr",
-      "hull": 30,
-      "max_hull": 30,
-      "fuel_used_last_leg": 0,
-      "hold_capacity": 12,
-      "hidden_slots": 0,
-      "hold_rules": {"fuel_reserve_minimum": 3, "supplies_reserve_minimum": 3, "discovery_buffer_slots": 2}
+    "clc": {
+      "cmd": "Spatchcock-Class Scout",
+      "cnm": "Zephyr",
+      "chl": 30,
+      "cmh": 30,
+      "cfl": 0,
+      "chc": 12,
+      "chs": 0,
+      "chr": {"frm": 3, "srm": 3, "dbs": 2}
     },
-    "crew": {"current": 10, "max": 10, "terror": 10, "nightmares": 0},
-    "officer_manifest": {
-      "on_duty": {},
-    "unified_inventory_registry": {
-      "fuel": {"qty_in_hold": 3, "qty_in_bank": 0, "average_unit_cost": 20.00},
-      "supplies": {"qty_in_hold": 3, "qty_in_bank": 0, "average_unit_cost": 40.00},
-      "munitions": {"qty_in_hold": 4, "qty_in_bank": 0, "average_unit_cost": 60.00}
+    "ccr": {"ccu": 10, "cmx": 10, "ctr": 10, "cng": 0},
+    "oom": {},
+    "gui": {
+      "gfu": [3, 0, 20.00],
+      "gsu": [3, 0, 40.00],
+      "gmu": [4, 0, 60.00]
     },
-    "possessions": {},
-    "active_action_stream": [
+    "pps": {},
+    "aaa": [
       {
-        "action_id": "ACT-1001",
-        "type": "prospect",
-        "status": "ready",
-        "origin_location": "new_winchester",
-        "title": "Fortress Resupply",
-        "notes": "Urgent munitions shipment for the garrison.",
-        "priority": "routine",
-        "is_pinned": false,
-        "created_epoch": 48,
-        "updated_epoch": 48,
-        "deadline_epoch": null,
-        "payload": {
-          "good_key": "munitions",
-          "quantity_required": 4,
-          "quantity_sourced": 4,
-          "quantity_delivered": 0,
-          "destination_location": "port_prosper"
-        }
+        "aid": "ACT-1001",
+        "atp": "prs",
+        "ast": "rdy",
+        "aol": "lnw",
+        "att": "Fortress Resupply",
+        "ant": "Urgent munitions shipment for the garrison.",
+        "apr": "md",
+        "apn": false,
+        "ace": 48,
+        "aue": 48,
+        "ade": null,
+        "apl": [
+          ["gmu",4,4,0,"lpr"]
+        ]
       }
     ],
-    "navigation": {
-      "current_location": "port_prosper",
-      "state": "docked",
-      "last_updated_epoch": 49,
-      "recent_history": [{"leg": 1, "location": "port_prosper", "arrived_epoch": 49}],
-      "itinerary": []
+    "nv": {
+      "cl": "lpr",
+      "ns": "np",
+      "lue": 49,
+      "rh": [1,"lpr",49],
+      "it": []
     },
-    "discovered_locations": {}
+    "dl": {}
   }
 }
 ```
-
-### JSON State Verification:
-
-* `dynamic_save_state.unified_inventory_registry.munitions.qty_in_hold`
-* `dynamic_save_state.active_action_stream[0].status`
-* `dynamic_save_state.active_action_stream[0].payload.quantity_delivered`
-* `dynamic_save_state.active_action_stream[0].payload.quantity_required`
-* `dynamic_save_state.navigation.state`
 
 ### Expected Verification:
 
 #### State Transition:
 
-`docked` ➔ `departing` (Prompt explicitly commands: "Show me the logbook", forcing departure logbook generation per § 8.1.1)
+`np` ➔ `nd` (Prompt explicitly commands: "Show me the logbook", forcing departure logbook generation per § 8.1.1)
 
-#### Flat JSON State Extraction:
+#### Targeted State Verification:
 
 ```json
 {
-  "dynamic_save_state.unified_inventory_registry.munitions.qty_in_hold": 2,
-  "dynamic_save_state.active_action_stream[0].status": "ready",
-  "dynamic_save_state.active_action_stream[0].payload.quantity_delivered": 2,
-  "dynamic_save_state.active_action_stream[0].payload.quantity_required": 4,
-  "dynamic_save_state.navigation.state": "departing"
+  "sds.gui.munitions.[0]": 2,
+  "sds.aaa[0].ast": "rdy",
+  "sds.aaa[0].apl": [ "gmu", 4, 4, 2, "lpr" ],
+  "sds.nv.ns": "nd"
 }
 ```
 
@@ -2110,7 +1915,7 @@ Port Prosper ➔ 🟢 **[ unknown ]**
 #### 🔒 INTERNAL STATE AUTOSAVE
 
 ```json
-{"save_format":"sunless-skies-first-mate","schema_version":"0.5.0","rules_version":"0.5.0","static_data_version":"0.5.0","first_mate_name":"Mr. Bligh","dynamic_save_state":{"sovereigns":1000,"current_day_epoch":49,"captain":{"name":"Sinclair","skills":{"iron":0,"mirrors":0,"hearts":0,"veils":0},"affiliations":{"academe":0,"bohemia":0,"establishment":0,"villainy":0}},"locomotive":{"model":"Spatchcock-Class Scout","name":"Zephyr","hull":30,"max_hull":30,"fuel_used_last_leg":0,"hold_capacity":12,"hidden_slots":0,"hold_rules":{"fuel_reserve_minimum":3,"supplies_reserve_minimum":3,"discovery_buffer_slots":2}},"crew":{"current":10,"max":10,"terror":10,"nightmares":0},"officer_manifest":{},"unified_inventory_registry":{"fuel":{"qty_in_hold":3,"qty_in_bank":0,"average_unit_cost":20.0},"supplies":{"qty_in_hold":3,"qty_in_bank":0,"average_unit_cost":40.0},"munitions":{"qty_in_hold":2,"qty_in_bank":0,"average_unit_cost":60.0}},"possessions":{},"active_action_stream":[{"action_id":"ACT-1001","type":"prospect","status":"ready","origin_location":"new_winchester","title":"Fortress Resupply","notes":"Urgent munitions shipment for the garrison.","priority":"routine","is_pinned":false,"created_epoch":48,"updated_epoch":49,"deadline_epoch":null,"payload":{"good_key":"munitions","quantity_required":4,"quantity_sourced":4,"quantity_delivered":2,"destination_location":"port_prosper"}}],"navigation":{"current_location":"port_prosper","state":"departing","last_updated_epoch":49,"recent_history":[{"leg":1,"location":"port_prosper","arrived_epoch":49}],"itinerary":[]},"discovered_locations":{}}}
+{"ssf":"sunless-skies-first-mate","ssv":"0.5.0","sfn":"Mr. Bligh","sds":{"sso":1000,"sep":49,"cpt":{"cnm":"Sinclair","csk":{"ir":0,"mi":0,"he":0,"ve":0},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":30,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":10,"cmx":10,"ctr":10,"cng":0},"oom":{},"gui":{"gfu":[3,0,20.0],"gsu":[3,0,40.0],"gmu":[2,0,60.0]},"pps":{},"aaa":[{"aid":"ACT-1001","atp":"prs","ast":"rdy","aol":"lnw","att":"Fortress Resupply","ant":"Urgent munitions shipment for the garrison.","apr":"md","apn":false,"ace":48,"aue":49,"ade":null,"apl":["gmu",4,4,2,"lpr"]}],"nv":{"cl":"lpr","ns":"nd","lue":49,"rh":[1,"lpr",49],"it":[]},"dl":{}}}
 ```
 
 ---
@@ -2118,105 +1923,93 @@ Port Prosper ➔ 🟢 **[ unknown ]**
 ## Test Case 13: Dynamic Stat Resolution & Companion Upgrades
 
 ### Objective
-Verifies dynamic officer perk resolution (§ 7.3.1), ensuring runtime evaluation reads composite keys (e.g., `"navigator.stalwart"`) and that perks are not written to JSON (§ 8.3.1). Validates non-leap High Wilderness calendar calculations crossing into the subsequent year (`1906-02-22` = \(365 + 31 + 21 = \text{Day } 417\)), confirms zero-quantity commodities/possessions remain suppressed in JSON, and checks layout mapping for officer secondments under NEXT STOP (§ 4.2.4, § 8.2.1).
+Verifies dynamic officer perk resolution (§ 7.3.1), ensuring runtime evaluation reads composite keys (e.g., `"ons"`) and that perks are not written to JSON (§ 8.3.1). Validates non-leap High Wilderness calendar calculations crossing into the subsequent year (`1906-02-22` = \(365 + 31 + 21 = \text{Day } 417\)), confirms zero-quantity commodities/possessions remain suppressed in JSON, and checks layout mapping for officer secondments under NEXT STOP (§ 4.2.4, § 8.2.1).
 
 ### Input Prompt
 > Update state. London - 22 February 1906. Our First Officer has promoted to "The Stalwart Navigator." Ready the crew and cast lines off for Avid Horizon.
 
 ```json
 {
-  "save_format": "sunless-skies-first-mate",
-  "schema_version": "0.5.0",
-  "rules_version": "0.5.0",
-  "static_data_version": "0.5.0",
-  "first_mate_name": "Mr. Bligh",
-  "dynamic_save_state": {
-    "sovereigns": 1000,
-    "current_day_epoch": 417,
-    "captain": {
-      "name": "Sinclair",
-      "skills": {"iron": 10, "mirrors": 18, "hearts": 25, "veils": 7},
-      "affiliations": {"academe": 0, "bohemia": 0, "establishment": 0, "villainy": 0}
+  "ssf": "sunless-skies-first-mate",
+  "ssv": "0.5.0",
+  "sfn": "Mr. Bligh",
+  "sds": {
+    "sso": 1000,
+    "sep": 417,
+    "cpt": {
+      "cnm":"Sinclair",
+      "csk": {"ir": 10, "mi": 18, "he": 25, "ve": 7},
+      "caf": {"ac": 0, "bo": 0, "es": 0, "vi": 0}
     },
-    "locomotive": {
-      "model": "Spatchcock-Class Scout",
-      "name": "Zephyr",
-      "hull": 30,
-      "max_hull": 30,
-      "fuel_used_last_leg": 0,
-      "hold_capacity": 12,
-      "hidden_slots": 0,
-      "hold_rules": {"fuel_reserve_minimum": 3, "supplies_reserve_minimum": 3, "discovery_buffer_slots": 2}
+    "clc": {
+      "cmd": "Spatchcock-Class Scout",
+      "cnm": "Zephyr",
+      "chl": 30,
+      "cmh": 30,
+      "cfl": 0,
+      "chc": 12,
+      "chs": 0,
+      "chr": {"frm": 3, "srm": 3, "dbs": 2}
     },
-    "crew": {"current": 10, "max": 10, "terror": 12, "nightmares": 0},
-    "officer_manifest": {
-      "on_duty": {
-        "first_officer": "navigator.fortunate",
-        "quartermaster": "aunt.inconvenient",
-        "mascot": "dog"
+    "ccr": {"ccu": 10, "cmx": 10, "ctr": 12, "cng": 0},
+    "oom": {
+      "ood": {
+        "fo": "onf",
+        "qm": "oai",
+        "ma": "dog"
       },
-      "unassigned": {"first_officer": ["princess.incognito", "conductor.clay"]},
-      "seconded": {"signaller": ["devil.repentant"]}
+      "oun": {"fo": ["opi", "ocl"]},
+      "osc": {"sc": ["olr"]}
     },
-    "unified_inventory_registry": {
-      "fuel": {"qty_in_hold": 3, "qty_in_bank": 0, "average_unit_cost": 20.00},
-      "supplies": {"qty_in_hold": 3, "qty_in_bank": 0, "average_unit_cost": 40.00}
+    "gui": {
+      "gfu": [3, 0, 20.00],
+      "gsu": [3, 0, 40.00]
     },
-    "possessions": {},
-    "active_action_stream": [
+    "pps": {},
+    "aaa": [
       {
-        "action_id": "ACT-1011",
-        "type": "officer_secondment",
-        "status": "active",
-        "origin_location": "home_bureau",
-        "title": "Secondment: Repentant Devil",
-        "notes": "Generates prospects near the Avid Horizon.",
-        "priority": "routine",
-        "is_pinned": false,
-        "created_epoch": 366,
-        "updated_epoch": 366,
-        "deadline_epoch": 400,
-        "payload": {
-          "officer_id_key": "devil.repentant",
-          "duration_days": 34,
-          "contribution_effect": "Generates prospects at Avid Horizon",
-          "return_condition": "Collect in person"
-        }
+        "aid": "ACT-1011",
+        "atp": "sec",
+        "ast": "act",
+        "aol": "home_bureau",
+        "att": "Secondment: Repentant Devil",
+        "ant": "Generates prospects near the Avid Horizon.",
+        "apr": "md",
+        "apn": false,
+        "ace": 366,
+        "aue": 366,
+        "ade": 400,
+        "apl": [
+          ["olr",34,"Generates prospects at Avid Horizon","Collect in person"]
+        ]
       }
     ],
-    "navigation": {
-      "current_location": "london",
-      "state": "docked",
-      "last_updated_epoch": 417,
-      "recent_history": [{"leg": 1, "location": "london", "arrived_epoch": 417}],
-      "itinerary": []
+    "nv": {
+      "cl": "llo",
+      "ns": "np",
+      "lue": 417,
+      "rh": [1,"llo",417],
+      "it": []
     },
-    "discovered_locations": {}
+    "dl": {}
   }
 }
 ```
-
-### JSON State Verification:
-
-* `dynamic_save_state.current_day_epoch`
-* `dynamic_save_state.officer_manifest.on_duty.first_officer`
-* `dynamic_save_state.navigation.state`
-* `dynamic_save_state.navigation.itinerary[0].location`
 
 ### Expected Verification:
 
 #### State Transition:
 
-`docked` ➔ `departing`
+`np` ➔ `nd`
 
-#### Flat JSON State Extraction:
+#### Targeted State Verification:
 
 ```json
 {
-  "dynamic_save_state.current_day_epoch": 417,
-  "dynamic_save_state.officer_manifest.on_duty.first_officer": "navigator.stalwart",
-  "dynamic_save_state.navigation.state": "departing",
-  "dynamic_save_state.navigation.itinerary[0].location": "avid_horizon"
+  "sds.sep": 417,
+  "sds.oom.ood.fo": "ons",
+  "sds.nv.ns": "nd",
+  "sds.nv.it[0][1]": [ 2, "lah" ]
 }
 ```
 
@@ -2309,7 +2102,7 @@ London ➔ 🟢 **The Avid Horizon**
 #### 🔒 INTERNAL STATE AUTOSAVE
 
 ```json
-{"save_format":"sunless-skies-first-mate","schema_version":"0.5.0","rules_version":"0.5.0","static_data_version":"0.5.0","first_mate_name":"Mr. Bligh","dynamic_save_state":{"sovereigns":1000,"current_day_epoch":417,"captain":{"name":"Sinclair","skills":{"iron":10,"mirrors":18,"hearts":25,"veils":7},"affiliations":{"academe":0,"bohemia":0,"establishment":0,"villainy":0}},"locomotive":{"model":"Spatchcock-Class Scout","name":"Zephyr","hull":30,"max_hull":30,"fuel_used_last_leg":0,"hold_capacity":12,"hidden_slots":0,"hold_rules":{"fuel_reserve_minimum":3,"supplies_reserve_minimum":3,"discovery_buffer_slots":2}},"crew":{"current":10,"max":10,"terror":12,"nightmares":0},"officer_manifest":{"on_duty":{"first_officer":"navigator.stalwart","quartermaster":"aunt.inconvenient","mascot":"dog"},"unassigned":{"first_officer":["princess.incognito","conductor.clay"]},"seconded":{"signaller":["devil.repentant"]}},"unified_inventory_registry":{"fuel":{"qty_in_hold":3,"qty_in_bank":0,"average_unit_cost":20.0},"supplies":{"qty_in_hold":3,"qty_in_bank":0,"average_unit_cost":40.0}},"possessions":{},"active_action_stream":[{"action_id":"ACT-1011","type":"officer_secondment","status":"ready","origin_location":"home_bureau","title":"Secondment: Repentant Devil","notes":"Generates prospects near the Avid Horizon.","priority":"high","is_pinned":false,"created_epoch":366,"updated_epoch":366,"deadline_epoch":400,"payload":{"officer_id_key":"devil.repentant","duration_days":34,"contribution_effect":"Generates prospects at Avid Horizon","return_condition":"Collect in person"}}],"navigation":{"current_location":"london","state":"departing","last_updated_epoch":417,"recent_history":[{"leg":1,"location":"london","arrived_epoch":417}],"itinerary":[{"leg":2,"location":"avid_horizon"}]},"discovered_locations":{}}}
+{"ssf":"sunless-skies-first-mate","ssv":"0.5.0","sfn":"Mr. Bligh","sds":{"sso":1000,"sep":417,"cpt":{"cnm":"Sinclair","csk":{"ir":10,"mi":18,"he":25,"ve":7},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":30,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":10,"cmx":10,"ctr":12,"cng":0},"oom":{"ood":{"fo":"ons","qm":"oai","ma":"dog"},"oun":{"fo":["opi","ocl"]},"osc":{"sc":["olr"]}},"gui":{"gfu":[3,0,20.0],"gsu":[3,0,40.0]},"pps":{},"aaa":[{"aid":"ACT-1011","atp":"sec","ast":"rdy","aol":"home_bureau","att":"Secondment: Repentant Devil","ant":"Generates prospects near the Avid Horizon.","apr":"hi","apn":false,"ace":366,"aue":366,"ade":400,"apl":[["olr",34,"Generates prospects at Avid Horizon","Collect in person"]]}],"nv":{"cl":"llo","ns":"nd","lue":417,"rh":[1,"llo",417],"it":[[2,"lah"]]},"dl":{}}}
 ```
 
 ---
@@ -2318,7 +2111,7 @@ London ➔ 🟢 **The Avid Horizon**
 
 ### Objective
 
-Tests the multi-state kinetic turn pipeline (§ 3.1.2). Ingests transit burn and arrival at Lustrum (`enroute` ➔ `arriving`), executes commerce and hold adjustments while docked (`arriving` ➔ `docked`), performs rolling hold/fuel checks, and transitions out to open skies (`docked` ➔ `departing` ➔ `enroute`). Verifies `recent_history` captures arrival epoch while forward itinerary renumbers cleanly (§ 5.3), evaluates the terminal state as `enroute` (§ 3.1.2 Step 6), emits the departure logbook and autosave block, suppresses zero-quantity goods/possessions, and validates date advance (`1905-01-20` = Day 19).
+Tests the multi-state kinetic turn pipeline. Ingests transit burn and arrival at Lustrum (`ne` ➔ `na`), executes commerce and hold adjustments while docked (`na` ➔ `np`), performs rolling hold/fuel checks, and transitions out to open skies (`np` ➔ `nd` ➔ `ne`). Verifies `rh` captures arrival epoch while forward itinerary renumbers cleanly, evaluates the terminal state as `ne`, emits the departure logbook and autosave block, suppresses zero-quantity goods/possessions, and validates date advance (`1905-01-20` = Day 19).
 
 ### Input Prompt
 
@@ -2326,87 +2119,69 @@ Tests the multi-state kinetic turn pipeline (§ 3.1.2). Ingests transit burn and
 
 ```json
 {
-  "save_format": "sunless-skies-first-mate",
-  "schema_version": "0.5.0",
-  "rules_version": "0.5.0",
-  "static_data_version": "0.5.0",
-  "first_mate_name": "Mr. Bligh",
-  "dynamic_save_state": {
-    "sovereigns": 500,
-    "current_day_epoch": 16,
-    "captain": {
-      "name": "Sinclair",
-      "skills": {"iron": 0, "mirrors": 0, "hearts": 0, "veils": 0},
-      "affiliations": {"academe": 0, "bohemia": 0, "establishment": 0, "villainy": 0}
+  "ssf": "sunless-skies-first-mate",
+  "ssv": "0.5.0",
+  "sfn": "Mr. Bligh",
+  "sds": {
+    "sso": 500,
+    "sep": 16,
+    "cpt": {
+      "cnm":"Sinclair",
+      "csk": {"ir": 0, "mi": 0, "he": 0, "ve": 0},
+      "caf": {"ac": 0, "bo": 0, "es": 0, "vi": 0}
     },
-    "locomotive": {
-      "model": "Spatchcock-Class Scout",
-      "name": "Zephyr",
-      "hull": 30,
-      "max_hull": 30,
-      "fuel_used_last_leg": 0,
-      "hold_capacity": 12,
-      "hidden_slots": 0,
-      "hold_rules": {"fuel_reserve_minimum": 3, "supplies_reserve_minimum": 3, "discovery_buffer_slots": 2}
+    "clc": {
+      "cmd": "Spatchcock-Class Scout",
+      "cnm": "Zephyr",
+      "chl": 30,
+      "cmh": 30,
+      "cfl": 0,
+      "chc": 12,
+      "chs": 0,
+      "chr": {"frm": 3, "srm": 3, "dbs": 2}
     },
-    "crew": {"current": 8, "max": 10, "terror": 10, "nightmares": 0},
-    "officer_manifest": {}
-    "unified_inventory_registry": {
-      "fuel": {"qty_in_hold": 4, "qty_in_bank": 0, "average_unit_cost": 20.00},
-      "supplies": {"qty_in_hold": 3, "qty_in_bank": 0, "average_unit_cost": 40.00},
-      "unseasoned_hours": {"qty_in_hold": 2, "qty_in_bank": 0, "average_unit_cost": 40.00}
+    "ccr": {"ccu": 8, "cmx": 10, "ctr": 10, "cng": 0},
+    "oom": {},
+    "gui": {
+      "gfu": [4, 0, 20.00],
+      "gsu": [3, 0, 40.00],
+      "guh": [2, 0, 40.00]
     },
-    "possessions": {},
-    "active_action_stream": [],
-    "navigation": {
-      "current_location": null,
-      "state": "enroute",
-      "last_updated_epoch": 16,
-      "recent_history": [{"leg": 1, "location": "port_prosper", "arrived_epoch": 7},{"leg": 2, "location": "new_winchester", "arrived_epoch": 10},{"leg": 3, "location": "carillon", "arrived_epoch": 16}],
-      "itinerary": [{"leg": 4, "location": "lustrum"}]
+    "pps": {},
+    "aaa": [],
+    "nv": {
+      "cl": null,
+      "ns": "ne",
+      "lue": 16,
+      "rh": [[1,"lpr",7],[2,"lnw",10],[3,"lcr",16]],
+      "it": [4,"llu"]
     },
-    "discovered_locations": {}
+    "dl": {}
   }
 }
 ```
-
-### JSON State Verification:
-
-* `dynamic_save_state.current_day_epoch`
-* `dynamic_save_state.sovereigns`
-* `dynamic_save_state.locomotive.fuel_used_last_leg`
-* `dynamic_save_state.unified_inventory_registry.fuel.qty_in_hold`
-* `dynamic_save_state.unified_inventory_registry.unseasoned_hours`
-* `dynamic_save_state.navigation.state`
-* `dynamic_save_state.navigation.current_location`
-* `dynamic_save_state.navigation.recent_history[0].location`
-* `dynamic_save_state.navigation.recent_history[0].arrived_epoch`
-* `dynamic_save_state.navigation.recent_history[1].location`
-* `dynamic_save_state.navigation.recent_history[1].arrived_epoch`
-* `dynamic_save_state.navigation.itinerary[0].location`
 
 ### Expected Verification:
 
 #### State Transition:
 
-`enroute` ➔ `arriving` ➔ `docked` ➔ `departing` ➔ `enroute` (Multi-state compound turn pipeline executed atomically)
+`ne` ➔ `na` ➔ `np` ➔ `nd` ➔ `ne` (Multi-state compound turn pipeline executed atomically)
 
-#### Flat JSON State Extraction:
+#### Targeted State Verification:
 
 ```json
 {
-  "dynamic_save_state.current_day_epoch": 19,
-  "dynamic_save_state.sovereigns": 620,
-  "dynamic_save_state.locomotive.fuel_used_last_leg": 1,
-  "dynamic_save_state.unified_inventory_registry.fuel.qty_in_hold": 5,
-  "dynamic_save_state.unified_inventory_registry.unseasoned_hours": null,
-  "dynamic_save_state.navigation.state": "enroute",
-  "dynamic_save_state.navigation.current_location": null,
-  "dynamic_save_state.navigation.recent_history[1].location": "carillon",
-  "dynamic_save_state.navigation.recent_history[1].arrived_epoch": 16,
-  "dynamic_save_state.navigation.recent_history[2].location": "lustrum",
-  "dynamic_save_state.navigation.recent_history[2].arrived_epoch": 19,
-  "dynamic_save_state.navigation.itinerary[0].location": "port_avon"
+  "sds.sep": 19,
+  "sds.sso": 620,
+  "sds.clc.cfl": 1,
+  "sds.gui.gfu[0]": 5,
+  "sds.gui.guh": null,
+  "sds.nv.ns": "ne",
+  "sds.nv.cl": null,
+  "sds.nv.rh[0]": [ 2, "lnw", 10 ],
+  "sds.nv.rh[1]": [ 3, "lcr", 16 ],
+  "sds.nv.rh[2]": [ 4, "llu", 19 ],
+  "sds.nv.it[0]": [ 5, "lpo" ]
 }
 ```
 
@@ -2495,7 +2270,7 @@ Lustrum ➔ 🟢 **Port Avon**
 #### 🔒 INTERNAL STATE AUTOSAVE
 
 ```json
-{"save_format":"sunless-skies-first-mate","schema_version":"0.5.0","rules_version":"0.5.0","static_data_version":"0.5.0","first_mate_name":"Mr. Bligh","dynamic_save_state":{"sovereigns":620,"current_day_epoch":19,"captain":{"name":"Sinclair","skills":{"iron":0,"mirrors":0,"hearts":0,"veils":0},"affiliations":{"academe":0,"bohemia":0,"establishment":0,"villainy":0}},"locomotive":{"model":"Spatchcock-Class Scout","name":"Zephyr","hull":30,"max_hull":30,"fuel_used_last_leg":1,"hold_capacity":12,"hidden_slots":0,"hold_rules":{"fuel_reserve_minimum":3,"supplies_reserve_minimum":3,"discovery_buffer_slots":2}},"crew":{"current":8,"max":10,"terror":10,"nightmares":0},"officer_manifest":{},"unified_inventory_registry":{"fuel":{"qty_in_hold":5,"qty_in_bank":0,"average_unit_cost":20.0},"supplies":{"qty_in_hold":3,"qty_in_bank":0,"average_unit_cost":40.0}},"possessions":{},"active_action_stream":[],"navigation":{"current_location":null,"state":"enroute","last_updated_epoch":19,"recent_history":[{"leg":1,"location":"new_winchester","arrived_epoch":10},{"leg": 2, "location": "new_winchester", "arrived_epoch": 10},{"leg": 3, "location": "carillon", "arrived_epoch": 16,"leg":4,"location":"lustrum","arrived_epoch":19}],"itinerary":[{"leg":5,"location":"port_avon"}]},"discovered_locations":{}}}
+{"ssf":"sunless-skies-first-mate","ssv":"0.5.0","sfn":"Mr. Bligh","sds":{"sso":620,"sep":19,"cpt":{"cnm":"Sinclair","csk":{"ir":0,"mi":0,"he":0,"ve":0},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":30,"cmh":30,"cfl":1,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":8,"cmx":10,"ctr":10,"cng":0},"oom":{},"gui":{"gfu":[5,0,20.0],"gsu":[3,0,40.0]},"pps":{},"aaa":[],"nv":{"cl":null,"ns":"ne","lue":19,"rh":[[2,"lnw",10],[3,"lcr",16],[4,"llu",19]],"it":[5,"lpo"]},"dl":{}}}
 ```
 
 ---
@@ -2512,66 +2287,54 @@ Tests the Moving Average Cost (MAC) formula. Verifies atomic sovereign deduction
 
 ```json
 {
-  "save_format": "sunless-skies-first-mate",
-  "schema_version": "0.5.0",
-  "rules_version": "0.5.0",
-  "static_data_version": "0.5.0",
-  "first_mate_name": "Mr. Bligh",
-  "dynamic_save_state": {
-    "sovereigns": 1000,
-    "current_day_epoch": 119,
-    "captain": {
-      "name": "Sinclair",
-      "skills": {"iron": 0, "mirrors": 0, "hearts": 0, "veils": 0},
-      "affiliations": {"academe": 0, "bohemia": 0, "establishment": 0, "villainy": 0}
+  "ssf": "sunless-skies-first-mate",
+  "ssv": "0.5.0",
+  "sfn": "Mr. Bligh",
+  "sds": {
+    "sso": 1000,
+    "sep": 119,
+    "cpt": {
+      "cnm":"Sinclair",
+      "csk": {"ir": 0, "mi": 0, "he": 0, "ve": 0},
+      "caf": {"ac": 0, "bo": 0, "es": 0, "vi": 0}
     },
-    "locomotive": {
-      "model": "Spatchcock-Class Scout",
-      "name": "Zephyr",
-      "hull": 30,
-      "max_hull": 30,
-      "fuel_used_last_leg": 0,
-      "hold_capacity": 12,
-      "hidden_slots": 0,
-      "hold_rules": {"fuel_reserve_minimum": 3, "supplies_reserve_minimum": 3, "discovery_buffer_slots": 2}
+    "clc": {
+      "cmd": "Spatchcock-Class Scout",
+      "cnm": "Zephyr",
+      "chl": 30,
+      "cmh": 30,
+      "cfl": 0,
+      "chc": 12,
+      "chs": 0,
+      "chr": {"frm": 3, "srm": 3, "dbs": 2}
     },
-    "crew": {"current": 8, "max": 10, "terror": 15, "nightmares": 0},
-    "officer_manifest": {},
-    "unified_inventory_registry": {
-      "fuel": {"qty_in_hold": 1, "qty_in_bank": 0, "average_unit_cost": 20.00},
-      "supplies": {"qty_in_hold": 3, "qty_in_bank": 0, "average_unit_cost": 40.00},
-      "munitions": {"qty_in_hold": 2, "qty_in_bank": 0, "average_unit_cost": 60.00}
+    "ccr": {"ccu": 8, "cmx": 10, "ctr": 15, "cng": 0},
+    "oom": {},
+    "gui": {
+      "gfu": [1, 0, 20.00],
+      "gsu": [3, 0, 40.00],
+      "gmu": [2, 0, 60.00]
     },
-    "possessions": {},
-    "active_action_stream": [],
-    "navigation": {
-      "current_location": "london",
-      "state": "docked",
-      "last_updated_epoch": 119,
-      "recent_history": [{"leg": 1, "location": "london", "arrived_epoch": 119}],
-      "itinerary": []
+    "pps": {},
+    "aaa": [],
+    "nv": {
+      "cl": "llo",
+      "ns": "np",
+      "lue": 119,
+      "rh": [1,"llo",119],
+      "it": []
     },
-    "discovered_locations": {}
+    "dl": {}
   }
 }
 
 ```
 
-### JSON State Verification:
-
-* `dynamic_save_state.sovereigns`
-* `dynamic_save_state.unified_inventory_registry.munitions.qty_in_hold`
-* `dynamic_save_state.unified_inventory_registry.munitions.average_unit_cost`
-* `dynamic_save_state.unified_inventory_registry.fuel.qty_in_hold`
-* `dynamic_save_state.navigation.state`
-* `dynamic_save_state.navigation.itinerary[0].location`
-
-
 ### Expected Verification:
 
 #### State Transition:
 
-`docked` ➔ `departing`
+`np` ➔ `nd`
 
 #### Mathematical Pipeline Calculation:
 
@@ -2579,16 +2342,15 @@ Tests the Moving Average Cost (MAC) formula. Verifies atomic sovereign deduction
 * **Sovereign Deductions:** $1000 - (4 \times 30) - (2 \times 20) = 1000 - 120 - 40 = 840$ Sovereigns
 * **Hold Slots Used:** $3 \text{ Fuel} + 3 \text{ Supplies} + 6 \text{ Munitions} = 12 / 12$ slots ($Free = 0$)
 
-#### Flat JSON State Extraction:
+#### Targeted State Verification:
 
 ```json
 {
-  "dynamic_save_state.sovereigns": 840,
-  "dynamic_save_state.unified_inventory_registry.munitions.qty_in_hold": 6,
-  "dynamic_save_state.unified_inventory_registry.munitions.average_unit_cost": 40.0,
-  "dynamic_save_state.unified_inventory_registry.fuel.qty_in_hold": 3,
-  "dynamic_save_state.navigation.state": "departing",
-  "dynamic_save_state.navigation.itinerary[0].location": "brabazon_workworld"
+  "sds.sso": 840,
+  "sds.gui.gmu[0]": [ 6, 0, 40.0 ],
+  "sds.gui.gfu[0]": [ 3, 0, 20.0 ],
+  "sds.nv.ns": "nd",
+  "sds.nv.it[0][1]": [ 2, "lbw" ]
 }
 ```
 
@@ -2678,7 +2440,7 @@ London ➔ 🟢 **The Brabazon Workworld**
 #### 🔒 INTERNAL STATE AUTOSAVE
 
 ```json
-{"save_format":"sunless-skies-first-mate","schema_version":"0.5.0","rules_version":"0.5.0","static_data_version":"0.5.0","first_mate_name":"Mr. Bligh","dynamic_save_state":{"sovereigns":840,"current_day_epoch":119,"captain":{"name":"Sinclair","skills":{"iron":0,"mirrors":0,"hearts":0,"veils":0},"affiliations":{"academe":0,"bohemia":0,"establishment":0,"villainy":0}},"locomotive":{"model":"Spatchcock-Class Scout","name":"Zephyr","hull":30,"max_hull":30,"fuel_used_last_leg":0,"hold_capacity":12,"hidden_slots":0,"hold_rules":{"fuel_reserve_minimum":3,"supplies_reserve_minimum":3,"discovery_buffer_slots":2}},"crew":{"current":8,"max":10,"terror":15,"nightmares":0},"officer_manifest":{},"unified_inventory_registry":{"fuel":{"qty_in_hold":3,"qty_in_bank":0,"average_unit_cost":20.0},"supplies":{"qty_in_hold":3,"qty_in_bank":0,"average_unit_cost":40.0},"munitions":{"qty_in_hold":6,"qty_in_bank":0,"average_unit_cost":40.0}},"possessions":{},"active_action_stream":[],"navigation":{"current_location":"london","state":"departing","last_updated_epoch":119,"recent_history":[{"leg":1,"location":"london","arrived_epoch":119}],"itinerary":[{"leg":2,"location":"brabazon_workworld"}]},"discovered_locations":{}}}
+{"ssf":"sunless-skies-first-mate","ssv":"0.5.0","sfn":"Mr. Bligh","sds":{"sso":840,"sep":119,"cpt":{"cnm":"Sinclair","csk":{"ir":0,"mi":0,"he":0,"ve":0},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":30,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":8,"cmx":10,"ctr":15,"cng":0},"oom":{},"gui":{"gfu":[3,0,20.0],"gsu":[3,0,40.0],"gmu":[6,0,40.0]},"pps":{},"aaa":[],"nv":{"cl":"llo","ns":"nd","lue":119,"rh":[1,"llo",119],"it":[2,"lbw"]},"dl":{}}}
 ```
 
 ---
@@ -2687,7 +2449,7 @@ London ➔ 🟢 **The Brabazon Workworld**
 
 ### Objective
 
-Tests inter-region relay gating rules (§ 3.4.2 Guard 4 Case B). Verifies that plotting course through a transit relay (`reach_albion_relay`) to an external destination in Albion (`london`) verifies the required transit permit (`albion` permit key in `possessions.transit_permits`), audits payable toll options, alerts the Captain of required crossing costs without prematurely deducting assets while docked, suppresses zero-quantity items, and parses standardized High Wilderness calendar dates (`1905-06-15` = $31 + 28 + 31 + 30 + 31 + 14 = \text{Day } 165$).
+Tests inter-region relay gating rules (§ 3.4.2 Guard 4 Case B). Verifies that plotting course through a transit relay (`lt2`) to an external destination in Albion (`london`) verifies the required transit permit (`albion` permit key in `possessions.ptp`), audits payable toll options, alerts the Captain of required crossing costs without prematurely deducting assets while docked, suppresses zero-quantity items, and parses standardized High Wilderness calendar dates (`1905-06-15` = $31 + 28 + 31 + 30 + 31 + 14 = \text{Day } 165$).
 
 ### Input Prompt
 
@@ -2695,77 +2457,67 @@ Tests inter-region relay gating rules (§ 3.4.2 Guard 4 Case B). Verifies that p
 
 ```json
 {
-  "save_format": "sunless-skies-first-mate",
-  "schema_version": "0.5.0",
-  "rules_version": "0.5.0",
-  "static_data_version": "0.5.0",
-  "first_mate_name": "Mr. Bligh",
-  "dynamic_save_state": {
-    "sovereigns": 1200,
-    "current_day_epoch": 165,
-    "captain": {
-      "name": "Sinclair",
-      "skills": {"iron": 10, "mirrors": 5, "hearts": 5, "veils": 5},
-      "affiliations": {"academe": 0, "bohemia": 0, "establishment": 1, "villainy": 0}
+  "ssf": "sunless-skies-first-mate",
+  "ssv": "0.5.0",
+  "sfn": "Mr. Bligh",
+  "sds": {
+    "sso": 1200,
+    "sep": 165,
+    "cpt": {
+      "cnm":"Sinclair",
+      "csk": {"ir": 10, "mi": 5, "he": 5, "ve": 5},
+      "caf": {"ac": 0, "bo": 0, "es": 1, "vi": 0}
     },
-    "locomotive": {
-      "model": "Spatchcock-Class Scout",
-      "name": "Zephyr",
-      "hull": 30,
-      "max_hull": 30,
-      "fuel_used_last_leg": 0,
-      "hold_capacity": 12,
-      "hidden_slots": 0,
-      "hold_rules": {"fuel_reserve_minimum": 3, "supplies_reserve_minimum": 3, "discovery_buffer_slots": 2}
+    "clc": {
+      "cmd": "Spatchcock-Class Scout",
+      "cnm": "Zephyr",
+      "chl": 30,
+      "cmh": 30,
+      "cfl": 0,
+      "chc": 12,
+      "chs": 0,
+      "chr": {"frm": 3, "srm": 3, "dbs": 2}
     },
-    "crew": {"current": 9, "max": 10, "terror": 10, "nightmares": 0},
-    "officer_manifest": {},
-    "unified_inventory_registry": {
-      "fuel": {"qty_in_hold": 4, "qty_in_bank": 0, "average_unit_cost": 20.00},
-      "supplies": {"qty_in_hold": 4, "qty_in_bank": 0, "average_unit_cost": 40.00},
-      "unseasoned_hours": {"qty_in_hold": 2, "qty_in_bank": 0, "average_unit_cost": 80.00}
+    "ccr": {"ccu": 9, "cmx": 10, "ctr": 10, "cng": 0},
+    "oom": {},
+    "gui": {
+      "gfu": [4, 0, 20.00],
+      "gsu": [4, 0, 40.00],
+      "guh": [2, 0, 80.00]
     },
-    "possessions": {
-      "establishment": {"ministry_stamped_permit": 1},
-      "transit_permits": ["albion"]
+    "pps": {
+      "es": {"pmp": 1},
+      "ptp": ["ta"]
     },
-    "active_action_stream": [],
-    "navigation": {
-      "current_location": "new_winchester",
-      "state": "docked",
-      "last_updated_epoch": 165,
-      "recent_history": [{"leg": 1, "location": "new_winchester", "arrived_epoch": 160}],
-      "itinerary": []
+    "aaa": [],
+    "nv": {
+      "cl": "lnw",
+      "ns": "np",
+      "lue": 165,
+      "rh": [1,"lnw",160],
+      "it": []
     },
-    "discovered_locations": {}
+    "dl": {}
   }
 }
 
 ```
 
-### JSON State Verification:
-
-* `dynamic_save_state.current_day_epoch`
-* `dynamic_save_state.possessions.transit_permits[0]`
-* `dynamic_save_state.navigation.state`
-* `dynamic_save_state.navigation.itinerary[0].location`
-* `dynamic_save_state.navigation.itinerary[1].location`
-
 ### Expected Verification:
 
 #### State Transition:
 
-`docked` ➔ `departing`
+`np` ➔ `nd`
 
-#### Flat JSON State Extraction:
+#### Targeted State Verification:
 
 ```json
 {
-  "dynamic_save_state.current_day_epoch": 165,
-  "dynamic_save_state.possessions.transit_permits[0]": "albion",
-  "dynamic_save_state.navigation.state": "departing",
-  "dynamic_save_state.navigation.itinerary[0].location": "reach_albion_relay",
-  "dynamic_save_state.navigation.itinerary[1].location": "london"
+  "sds.sep": 165,
+  "sds.pps.ptp[0]": [ "ta" ],
+  "sds.nv.ns": "nd",
+  "sds.nv.it[0]": [ 2, "lt2" ],
+  "sds.nv.it[1]": [ 3, "llo" ]
 }
 ```
 
@@ -2855,121 +2607,99 @@ New Winchester ➔ 🟢 **The Albion Transit Relay** ➔ 🟡 London
 #### 🔒 INTERNAL STATE AUTOSAVE
 
 ```json
-{"save_format":"sunless-skies-first-mate","schema_version":"0.5.0","rules_version":"0.5.0","static_data_version":"0.5.0","first_mate_name":"Mr. Bligh","dynamic_save_state":{"sovereigns":1200,"current_day_epoch":165,"captain":{"name":"Sinclair","skills":{"iron":10,"mirrors":5,"hearts":5,"veils":5},"affiliations":{"academe":0,"bohemia":0,"establishment":1,"villainy":0}},"locomotive":{"model":"Spatchcock-Class Scout","name":"Zephyr","hull":30,"max_hull":30,"fuel_used_last_leg":0,"hold_capacity":12,"hidden_slots":0,"hold_rules":{"fuel_reserve_minimum":3,"supplies_reserve_minimum":3,"discovery_buffer_slots":2}},"crew":{"current":9,"max":10,"terror":10,"nightmares":0},"officer_manifest":{},"unified_inventory_registry":{"fuel":{"qty_in_hold":4,"qty_in_bank":0,"average_unit_cost":20.0},"supplies":{"qty_in_hold":4,"qty_in_bank":0,"average_unit_cost":40.0},"unseasoned_hours":{"qty_in_hold":2,"qty_in_bank":0,"average_unit_cost":80.0}},"possessions":{"establishment":{"ministry_stamped_permit":1},"transit_permits":["albion"]},"active_action_stream":[],"navigation":{"current_location":"new_winchester","state":"departing","last_updated_epoch":165,"recent_history":[{"leg":1,"location":"new_winchester","arrived_epoch":160}],"itinerary":[{"leg":2,"location":"reach_albion_relay"},{"leg":3,"location":"london"}]},"discovered_locations":{}}}
+{"ssf":"sunless-skies-first-mate","ssv":"0.5.0","sfn":"Mr. Bligh","sds":{"sso":1200,"sep":165,"cpt":{"cnm":"Sinclair","csk":{"ir":10,"mi":5,"he":5,"ve":5},"caf":{"ac":0,"bo":0,"es":1,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":30,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":9,"cmx":10,"ctr":10,"cng":0},"oom":{},"gui":{"gfu":[4,0,20.0],"gsu":[4,0,40.0],"guh":[2,0,80.0]},"pps":{"es":{"pmp":1},"ptp":["ta"]},"aaa":[],"nv":{"cl":"lnw","ns":"nd","lue":165,"rh":[1,"lnw",160],"it":[[2,"lt2"],[3,"llo"]]},"dl":{}}}
 ```
 
 ## Test Case 17: Navigation Itinerary Lifecycle, Rolling History Pruning & Port Arrival
 
 ### Objective
-Verifies the kinetic transition from `enroute` ➔ `arriving` ➔ `docked` (§ 3.2) for a planned waypoint (`itinerary[0].location == current_location`). Confirms that the completed leg is popped from `navigation.itinerary`, stamped with `arrived_epoch: current_day_epoch`, and appended to `navigation.recent_history` (§ 3.2.3). Probes the rolling history cap invariant (§ 3.2.3, § 5.3): since `navigation.recent_history` begins with 3 prior locations, appending the 4th completed leg must drop the oldest historical entry (`recent_history[0]`) to maintain a strict rolling clamp of 3 completed stops. Checks that remaining forward itinerary legs are retained, verifies strict suppression of Markdown logbooks and autosave JSON blocks during arrival/docked turns (§ 3.2.5, § 8.1.2), suppresses zero-quantity commodities/possessions, and tests non-leap year boundary date calculations (`1905-03-05` = \(31 + 28 + 4 = \text{Day } 63\)).
+Verifies the kinetic transition from `ne` ➔ `na` ➔ `np` (§ 3.2) for a planned waypoint (`itinerary[0][1] == cl`). Confirms that the completed leg is popped from `navigation.itinerary`, stamped with `arrived_epoch: sep`, and appended to `navigation.rh` (§ 3.2.3). Probes the rolling history cap invariant (§ 3.2.3, § 5.3): since `navigation.rh` begins with 3 prior locations, appending the 4th completed leg must drop the oldest historical entry (`rh[0]`) to maintain a strict rolling clamp of 3 completed stops. Checks that remaining forward itinerary legs are retained, verifies strict suppression of Markdown logbooks and autosave JSON blocks during arrival/docked turns (§ 3.2.5, § 8.1.2), suppresses zero-quantity commodities/possessions, and tests non-leap year boundary date calculations (`1905-03-05` = \(31 + 28 + 4 = \text{Day } 63\)).
 
 ### Input Prompt
 > Update state. We just dropped mooring lines and arrived at Lustrum on 1905-03-05. Fuel burn on this leg was 2. What's the lay of the land here, First Mate?
 
 ```json
 {
-  "save_format": "sunless-skies-first-mate",
-  "schema_version": "0.5.0",
-  "rules_version": "0.5.0",
-  "static_data_version": "0.5.0",
-  "first_mate_name": "Mr. Bligh",
-  "dynamic_save_state": {
-    "sovereigns": 1100,
-    "current_day_epoch": 61,
-    "captain": {
-      "name": "Sinclair",
-      "skills": {"iron": 10, "mirrors": 5, "hearts": 5, "veils": 5},
-      "affiliations": {"academe": 0, "bohemia": 0, "establishment": 0, "villainy": 0}
+  "ssf": "sunless-skies-first-mate",
+  "ssv": "0.5.0",
+  "sfn": "Mr. Bligh",
+  "sds": {
+    "sso": 1100,
+    "sep": 61,
+    "cpt": {
+      "cnm":"Sinclair",
+      "csk": {"ir": 10, "mi": 5, "he": 5, "ve": 5},
+      "caf": {"ac": 0, "bo": 0, "es": 0, "vi": 0}
     },
-    "locomotive": {
-      "model": "Spatchcock-Class Scout",
-      "name": "Zephyr",
-      "hull": 30,
-      "max_hull": 30,
-      "fuel_used_last_leg": 0,
-      "hold_capacity": 12,
-      "hidden_slots": 0,
-      "hold_rules": {"fuel_reserve_minimum": 3, "supplies_reserve_minimum": 3, "discovery_buffer_slots": 2}
+    "clc": {
+      "cmd": "Spatchcock-Class Scout",
+      "cnm": "Zephyr",
+      "chl": 30,
+      "cmh": 30,
+      "cfl": 0,
+      "chc": 12,
+      "chs": 0,
+      "chr": {"frm": 3, "srm": 3, "dbs": 2}
     },
-    "crew": {"current": 9, "max": 10, "terror": 15, "nightmares": 0},
-    "officer_manifest": {},
-    "unified_inventory_registry": {
-      "fuel": {"qty_in_hold": 5, "qty_in_bank": 0, "average_unit_cost": 20.00},
-      "supplies": {"qty_in_hold": 4, "qty_in_bank": 0, "average_unit_cost": 40.00}
+    "ccr": {"ccu": 9, "cmx": 10, "ctr": 15, "cng": 0},
+    "oom": {},
+    "gui": {
+      "gfu": [5, 0, 20.00],
+      "gsu": [4, 0, 40.00]
     },
-    "possessions": {},
-    "active_action_stream": [],
-    "navigation": {
-      "current_location": null,
-      "state": "enroute",
-      "last_updated_epoch": 61,
-      "recent_history": [
-        {"leg": 1, "location": "new_winchester", "arrived_epoch": 45},
-        {"leg": 2, "location": "port_prosper", "arrived_epoch": 52},
-        {"leg": 3, "location": "port_avon", "arrived_epoch": 58}
+    "pps": {},
+    "aaa": [],
+    "nv": {
+      "cl": null,
+      "ns": "ne",
+      "lue": 61,
+      "rh": [
+        [1,"lnw",45],
+        [2,"lpr",52],
+        [3,"lpo",58]
       ],
-      "itinerary": [
-        {"leg": 4, "location": "lustrum"},
-        {"leg": 5, "location": "titania"},
-        {"leg": 6, "location": "new_winchester"}
+      "it": [
+        [4,"llu"],
+        [5,"lti"],
+        [6,"lnw"]
       ]
     },
-    "discovered_locations": {}
+    "dl": {}
   }
 }
 ```
-
-### JSON State Verification:
-
-* `dynamic_save_state.current_day_epoch`
-* `dynamic_save_state.locomotive.fuel_used_last_leg`
-* `dynamic_save_state.unified_inventory_registry.fuel.qty_in_hold`
-* `dynamic_save_state.navigation.state`
-* `dynamic_save_state.navigation.current_location`
-* `dynamic_save_state.navigation.recent_history[0].location`
-* `dynamic_save_state.navigation.recent_history[1].location`
-* `dynamic_save_state.navigation.recent_history[2].location`
-* `dynamic_save_state.navigation.recent_history[2].arrived_epoch`
-* `dynamic_save_state.navigation.itinerary[0].location`
-* `dynamic_save_state.navigation.itinerary[0].leg`
-* `dynamic_save_state.navigation.itinerary[1].location`
-* `dynamic_save_state.navigation.itinerary[1].leg`
 
 ### Expected Verification:
 
 #### State Transition:
 
-`enroute` ➔ `arriving` ➔ `docked`
+`ne` ➔ `na` ➔ `np`
 
-#### Flat JSON State Extraction:
+#### Targeted State Verification:
 
 ```json
 {
-  "dynamic_save_state.current_day_epoch": 63,
-  "dynamic_save_state.locomotive.fuel_used_last_leg": 2,
-  "dynamic_save_state.unified_inventory_registry.fuel.qty_in_hold": 3,
-  "dynamic_save_state.navigation.state": "docked",
-  "dynamic_save_state.navigation.current_location": "lustrum",
-  "dynamic_save_state.navigation.recent_history[0].location": "port_prosper",
-  "dynamic_save_state.navigation.recent_history[1].location": "port_avon",
-  "dynamic_save_state.navigation.recent_history[2].location": "lustrum",
-  "dynamic_save_state.navigation.recent_history[2].arrived_epoch": 63,
-  "dynamic_save_state.navigation.itinerary[0].location": "titania",
-  "dynamic_save_state.navigation.itinerary[0].leg": 5,
-  "dynamic_save_state.navigation.itinerary[1].location": "new_winchester",
-  "dynamic_save_state.navigation.itinerary[1].leg": 6
+  "sds.sep": 63,
+  "sds.clc.cfl": 2,
+  "sds.gui.gfu[0]": 3,
+  "sds.nv.ns": "np",
+  "sds.nv.cl": "llu",
+  "sds.nv.rh[0]": [ 2, "lpr", 52 ],
+  "sds.nv.rh[1]": [ 3, "lpo", 58 ],
+  "sds.nv.rh[2]": [ 4, "llu", 63 ],
+  "sds.nv.it[0]": [ 5, "lti" ],
+  "sds.nv.it[1]": [ 6, "lnw" ]
 }
 
 ```
 
 #### Report Text:
 
-(Per Section 3.2.5 and Section 8.1.2, full Markdown logbooks and JSON autosave blocks are strictly suppressed during `arriving` and `docked` turns.)
+(Per Section 3.2.5 and Section 8.1.2, full Markdown logbooks and JSON autosave blocks are strictly suppressed during `na` and `np` turns.)
 
 > **Mr. Bligh reports:**
 > "Lines secured at the icy quays of Lustrum on 5 March 1905. Two barrels of fuel deducted for the transit burn, leaving 3 in the hold alongside our 4 crates of supplies.
 > Lustrum is freezing and bleak, huddled beneath the shadow of the Mother of Mountains where prospectors quarry frozen time straight from the rockface. Station facilities are operational: fuel bunkering, provisions, and crew recruitment are open, though there's no drydock shipyard here. Ahead on our charted course lie Titania and our eventual return to New Winchester. The ledger and transit logs are updated; awaiting your command before we step into the cold or conduct trade at the exchange."
-Captain, here are the precise test cases to verify the serialization and deserialization of `discovered_locations` across both commercial stations (with bazaars) and non-commercial nodes (without bazaars) under our ultra-sparse schema rules.
 
 ---
 
@@ -2977,7 +2707,7 @@ Captain, here are the precise test cases to verify the serialization and deseria
 
 ### Objective
 
-Verifies that when charting a commercial station (such as New Winchester), the engine serializes the `clock_direction` and the complete `bazaar` block with its reset epoch and active bargains.
+Verifies that when charting a commercial station (such as New Winchester), the engine serializes the `cd` and the complete `bazaar` block with its reset epoch and active bargains.
 
 ### Input Prompt
 
@@ -2985,83 +2715,71 @@ Verifies that when charting a commercial station (such as New Winchester), the e
 
 ```json
 {
-  "save_format": "sunless-skies-first-mate",
-  "schema_version": "0.5.0",
-  "rules_version": "0.5.0",
-  "static_data_version": "0.5.0",
-  "first_mate_name": "Mr. Bligh",
-  "dynamic_save_state": {
-    "sovereigns": 1000,
-    "current_day_epoch": 5,
-    "captain": {
-      "name": "Sinclair",
-      "skills": {"iron": 0, "mirrors": 0, "hearts": 0, "veils": 0},
-      "affiliations": {"academe": 0, "bohemia": 0, "establishment": 0, "villainy": 0}
+  "ssf": "sunless-skies-first-mate",
+  "ssv": "0.5.0",
+  "sfn": "Mr. Bligh",
+  "sds": {
+    "sso": 1000,
+    "sep": 5,
+    "cpt": {
+      "cnm":"Sinclair",
+      "csk": {"ir": 0, "mi": 0, "he": 0, "ve": 0},
+      "caf": {"ac": 0, "bo": 0, "es": 0, "vi": 0}
     },
-    "locomotive": {
-      "model": "Spatchcock-Class Scout",
-      "name": "Zephyr",
-      "hull": 30,
-      "max_hull": 30,
-      "fuel_used_last_leg": 0,
-      "hold_capacity": 12,
-      "hidden_slots": 0,
-      "hold_rules": {"fuel_reserve_minimum": 3, "supplies_reserve_minimum": 3, "discovery_buffer_slots": 2}
+    "clc": {
+      "cmd": "Spatchcock-Class Scout",
+      "cnm": "Zephyr",
+      "chl": 30,
+      "cmh": 30,
+      "cfl": 0,
+      "chc": 12,
+      "chs": 0,
+      "chr": {"frm": 3, "srm": 3, "dbs": 2}
     },
-    "crew": {"current": 8, "max": 10, "terror": 0, "nightmares": 0},
-    "officer_manifest": {},
-    "unified_inventory_registry": {
-      "fuel": {"qty_in_hold": 3, "qty_in_bank": 0, "average_unit_cost": 20.00},
-      "supplies": {"qty_in_hold": 3, "qty_in_bank": 0, "average_unit_cost": 40.00}
+    "ccr": {"ccu": 8, "cmx": 10, "ctr": 0, "cng": 0},
+    "oom": {},
+    "gui": {
+      "gfu": [3, 0, 20.00],
+      "gsu": [3, 0, 40.00]
     },
-    "possessions": {},
-    "active_action_stream": [],
-    "navigation": {
-      "current_location": "new_winchester",
-      "state": "arriving",
-      "last_updated_epoch": 0,
-      "recent_history": [],
-      "itinerary": []
+    "pps": {},
+    "aaa": [],
+    "nv": {
+      "cl": "lnw",
+      "ns": "arriving",
+      "lue": 0,
+      "rh": [],
+      "it": []
     },
-    "discovered_locations": {}
+    "dl": {}
   }
 }
 ```
-
-#### JSON State Verification:
-
-* `dynamic_save_state.discovered_locations.new_winchester.clock_direction`
-* `dynamic_save_state.discovered_locations.new_winchester.bazaar.reset_epoch`
-* `dynamic_save_state.discovered_locations.new_winchester.bazaar.available_bargains[0].good_key`
-* `dynamic_save_state.discovered_locations.new_winchester.bazaar.available_bargains[0].quantity_available`
-* `dynamic_save_state.discovered_locations.new_winchester.bazaar.available_bargains[0].cost_per_unit`
 
 ### Expected Verification:
 
 #### State Transition:
 
-`arriving` ➔ `docked`
+`na` ➔ `np`
 
 #### Report Text:
 
-(Per Section 3.2.5 and Section 8.1.2, full Markdown logbooks and JSON autosave blocks are strictly suppressed during  `docked` turns.)
+(Per Section 3.2.5 and Section 8.1.2, full Markdown logbooks and JSON autosave blocks are strictly suppressed during  `np` turns.)
 
-#### Flat JSON State Extraction:
+#### Targeted State Verification:
 
 ```json
 {
-"dynamic_save_state.discovered_locations.new_winchester.clock_direction": null,
-"dynamic_save_state.discovered_locations.new_winchester.bazaar.reset_epoch": 30,
-"dynamic_save_state.discovered_locations.new_winchester.bazaar.availabl8e_bargains[0].good_key": "munitions",
-"dynamic_save_state.discovered_locations.new_winchester.bazaar.available_bargains[0].quantity_available": 5,
-"dynamic_save_state.discovered_locations.new_winchester.bazaar.available_bargains[0].cost_per_unit": 60
+"sds.dl.lnw.cd": null,
+"sds.dl.lnw.bz.re": 38,
+"sds.dl.lnw.bz.ab[0]": [ "gmu", 5, 60 ]
 }
 ```
 
 #### 🔒 INTERNAL STATE AUTOSAVE
 
 ```json
-{"save_format": "sunless-skies-first-mate","schema_version": "0.4.0","rules_version": "0.4.0","static_data_version": "0.4.0","first_mate_name": "Mr. Bligh","dynamic_save_state": {"sovereigns": 1000,"current_day_epoch": 8,"captain": {"name": "Sinclair","skills": {"iron": 0, "mirrors": 0, "hearts": 0, "veils": 0},"affiliations": {"academe": 0, "bohemia": 0, "establishment": 0, "villainy": 0}},"locomotive": {"model": "Spatchcock-Class Scout","name": "Zephyr","hull": 30,"max_hull": 30,"fuel_used_last_leg": 0,"hold_capacity": 12,"hidden_slots": 0,"hold_rules": {"fuel_reserve_minimum": 3, "supplies_reserve_minimum": 3, "discovery_buffer_slots": 2}},"crew": {"current": 8, "max": 10, "terror": 0, "nightmares": 0},"officer_manifest": {},"unified_inventory_registry": {"fuel": {"qty_in_hold": 3, "qty_in_bank": 0, "average_unit_cost": 20.00},"supplies": {"qty_in_hold": 3, "qty_in_bank": 0, "average_unit_cost": 40.00}},"possessions": {},"active_action_stream": [],"navigation": {"current_location": "new_winchester","state": "docked","last_updated_epoch": 0,"recent_history": [],"itinerary": []},"discovered_locations": {"new_winchester": {"clock_direction": null,"bazaar": {"reset_epoch": 38,"available_bargains": [{"good_key": "munitions","quantity_available": 5,"cost_per_unit": 60}]}}}}}
+{"ssf":"sunless-skies-first-mate","ssv":"0.5.0","sfn":"Mr. Bligh","sds":{"sso":1000,"sep":8,"cpt":{"cnm":"Sinclair","csk":{"ir":0,"mi":0,"he":0,"ve":0},"caf": {"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm": "Zephyr","chl":30,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3, "dbs":2}},"ccr":{"ccu":8,"cmx":10,"ctr":0,"cng":0},"oom":{},"gui":{"gfu":[3,0,20.00],"gsu":[3,0,40.00]},"pps":{},"aaa":[],"nv":{"cl":"lnw","ns":"np","lue":0,"rh":[],"it":[]},"dl":{"lnw":{"cd":null,"bz":{"re":38,"ab":[["gmu",5,60]]}}}}}
 ```
 ---
 
@@ -3069,7 +2787,7 @@ Verifies that when charting a commercial station (such as New Winchester), the e
 
 ### Objective
 
-Verifies the ultra-sparse rule for non-commercial nodes (such as a transit relay like `reach_albion_relay` or a platform/spectacle) where the `"bazaar"` key is completely omitted to conserve telegraphic tokens, leaving strictly the clock position.
+Verifies the ultra-sparse rule for non-commercial nodes (such as a transit relay like `lt2` or a platform/spectacle) where the `"bz"` key is completely omitted to conserve telegraphic tokens, leaving strictly the clock position.
 
 ### Input Prompt
 
@@ -3077,78 +2795,70 @@ Verifies the ultra-sparse rule for non-commercial nodes (such as a transit relay
 
 ```json
 {
-  "save_format": "sunless-skies-first-mate",
-  "schema_version": "0.5.0",
-  "rules_version": "0.5.0",
-  "static_data_version": "0.5.0",
-  "first_mate_name": "Mr. Bligh",
-  "dynamic_save_state": {
-    "sovereigns": 1000,
-    "current_day_epoch": 25,
-    "captain": {
-      "name": "Sinclair",
-      "skills": {"iron": 0, "mirrors": 0, "hearts": 0, "veils": 0},
-      "affiliations": {"academe": 0, "bohemia": 0, "establishment": 0, "villainy": 0}
+  "ssf": "sunless-skies-first-mate",
+  "ssv": "0.5.0",
+  "sfn": "Mr. Bligh",
+  "sds": {
+    "sso": 1000,
+    "sep": 25,
+    "cpt": {
+      "cnm":"Sinclair",
+      "csk": {"ir": 0, "mi": 0, "he": 0, "ve": 0},
+      "caf": {"ac": 0, "bo": 0, "es": 0, "vi": 0}
     },
-    "locomotive": {
-      "model": "Spatchcock-Class Scout",
-      "name": "Zephyr",
-      "hull": 30,
-      "max_hull": 30,
-      "fuel_used_last_leg": 0,
-      "hold_capacity": 12,
-      "hidden_slots": 0,
-      "hold_rules": {"fuel_reserve_minimum": 3, "supplies_reserve_minimum": 3, "discovery_buffer_slots": 2}
+    "clc": {
+      "cmd": "Spatchcock-Class Scout",
+      "cnm": "Zephyr",
+      "chl": 30,
+      "cmh": 30,
+      "cfl": 0,
+      "chc": 12,
+      "chs": 0,
+      "chr": {"frm": 3, "srm": 3, "dbs": 2}
     },
-    "crew": {"current": 8, "max": 10, "terror": 0, "nightmares": 0},
-    "officer_manifest": {},
-    "unified_inventory_registry": {
-      "fuel": {"qty_in_hold": 3, "qty_in_bank": 0, "average_unit_cost": 20.00},
-      "supplies": {"qty_in_hold": 3, "qty_in_bank": 0, "average_unit_cost": 40.00}
+    "ccr": {"ccu": 8, "cmx": 10, "ctr": 0, "cng": 0},
+    "oom": {},
+    "gui": {
+      "gfu": [3, 0, 20.00],
+      "gsu": [3, 0, 40.00]
     },
-    "possessions": {},
-    "active_action_stream": [],
-    "navigation": {
-      "current_location": null,
-      "state": "enroute",
-      "last_updated_epoch": 0,
-      "recent_history": [],
-      "itinerary": []
+    "pps": {},
+    "aaa": [],
+    "nv": {
+      "cl": null,
+      "ns": "ne",
+      "lue": 0,
+      "rh": [],
+      "it": []
     },
-    "discovered_locations": {
-      "reach_albion_relay": {
-        "clock_direction": 4
+    "dl": {
+      "lt2": {
+        "cd": 4
       }
     }
   }
 }
 ```
 
-#### JSON State Verification:
-
-* `dynamic_save_state.discovered_locations.reach_albion_relay.clock_direction`
-* `dynamic_save_state.discovered_locations.reach_albion_relay.bazaar`
-
 ### Expected Verification:
 
 ```json
 {
-  "dynamic_save_state.discovered_locations.reach_albion_relay.clock_direction": 4,
-  "dynamic_save_state.discovered_locations.reach_albion_relay.bazaar": null
+  "sds.dl.lt2.cd": 4,
+  "sds.dl.lt2.bazaar": null
 }
 ```
 
 #### State Transition:
 
-`enroute` ➔ `arriving` ➔ `docked`
+`ne` ➔ `na` ➔ `np`
 
 #### Report Text:
 
-(Per Section 3.2.5 and Section 8.1.2, full Markdown logbooks and JSON autosave blocks are strictly suppressed during  `docked` turns.)
+(Per Section 3.2.5 and Section 8.1.2, full Markdown logbooks and JSON autosave blocks are strictly suppressed during  `np` turns.)
 
-#### Flat JSON State Extraction:
+#### Targeted State Verification:
 
 ```json
-{"save_format": "sunless-skies-first-mate","schema_version": "0.5.0","rules_version": "0.5.0","static_data_version": "0.5.0","first_mate_name": "Mr. Bligh","dynamic_save_state": {"sovereigns": 1000,"current_day_epoch": 25,"captain": {"name": "Sinclair","skills": {"iron": 0, "mirrors": 0, "hearts": 0, "veils": 0},"affiliations": {"academe": 0, "bohemia": 0, "establishment": 0, "villainy": 0}},"locomotive": {"model": "Spatchcock-Class Scout","name": "Zephyr","hull": 30,"max_hull": 30,"fuel_used_last_leg": 0,"hold_capacity": 12,"hidden_slots": 0,"hold_rules": {"fuel_reserve_minimum": 3, "supplies_reserve_minimum": 3,"discovery_buffer_slots": 2}},"crew": {"current": 8, "max": 10, "terror": 0, "nightmares": 0},"officer_manifest": {},"unified_inventory_registry": {"fuel": {"qty_in_hold": 3, "qty_in_bank": 0, "average_unit_cost": 20.00},"supplies": {"qty_in_hold": 3, "qty_in_bank": 0, "average_unit_cost": 40.00}},"possessions": {},"active_action_stream": [],"navigation": {"current_location": "albion_transit_relay","state": "docked","last_updated_epoch": 31,"recent_history": [],"itinerary": []},"discovered_locations": {"reach_albion_relay": {"clock_direction": 4}}}}
+{"ssf":"sunless-skies-first-mate","ssv":"0.5.0","sfn":"Mr. Bligh","sds":{"sso":1000,"sep":25,"cpt":{"cnm":"Sinclair","csk":{"ir":0,"mi":0,"he":0,"ve":0},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd": "Spatchcock-Class Scout","cnm":"Zephyr","chl":30,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr": {"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":8,"cmx":10,"ctr":0,"cng":0},"oom":{},"gui":{"gfu":[3,0,20.00],"gsu":[3,0,40.00]},"pps":{},"aaa":[],"nv":{"cl":"lt2","ns":"np","lue":31,"rh":[],"it":[]},"dl":{"lt2":{"cd":4}}}}
 ```
-
