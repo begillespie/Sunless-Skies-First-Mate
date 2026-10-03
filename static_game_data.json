@@ -3187,6 +3187,18 @@
         "lo": "low",
         "md": "routine"
       },
+      "quest_patterns": {
+        "qf": "fetch",
+        "qs": "sequential",
+        "qh": "hub_and_spoke",
+        "ql": "shopping_list"
+      },
+      "skills": {
+        "he": "hearts",
+        "ir": "iron",
+        "mi": "mirrors",
+        "ve": "veils"
+      },
       "transit_permits": {
         "ta": "Albion",
         "tb": "Blue Kingdom",
