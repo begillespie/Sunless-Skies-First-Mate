@@ -1,3 +1,8 @@
+<!--
+Sunless SKies First Mate Logbook Template
+Version 0.5.1
+-->
+
 # 🚂 CAPTAIN'S LOG 🚀
 
 ## 📅 [DATE] (Day [CURRENT_DAY_EPOCH]) · ⚓ [PORT JUST LEFT]
@@ -49,6 +54,14 @@
 * 👤 **OFFICER QUEST:** [QUESTLINE_NAME] ([OFFICER_NAME]) — [MILESTONE_TRIGGER_NOTES]. Requires: [OFFICER_ITEM]
 * 💼 **SECONDMENT:** [OFFICER_NAME] at [STATION_NAME]. Effect: [CONTRIBUTION_EFFECT] — Return Conditions: [RETURN_CONDITION]
 * 📌 **BRIDGE NOTE:** [USER_NOTES] — Priority: [LOW/NORMAL/HIGH]
+
+### ➡️ NEXT STOP: [NEXT PORT NAME]
+* `[Priority Indicator: ‼️ (high) /🔻 (low) if applicable]` 🎯 **AMBITION:** [MILESTONE_DESCRIPTION]. Items Needed: [ITEMS_REQUIRED_NEXT_TIER]
+* `[Priority Indicator]`🔑 **READY FOR DELIVERY:** [PROSPECT_TITLE] — Deliver [QTY_REMAINING] [GOOD_NAME] to [DESTINATION_PORT] to complete contract
+* `[Priority Indicator]`📖 **QUEST PLOTLINE:** [QUESTLINE_NAME] — Step [NUM]: [TARGET_OBJECTIVE_NOTES]
+* `[Priority Indicator]`👤 **OFFICER QUEST:** [QUESTLINE_NAME] ([OFFICER_NAME]) — [MILESTONE_TRIGGER_NOTES]. Requires: [OFFICER_ITEM]
+* `[Priority Indicator]`💼 **SECONDMENT:** [OFFICER_NAME] at [STATION_NAME]. Effect: [CONTRIBUTION_EFFECT] — Return Conditions: [RETURN_CONDITION]
+* `[Priority Indicator]`📌 **BRIDGE NOTE:** [USER_NOTES]
 
 ### 👤 ACTIVE PASSENGERS & BRIDGE TRANSIT
 * **[PASSENGER/TRANSIT NAME] ([ID])** ➔ Bound for: [DESTINATION_PORT] ([REGION]) — Complication: *[COMPLICATION_NOTES]* — Timeline: [ACCEPTED_DATE] ➔ [DEADLINE_DATE / Open Timeline]

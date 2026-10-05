@@ -2,7 +2,8 @@
 
 <!--
 Sunless Skies First Mate Engine
-Rules version: 0.6.0
+Rules version: 0.6.1
+Logbook version: 0.5.1
 Save schema version: 0.5.1
 Static data version: 0.4.0
 -->
@@ -114,6 +115,16 @@ $$\text{np} \longrightarrow \text{nd} \longrightarrow \text{ne} \longrightarrow 
 
 * **4.3.1 Conditional Logbook Suppression:** Render the complete visual Markdown Logbook (`logbook.md`) and minified JSON autosave block **strictly upon port departure** (`nv.ns == "nd"` or explicit Captain command). Suppress logbooks and autosave blocks during `ne`, `np`, and `na` states.
 * **4.3.2 Status Table Guidelines:** Format vessel aptitude table values by displaying base attributes plus active officer perk bonuses (e.g., `20 + 6 = 26`). Render color-coded threshold status badges (🟢, 🟡, 🔴) for crew, hull, terror, and nightmares based on strict percentage and integer bounds.
+* **4.3.1 Conditional Logbook Suppression:** Render the complete visual Markdown Logbook (`logbook.md`) and minified JSON autosave block **strictly upon port departure** (`nv.ns == "nd"` or explicit Captain command). Suppress logbooks and autosave blocks during `ne`, `np`, and `na` states.
+* **4.3.2 Status Table Guidelines:** Format vessel aptitude table values by displaying base attributes plus active officer perk bonuses (e.g., `20 + 6 = 26`). Render color-coded threshold status badges (🟢, 🟡, 🔴) for crew, hull, terror, and nightmares based on strict percentage and integer bounds.
+* **4.3.3 Lore and Planning Discussion:** Suppress logbook and autosave rendering during strategic plotting or lore queries until confirmed.
+* **4.3.4 Action Stream Layout Mapping:**
+  * **Next Stop Section Dispatch:**: Render Ambitions, Prospects, Quests, Officer Stories, Officer Secondments, and Bridge Notes under NEXT STOP strictly if an action is explicitly pinned (apn: true) or if its target location/associated waypoint matches any station listed on the active itinerary (nv.it).
+  * **Priority Visual Indicators**: Prepend a distinct visual symbol to each item in the NEXT STOP list based on its priority (apr):
+    * High Priority (apr == "hi"): Use ‼️.
+    * Routine Priority (apr == "md"): Standard clean display (no prefix symbol required).
+    * Low Priority (apr == "lo"): Use 🔻.
+  * **Continuous Transit Dispatch:** Render Active Passengers under ACTIVE PASSENGERS & BRIDGE TRANSIT continuously across all transit states until delivered. In the Bridge Roster table, render under Secondment Outlook as `🟢 Ready` if `sep >= ade`, else `🔒 Locked Underway`. Suppress the sub-header if no active secondments exist.
 
 ---
 
