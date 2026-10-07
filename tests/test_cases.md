@@ -10,42 +10,35 @@ Save schema version: 0.5.1
 Static data version: 0.4.1
 -->
 
-## MASTER TEST PACKAGE INDEX
-| Sequence | Package Identifier | Functional Domain | Included Tests | Scope & Invariants Under Test |
-| --- | --- | --- | --- | --- |
-| 1 | **`PKG-IO`** | Core I/O & Validation | **TC1, TC4** | Cold-boot state initialization, baseline day 0 epoch, default locomotive parameters, and foreign key/location schema guardrail intercepts. |
-| 2 | **`PKG-STATE`** | Kinetic State & Navigation | **TC2, TC5, TC6, TC14, TC16, TC17, TC18, TC19** | Kinetic loop cycling (`np`/`ne`/`na`), month-boundary temporal conversions, rolling history 3-stop clamps, crew/hull warning thresholds, and sparse bazaar serialization. |
-| 3 | **`PKG-ECON`** | Routing & Economy | **TC3, TC7, TC8, TC15** | Central hub bank transfers, non-leap year calendar anomalies, multi-leg itinerary sequencing ($N+1$), angular coordinate checks ($\Delta\theta$), resupply isolation alerts, and Moving Average Cost ($MAC$) recomputations. |
-| 4 | **`PKG-NARRATIVE`** | Actions & Officers | **TC9, TC10, TC11, TC12, TC13, TC20** | Weightless category 2/3 item isolation, prospect sourcing mutations (`active` ➔ `ready`), multi-item quest shopping lists, partial cargo handoffs, dynamic officer perk resolutions, and secondments. |
-
----
-
 ## MASTER TEST SUITE INDEX
-| Test # | Package | Title | Primary Features Under Test |
+
+| Test # | Feature Tags | Title | Primary Features Under Test |
 | --- | --- | --- | --- |
-| **TC1** | `PKG-IO` | **Session Initialization (Blank Slate Verification)** | Engine cold-boot without prior JSON; assignment of First Mate identity ("Mr. Bligh"); Day 0 baseline epoch handling; initial sovereign/fuel/supply parameters; default hold rules; initial departure logbook and autosave rendering.|
-| **TC2** | `PKG-STATE` | **Port Arrival & Month-Boundary Bargain Discovery Tracking** | Kinetic FSM transition (`ne` ➔ `na` ➔ `np`); transit burn accounting; date conversion crossing month boundary (Jan 31 to Feb 12); bazaar bargain discovery and reset epoch logging; strict UI suppression during port calls.|
-| **TC3** | `PKG-ECON` | **Inventory Math, Banking Logistics & Non-Leap Temporal Calculation** | Central hub bank transfers (`[0]` $\leftrightarrow$ `[1]`); standardized 365-day High Wilderness calendar invariant across non-leap leap-year anomalies (Feb 28 to Mar 1 1908 = +1 day); hold capacity re-evaluation; departure logbook rendering.|
-| **TC4** | `PKG-IO` | **State Integrity Breach Emergency Intercept (Directive 2.2.4)** | Safety guardrail triggers; foreign key validation failure against unwhitelisted commodity keys (`quantum_æther_crystal`) and invalid locations (`missing_port_x`); execution halt and verbatim emergency recovery alert output.|
-| **TC5** | `PKG-STATE` | **Crew Status Color Mapping - Yellow Tier Warning** | Numeric threshold mapping for crew ($50\% \le \text{Crew} < 70\% \rightarrow$ Yellow Tier) and hull integrity ($30\% \le \text{Hull} < 60\% \rightarrow$ Yellow Tier); year-boundary calendar calculation (Dec 31 1905 to Jan 15 1906); zero-quantity item suppression.|
-| **TC6** | ``PKG-STATE`` | **Critical Low Crew Threshold & Consumable Depletion** | High-fatigue tone shifts when crew drops below 50% (Red Tier); consumable hold warnings (fuel $\le 1$ = ⚠️, supplies $= 0$ = 🚨); high-priority unpinned bridge note tracking (`todo`); departure manifest generation.|
-| **TC7** | `PKG-ECON` | **Route Planner - Multi-Stop Sequential Itinerary & Task Linking** | Multi-leg route planning; sequential leg indexing ($N+1$ continuity); spatial task filtering under NEXT STOP for pending mercantile prospects and bridge notes; mid-year non-leap calendar conversion.|
-| **TC8** | `PKG-ECON` | **Route Planner - Resupply Isolation Alert & Intermediate Port Recommendation** | Pre-departure consumable deficit guard; angular coordinate evaluation ($\Delta\theta$); automated intermediate port detour recommendations (Titania insertion); professional caution bridge counsel.|
-| **TC9** | `PKG-NARRATIVE` | **Cargo Isolation & Weightless Possessions Tracking** | Physical hold isolation for Category 2 progression tokens (`possessions.villainy`) and Category 3 narrative items (`apl.items_manifest.ni`); polymorphic quest instantiation (`fetch` pattern).|
-| **TC10** | `PKG-NARRATIVE` | **Prospect Sourcing Phase to Sourced Readiness Mutation** | Commodity purchase accounting; atomic progression of mercantile prospect lifecycle from `status: "active"` to `status: "rdy"` upon sourcing complete cargo; dynamic NEXT STOP spatial matching.|
-| **TC11** | `PKG-NARRATIVE` | **Partial Delivery of a Quest Shopping List Pattern** | Multi-item quest manifest handling (`ql` pattern); hold inventory decrements alongside incrementing `quantity_delivered`; retention of `status: "active"` pending outstanding requirements; zero-inventory suppression.|
-| **TC12** | `PKG-NARRATIVE` | **Partial Delivery of an Underway Prospect** | Port destination delivery interactions; partial contract handoff; decrements to physical cargo while retaining `status: "rdy"`; hold utilization updates; forced logbook rendering via explicit Captain command.|
-| **TC13** | `PKG-NARRATIVE` | **Dynamic Stat Resolution & Companion Upgrades** | Runtime dynamic perk evaluation across officer composite keys (`ons`); prevention of calculated perk serialization in JSON; officer secondment lifecycle and maturity tracking; multi-year calendar calculation.|
-| **TC14** | `PKG-STATE` | **Multi-State Compound Turn Pipeline** | Atomic resolution of a multi-phase turn (`ne` ➔ `na` ➔ `np` ➔ `nd` ➔ `ne`); transit fuel burns, market sales, bazaar restocking, and departure execution in a single turn; rolling history tracking.|
-| **TC15** | `PKG-ECON` | **Economic Core & Moving Average Cost (MAC) Recalculation** | Atomic Moving Average Cost ($MAC$) re-computation when acquiring standard commodities at discounted market rates; floating capital tracking; physical hold capacity saturation checks ($12/12$ slots).|
-| **TC16** | `PKG-STATE` | **Inter-Region Transit Relay Trajectory & Toll Evaluation** | Inter-region navigation gating; transit permit validation (`possessions.ptp`); toll option assessment across first- and second-class options without premature fee deductions prior to gate engagement.|
-| **TC17** | `PKG-STATE` | **Navigation Itinerary Lifecycle, Rolling History Pruning & Port Arrival** | Kinetic arrival processing (`itinerary[0]` resolution); sequential leg transfer to `rh`; strict rolling cap invariant enforcement (clamping history to the 3 most recent stops and discarding oldest entry); port arrival dialogue.|
-| **TC18** | `PKG-STATE` | **Commercial Station Serialization (With Bazaar)** | Discovered location tracking with sparse bazaar serialization. |
-| **TC19** | `PKG-STATE` | **Non-Commercial Node Serialization (Without Bazaar)** | Discoverd location without baazaar. Test sparse bazaar serialization. |
-| **TC20** | `PKG-NARRATIVE` | **Actions & UI Filtering** | Next Stop action spatial filtering against active itineraries, suppression of un-matched destinations, and visual priority indicator rendering (`‼️` / `🔻`). |
+| **TC1** | `[startup-recovery, ui-gates, narrative]`<br> | **Session Initialization (Blank Slate Verification)** | Engine cold-boot without prior JSON; assignment of First Mate identity ("Mr. Bligh"); Day 0 baseline epoch handling; initial sovereign/fuel/supply parameters; default hold rules; initial departure logbook and autosave rendering. |
+| **TC2** | `[fsm, datetime, economy, ui-gates]`<br> | **Port Arrival & Month-Boundary Bargain Discovery Tracking** | Kinetic FSM transition (`ne` ➔ `na` ➔ `np`); transit burn accounting; date conversion crossing month boundary (Jan 31 to Feb 12); bazaar bargain discovery and reset epoch logging; strict UI suppression during port calls. |
+| **TC3** | `[economy, inventory, datetime, officers]`<br> | **Inventory Math, Banking Logistics & Non-Leap Temporal Calculation** | Central hub bank transfers (`[0]` $\leftrightarrow$ `[1]`); standardized 365-day High Wilderness calendar invariant across non-leap leap-year anomalies (Feb 28 to Mar 1 1908 = +1 day); hold capacity re-evaluation; departure logbook rendering. |
+| **TC4** | `[startup-recovery]`<br> | **State Integrity Breach Emergency Intercept (Directive 2.2.4)** | Safety guardrail triggers; foreign key validation failure against unwhitelisted commodity keys (`quantum_æther_crystal`) and invalid locations (`missing_port_x`); execution halt and verbatim emergency recovery alert output. |
+| **TC5** | `[crew, hull, datetime, inventory]`<br> | **Crew Status Color Mapping - Yellow Tier Warning** | Numeric threshold mapping for crew ($50\% \le \text{Crew} < 70\% \rightarrow$ Yellow Tier) and hull integrity ($30\% \le \text{Hull} < 60\% \rightarrow$ Yellow Tier); year-boundary calendar calculation (Dec 31 1905 to Jan 15 1906); zero-quantity item suppression. |
+| **TC6** | `[crew, terror, narrative, datetime]`<br> | **Critical Low Crew Threshold & Consumable Depletion** | High-fatigue tone shifts when crew drops below 50% (Red Tier); consumable hold warnings (fuel $\le 1$ = ⚠️, supplies $= 0$ = 🚨); high-priority unpinned bridge note tracking (`todo`); departure manifest generation. |
+| **TC7** | `[navigation, datetime]`<br> | **Route Planner - Multi-Stop Sequential Itinerary & Task Linking** | Multi-stop route planning; sequential leg indexing ($N+1$ continuity); spatial task filtering under NEXT STOP for pending mercantile prospects and bridge notes; mid-year non-leap calendar conversion. |
+| **TC8** | `[navigation, terror, datetime]`<br> | **Route Planner - Resupply Isolation Alert & Intermediate Port Recommendation** | Pre-departure consumable deficit guard; angular coordinate evaluation ($\Delta\theta$); automated intermediate port detour recommendations (Titania insertion); professional caution bridge counsel. |
+| **TC9** | `[inventory, narrative, datetime]`<br> | **Cargo Isolation & Weightless Possessions Tracking** | Physical hold isolation for Category 2 progression tokens (`possessions.villainy`) and Category 3 narrative items (`apl.items_manifest.ni`); polymorphic quest instantiation (`fetch` pattern). |
+| **TC10** | `[inventory, navigation, datetime]`<br> | **Prospect Sourcing Phase to Sourced Readiness Mutation** | Commodity purchase accounting; atomic progression of mercantile prospect lifecycle from `status: "active"` to `status: "rdy"` upon sourcing complete cargo; dynamic NEXT STOP spatial matching. |
+| **TC11** | `[inventory, narrative, navigation]`<br> | **Partial Delivery of a Quest Shopping List Pattern** | Multi-item quest manifest handling (`ql` pattern); hold inventory decrements alongside incrementing `quantity_delivered`; retention of `status: "active"` pending outstanding requirements; zero-inventory suppression. |
+| **TC12** | `[inventory, ui-gates, datetime]`<br> | **Partial Delivery of an Underway Prospect** | Port destination delivery interactions; partial contract handoff; decrements to physical cargo while retaining `status: "rdy"`; hold utilization updates; forced logbook rendering via explicit Captain command. |
+| **TC13** | `[officers, datetime]`<br> | **Dynamic Stat Resolution & Companion Upgrades** | Runtime dynamic perk evaluation across officer composite keys (`ons`); prevention of calculated perk serialization in JSON; officer secondment lifecycle and maturity tracking; multi-year calendar calculation. |
+| **TC14** | `[fsm, navigation, datetime, economy]`<br> | **Multi-State Compound Turn Pipeline** | Atomic resolution of a multi-phase turn (`ne` ➔ `na` ➔ `np` ➔ `nd` ➔ `ne`); transit fuel burns, market sales, bazaar restocking, and departure execution in a single turn; rolling history tracking. |
+| **TC15** | `[economy, inventory, datetime]`<br> | **Economic Core & Moving Average Cost (MAC) Recalculation** | Atomic Moving Average Cost ($MAC$) re-computation when acquiring standard commodities at discounted market rates; floating capital tracking; physical hold capacity saturation checks ($12/12$ slots). |
+| **TC16** | `[navigation, datetime]`<br> | **Inter-Region Transit Relay Trajectory & Toll Evaluation** | Inter-region navigation gating; transit permit validation (`possessions.ptp`); toll option assessment across first- and second-class options without premature fee deductions prior to gate engagement. |
+| **TC17** | `[fsm, navigation, ui-gates, datetime]`<br> | **Navigation Itinerary Lifecycle, Rolling History Pruning & Port Arrival** | Kinetic arrival processing (`itinerary[0]` resolution); sequential leg transfer to `rh`; strict rolling cap invariant enforcement (clamping history to the 3 most recent stops and discarding oldest entry); port arrival dialogue. |
+| **TC18** | `[startup-recovery, economy, ui-gates]`<br> | **Commercial Station Serialization (With Bazaar)** | Discovered location tracking with sparse bazaar serialization. |
+| **TC19** | `[startup-recovery, navigation, ui-gates]`<br> | **Non-Commercial Node Serialization (Without Bazaar)** | Discovered location without bazaar. Test sparse bazaar serialization. |
+| **TC20** | `[narrative, navigation]`<br> | **Actions & UI Filtering** | Next Stop action spatial filtering against active itineraries, suppression of un-matched destinations, and visual priority indicator rendering (`‼️` / `🔻`). |
+
 ---
 
 ## Test Case 1: Session Initialization (Blank Slate Verification)
+**Feature Tags:** `[startup-recovery, ui-gates, narrative]`[cite: 3]
 
 ### Objective
 Verifies that when no prior JSON state is provided, the system boots cleanly, assigns the First Mate persona ("Mr. Bligh"), sets Day 0 (1 January 1905), handles initial sovereign parameters, initializes default locomotive and non-zero inventory attributes (suppressing zero-quantity commodities and possessions), and renders the departure logbook.
@@ -168,6 +161,7 @@ New Winchester ➔ 🟢 **[ unknown ]**
 ---
 
 ## Test Case 2: Port Arrival & Month-Boundary Bargain Discovery Tracking
+**Feature Tags:** `[fsm, datetime, economy, ui-gates]`
 
 ### Objective
 
@@ -248,6 +242,7 @@ Verifies kinetic state transition from `ne` ➔ `na` ➔ `np`, temporal conversi
 ---
 
 ## Test Case 3: Inventory Math, Banking Logistics & Non-Leap Temporal Calculation
+**Feature Tags:** `[economy, inventory, datetime, officers]`
 
 ### Objective
 
@@ -412,6 +407,7 @@ New Winchester ➔ 🟢 **Titania**
 ---
 
 ## Test Case 4: State Integrity Breach Emergency Intercept (Directive 2.2.4)
+**Feature Tags:** `[startup-recovery]`
 
 ### Objective
 
@@ -489,6 +485,7 @@ Probes compliance with safety guardrails by forcing an intentional relational in
 > ⚠️ EXECUTIVE OFFICER'S ALERT - STATE INTEGRITY FAILURE. Captain, I've lost my grip on the logbook. My records have gone dark - likely a break in the telegraph line between sessions. To restore full operational status, please paste your most recent Internal Game State JSON block into the chat. You'll find it collapsed at the bottom of your last log entry under 'Internal Game State JSON'. If no prior log exist, say 'Start fresh' and I'll initialize a clean slate.
 
 ## Test Case 5: Crew Status Color Mapping - Yellow Tier Warning
+**Feature Tags:** `[crew, hull, datetime, inventory]`
 
 ### Objective
 Verifies the application of the structural color math threshold where crew count drops into the caution zone, checks that zero-quantity commodities and possessions are suppressed from the JSON payload, evaluates hull percentage thresholds, and tests non-leap year boundary crossing from 31 December 1905 to 15 January 1906.
@@ -646,6 +643,7 @@ Port Avon ➔ 🟢 **New Winchester**
 ```
 
 ## Test Case 6: Critical Low Crew Threshold & Consumable Depletion
+**Feature Tags:** `[crew, terror, narrative, datetime]`
 
 ### Objective
 
@@ -810,6 +808,7 @@ Hybras ➔ 🟢 **Polmear & Plenty's Inconceivable Circus**
 ```
 
 ## Test Case 7: Route Planner - Multi-Stop Sequential Itinerary & Task Linking
+**Feature Tags:** `[navigation, datetime]`
 
 ### Objective
 
@@ -1029,6 +1028,7 @@ New Winchester ➔ 🟢 **Titania** ➔ 🟡 Lustrum
 ```
 
 ## Test Case 8: Route Planner - Resupply Isolation Alert & Intermediate Port Recommendation
+**Feature Tags:** `[navigation, terror, datetime]`
 
 ### Objective
 
@@ -1205,6 +1205,7 @@ New Winchester ➔ 🟢 **Port Prosper**
 
 
 ## Test Case 9: Cargo Isolation & Weightless Possessions Tracking
+**Feature Tags:** `[inventory, narrative, datetime]`
 
 ### Objective
 Verifies that spatial possessions (Category 2: 16 immutable progression tokens) and narrative quest items (Category 3: polymorphic items manifest) do not draw physical hold space against `locomotive.chc`. Confirms that a polymorphic quest object is cleanly constructed within `sds.aaa`, checks that non-zero possessions populate their respective affiliation domain while zero-quantity commodities and possessions are strictly suppressed from the JSON payload, and tests mid-month High Wilderness calendar calculation (`1905-01-15` = Day 14).
@@ -1371,6 +1372,7 @@ New Winchester ➔ 🟢 **Port Avon**
 ---
 
 ## Test Case 10: Prospect Sourcing Phase to Sourced Readiness Mutation
+**Feature Tags:** `[inventory, navigation, datetime]`
 
 ### Objective
 
@@ -1552,6 +1554,7 @@ New Winchester ➔ 🟢 **Port Prosper**
 ---
 
 ## Test Case 11: Partial Delivery of a Quest Shopping List Pattern
+**Feature Tags:** `[inventory, narrative, navigation]`
 
 ### Objective
 
@@ -1744,6 +1747,7 @@ Titania ➔ 🟢 **New Winchester**
 ---
 
 ## Test Case 12: Partial Delivery of an Underway Prospect
+**Feature Tags:** `[inventory, ui-gates, datetime]`
 
 ### Objective
 
@@ -1923,6 +1927,7 @@ Port Prosper ➔ 🟢 **[ unknown ]**
 ---
 
 ## Test Case 13: Dynamic Stat Resolution & Companion Upgrades
+**Feature Tags:** `[officers, datetime]`
 
 ### Objective
 Verifies dynamic officer perk resolution, ensuring runtime evaluation reads composite keys (e.g., `"ons"`) and that perks are not written to JSON. Validates non-leap High Wilderness calendar calculations crossing into the subsequent year (`1906-02-22` = \(365 + 31 + 21 = \text{Day } 417\)), confirms zero-quantity commodities/possessions remain suppressed in JSON, and checks layout mapping for officer secondments under NEXT STOP.
@@ -2110,6 +2115,7 @@ London ➔ 🟢 **The Avid Horizon**
 ---
 
 ## Test Case 14: Multi-State Compound Turn Pipeline
+**Feature Tags:** `[fsm, navigation, datetime, economy]`
 
 ### Objective
 
@@ -2278,6 +2284,7 @@ Lustrum ➔ 🟢 **Port Avon**
 ---
 
 ## Test Case 15: Economic Core & Moving Average Cost (MAC) Recalculation
+**Feature Tags:** `[economy, inventory, datetime]`
 
 ### Objective
 
@@ -2448,6 +2455,7 @@ London ➔ 🟢 **The Brabazon Workworld**
 ---
 
 ## Test Case 16: Inter-Region Transit Relay Trajectory & Toll Evaluation
+**Feature Tags:** `[navigation, datetime]`
 
 ### Objective
 
@@ -2613,6 +2621,7 @@ New Winchester ➔ 🟢 **The Albion Transit Relay** ➔ 🟡 London
 ```
 
 ## Test Case 17: Navigation Itinerary Lifecycle, Rolling History Pruning & Port Arrival
+**Feature Tags:** `[fsm, navigation, ui-gates, datetime]`
 
 ### Objective
 Verifies the kinetic transition from `ne` ➔ `na` ➔ `np` for a planned waypoint (`itinerary[0][1] == cl`). Confirms that the completed leg is popped from `navigation.itinerary`, stamped with `arrived_epoch: sep`, and appended to `navigation.rh`. Probes the rolling history cap invariant: since `navigation.rh` begins with 3 prior locations, appending the 4th completed leg must drop the oldest historical entry (`rh[0]`) to maintain a strict rolling clamp of 3 completed stops. Checks that remaining forward itinerary legs are retained, verifies strict suppression of Markdown logbooks and autosave JSON blocks during arrival/docked turns, suppresses zero-quantity commodities/possessions, and tests non-leap year boundary date calculations (`1905-03-05` = \(31 + 28 + 4 = \text{Day } 63\)).
@@ -2706,6 +2715,7 @@ Verifies the kinetic transition from `ne` ➔ `na` ➔ `np` for a planned waypoi
 ---
 
 ## Test Case 18: Commercial Station Serialization (With Bazaar)
+**Feature Tags:** `[startup-recovery, economy, ui-gates]`
 
 ### Objective
 
@@ -2786,6 +2796,7 @@ Verifies that when charting a commercial station (such as New Winchester), the e
 ---
 
 ## Test Case 19: Non-Commercial Node Serialization (Without Bazaar)
+**Feature Tags:** `[startup-recovery, navigation, ui-gates]`
 
 ### Objective
 
@@ -2868,6 +2879,7 @@ Verifies the ultra-sparse rule for non-commercial nodes (such as a transit relay
 ---
 
 ## Test Case 20: Next Stop Action Filtering & Priority Indicator Verification
+**Feature Tags:** `[narrative, navigation]`
 
 ### Objective
 

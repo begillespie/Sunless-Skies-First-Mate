@@ -47,15 +47,7 @@ Version 0.5.1
 ### 🧭 Active Trajectory:
 [recent_history[-1].location] ➔ 🟢 **[itinerary[0].location]** ➔ 🟡 [itinerary[1].location] ➔ 🟡 [itinerary[n].location]
 
-### ➡️ NEXT STOP: [NEXT PORT NAME]
-* 🎯 **AMBITION:** [MILESTONE_DESCRIPTION]. Items Needed: [ITEMS_REQUIRED_NEXT_TIER]
-* 🔑 **READY FOR DELIVERY:** [PROSPECT_TITLE] — Deliver [QTY_REMAINING] [GOOD_NAME] to [DESTINATION_PORT] to complete contract
-* 📖 **QUEST PLOTLINE:** [QUESTLINE_NAME] — Step [NUM]: [TARGET_OBJECTIVE_NOTES]
-* 👤 **OFFICER QUEST:** [QUESTLINE_NAME] ([OFFICER_NAME]) — [MILESTONE_TRIGGER_NOTES]. Requires: [OFFICER_ITEM]
-* 💼 **SECONDMENT:** [OFFICER_NAME] at [STATION_NAME]. Effect: [CONTRIBUTION_EFFECT] — Return Conditions: [RETURN_CONDITION]
-* 📌 **BRIDGE NOTE:** [USER_NOTES] — Priority: [LOW/NORMAL/HIGH]
-
-### ➡️ NEXT STOP: [NEXT PORT NAME]
+### ➡️ NEXT STOP: [NEXT_PORT_NAME]
 * `[Priority Indicator: ‼️ (high) /🔻 (low) if applicable]` 🎯 **AMBITION:** [MILESTONE_DESCRIPTION]. Items Needed: [ITEMS_REQUIRED_NEXT_TIER]
 * `[Priority Indicator]`🔑 **READY FOR DELIVERY:** [PROSPECT_TITLE] — Deliver [QTY_REMAINING] [GOOD_NAME] to [DESTINATION_PORT] to complete contract
 * `[Priority Indicator]`📖 **QUEST PLOTLINE:** [QUESTLINE_NAME] — Step [NUM]: [TARGET_OBJECTIVE_NOTES]
