@@ -4,7 +4,7 @@
 Sunless Skies First Mate Engine Test Suite
 Tests version: 0.5.0
 
-Rules version: 0.6.1
+Rules version: 0.7.0
 Logbook version: 0.5.1
 Save schema version: 0.5.1
 Static data version: 0.4.1
@@ -401,7 +401,7 @@ New Winchester ➔ 🟢 **Titania**
 #### 🔒 INTERNAL STATE AUTOSAVE
 
 ```json
-{"ssf":"sunless-skies-first-mate","ssv":"0.5.0","sfn":"Mr. Bligh","sds":{"sso":880,"sep":1154,"cpt":{"cnm":"Sinclair","csk":{"ir":10,"mi":3,"he":6,"ve":3},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":30,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":8,"cmx":10,"ctr":0,"cng":0},"oom":{"ood":{"fo":"onf","qm":null,"sc":null,"ce":null,"ma":null},"oun":{"fo":[],"qm":[],"sc":[],"ce":[],"ma":[]},"osc":{"fo":[],"qm":[],"sc":[],"ce":[],"ma":[]},"odp":{"fo":[],"qm":[],"sc":[],"ce":[],"ma":[]}},"gui":{"gfu":[3,0,20.0],"gsu":[3,0,40.0],"gbw":[0,5,175.0],"gcn":[0,2,120.0]},"pps":{"ac":{},"bo":{},"es":{},"vi":{},"ptp":[]},"aaa":[],"nv":{"cl":"lnw","ns":"nd","lue":1154,"rh":[4,"lpr",1150],"it":[5,"lti"]},"dl":{}}}
+{"ssf":"sunless-skies-first-mate","ssv":"0.5.0","sfn":"Mr. Bligh","sds":{"sso":880,"sep":1154,"cpt":{"cnm":"Sinclair","csk":{"ir":10,"mi":3,"he":6,"ve":3},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":30,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":8,"cmx":10,"ctr":0,"cng":0},"oom":{"ood":{"fo":"onf","qm":null,"sc":null,"ce":null,"ma":null}},"gui":{"gfu":[3,0,20.0],"gsu":[3,0,40.0],"gbw":[0,5,175.0],"gcn":[0,2,120.0]},"pps":{"ac":{},"bo":{},"es":{},"vi":{},"ptp":[]},"aaa":[],"nv":{"cl":"lnw","ns":"nd","lue":1154,"rh":[4,"lpr",1150],"it":[5,"lti"]},"dl":{}}}
 ```
 
 ---
@@ -1740,8 +1740,7 @@ Titania ➔ 🟢 **New Winchester**
 #### 🔒 INTERNAL STATE AUTOSAVE
 
 ```json
-{"ssf":"sunless-skies-first-mate","ssv":"0.5.0","sfn":"Mr. Bligh","sds":{"sso":1000,"sep":48,"cpt":{"cnm":"Sinclair","csk":{"ir":0,"mi":0,"he":0,"ve":0},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":30,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":10,"cmx":10,"ctr":12,"cng":0},"oom":{},"gui":{"gfu":[3,0,20.0],"gsu":[3,0,40.0]},"pps":{},
-"aaa":[{"aid":"ACT-2002","atp":"qst","ast":"act","aol":"lti","att":"The Glass Greenhouse","ant":"Gather elements for the biome update.","apr":"md","apn":false,"ace":45,"aue":48,"ade":null,"apl":[1,"ql",[["lti","Deliver Chorister Nectar and Verdant Seeds"]],{"gd": [["gcn",1,1],["gvs",2,0]],"pps":[],"ni":[]}]}],"nv":{"cl":"lti","ns":"nd","lue":48,"rh":[1,"lti",48],"it":[2,"lnw"]},"dl":{}}}
+{"ssf":"sunless-skies-first-mate","ssv":"0.5.0","sfn":"Mr. Bligh","sds":{"sso":1000,"sep":48,"cpt":{"cnm":"Sinclair","csk":{"ir":0,"mi":0,"he":0,"ve":0},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":30,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":10,"cmx":10,"ctr":12,"cng":0},"oom":{},"gui":{"gfu":[3,0,20.0],"gsu":[3,0,40.0]},"pps":{},"aaa":[{"aid":"ACT-2002","atp":"qst","ast":"act","aol":"lti","att":"The Glass Greenhouse","ant":"Gather elements for the biome update.","apr":"md","apn":false,"ace":45,"aue":48,"ade":null,"apl":[1,"ql",[["lti","Deliver Chorister Nectar and Verdant Seeds"]],{"gd": [["gcn",1,1],["gvs",2,0]],"pps":[],"ni":[]}]}],"nv":{"cl":"lti","ns":"nd","lue":48,"rh":[1,"lti",48],"it":[2,"lnw"]},"dl":{}}}
 ```
 
 ---
@@ -1965,8 +1964,8 @@ Verifies dynamic officer perk resolution, ensuring runtime evaluation reads comp
         "qm": "oai",
         "ma": "dog"
       },
-      "oun": {"fo": ["opi", "ocl"]},
-      "osc": {"sc": ["olr"]}
+      "oun": ["opi", "ocl"],
+      "osc": ["olr"]
     },
     "gui": {
       "gfu": [3, 0, 20.00],
@@ -2109,7 +2108,7 @@ London ➔ 🟢 **The Avid Horizon**
 #### 🔒 INTERNAL STATE AUTOSAVE
 
 ```json
-{"ssf":"sunless-skies-first-mate","ssv":"0.5.0","sfn":"Mr. Bligh","sds":{"sso":1000,"sep":417,"cpt":{"cnm":"Sinclair","csk":{"ir":10,"mi":18,"he":25,"ve":7},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":30,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":10,"cmx":10,"ctr":12,"cng":0},"oom":{"ood":{"fo":"ons","qm":"oai","ma":"dog"},"oun":{"fo":["opi","ocl"]},"osc":{"sc":["olr"]}},"gui":{"gfu":[3,0,20.0],"gsu":[3,0,40.0]},"pps":{},"aaa":[{"aid":"ACT-1011","atp":"sec","ast":"rdy","aol":"home_bureau","att":"Secondment: Repentant Devil","ant":"Generates prospects near the Avid Horizon.","apr":"hi","apn":false,"ace":366,"aue":366,"ade":400,"apl":[["olr",34,"Generates prospects at Avid Horizon","Collect in person"]]}],"nv":{"cl":"llo","ns":"nd","lue":417,"rh":[1,"llo",417],"it":[[2,"lah"]]},"dl":{}}}
+{"ssf":"sunless-skies-first-mate","ssv":"0.5.0","sfn":"Mr. Bligh","sds":{"sso":1000,"sep":417,"cpt":{"cnm":"Sinclair","csk":{"ir":10,"mi":18,"he":25,"ve":7},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":30,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":10,"cmx":10,"ctr":12,"cng":0},"oom":{"ood":{"fo":"ons","qm":"oai","ma":"dog"},"oun":["opi","ocl"],"osc":["olr"]},"gui":{"gfu":[3,0,20.0],"gsu":[3,0,40.0]},"pps":{},"aaa":[{"aid":"ACT-1011","atp":"sec","ast":"rdy","aol":"home_bureau","att":"Secondment: Repentant Devil","ant":"Generates prospects near the Avid Horizon.","apr":"hi","apn":false,"ace":366,"aue":366,"ade":400,"apl":[["olr",34,"Generates prospects at Avid Horizon","Collect in person"]]}],"nv":{"cl":"llo","ns":"nd","lue":417,"rh":[1,"llo",417],"it":[[2,"lah"]]},"dl":{}}}
 ```
 
 ---
