@@ -7,7 +7,7 @@ Tests version: 0.5.0
 Rules version: 0.7.0
 Logbook version: 0.5.1
 Save schema version: 0.5.1
-Static data version: 0.4.1
+Static data version: 0.4.2
 -->
 
 ## MASTER TEST SUITE INDEX
@@ -155,7 +155,7 @@ New Winchester ➔ 🟢 **[ unknown ]**
 #### 🔒 INTERNAL STATE AUTOSAVE
 
 ```json
-{"ssf":"sunless-skies-first-mate","ssv":"0.5.0","sfn":"Mr. Bligh","sds":{"sso":1000,"sep":0,"cpt":{"cnm":"Sinclair","csk":{"ir":0,"mi":0,"he":0,"ve":0},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"","chl":30,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":8,"cmx":10,"ctr":0,"cng":0},"oom":{},"gui":{"gfu":[3,0,20.0],"gsu":[3,0,40.0]},"pps":{},"aaa":[],"nv":{"cl":"lnw","ns":"nd","lue":0,"rh":[],"it":[]},"dl":{"lnw":{"cd":null,"bz":{"re":null,"ab":[]}}}}}
+{"ssf":"sunless-skies-first-mate","ssv":"0.6.0","sfn":"Mr. Bligh","sds":{"sso":1000,"sep":0,"cpt":{"cnm":"Sinclair","csk":{"ir":0,"mi":0,"he":0,"ve":0},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"","chl":30,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":8,"cmx":10,"ctr":0,"cng":0},"oom":{},"gui":{"gfu":[3,0,20.0],"gsu":[3,0,40.0]},"pps":{},"aaa":[],"nv":{"cl":"lnw","ns":"nd","lue":0,"rh":[],"it":[]},"dl":{"lnw":{"cd":null,"bz":{"re":null,"ab":[]}}}}}
 ```
 
 ---
@@ -174,7 +174,7 @@ Verifies kinetic state transition from `ne` ➔ `na` ➔ `np`, temporal conversi
 ```json
 {
   "ssf": "sunless-skies-first-mate",
-  "ssv": "0.5.0",
+  "ssv":"0.6.0",
   "sfn": "Mr. Bligh",
   "sds": {
     "sso": 1000,
@@ -255,7 +255,7 @@ Verifies ledger accounting updates for assets moved to central hub storage, supp
 ```json
 {
   "ssf": "sunless-skies-first-mate",
-  "ssv": "0.5.0",
+  "ssv":"0.6.0",
   "sfn": "Mr. Bligh",
   "sds": {
     "sso": 880,
@@ -401,7 +401,7 @@ New Winchester ➔ 🟢 **Titania**
 #### 🔒 INTERNAL STATE AUTOSAVE
 
 ```json
-{"ssf":"sunless-skies-first-mate","ssv":"0.5.0","sfn":"Mr. Bligh","sds":{"sso":880,"sep":1154,"cpt":{"cnm":"Sinclair","csk":{"ir":10,"mi":3,"he":6,"ve":3},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":30,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":8,"cmx":10,"ctr":0,"cng":0},"oom":{"ood":{"fo":"onf","qm":null,"sc":null,"ce":null,"ma":null}},"gui":{"gfu":[3,0,20.0],"gsu":[3,0,40.0],"gbw":[0,5,175.0],"gcn":[0,2,120.0]},"pps":{"ac":{},"bo":{},"es":{},"vi":{},"ptp":[]},"aaa":[],"nv":{"cl":"lnw","ns":"nd","lue":1154,"rh":[4,"lpr",1150],"it":[5,"lti"]},"dl":{}}}
+{"ssf":"sunless-skies-first-mate","ssv":"0.6.0","sfn":"Mr. Bligh","sds":{"sso":880,"sep":1154,"cpt":{"cnm":"Sinclair","csk":{"ir":10,"mi":3,"he":6,"ve":3},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":30,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":8,"cmx":10,"ctr":0,"cng":0},"oom":{"ood":{"fo":"onf","qm":null,"sc":null,"ce":null,"ma":null}},"gui":{"gfu":[3,0,20.0],"gsu":[3,0,40.0],"gbw":[0,5,175.0],"gcn":[0,2,120.0]},"pps":{"ac":{},"bo":{},"es":{},"vi":{},"ptp":[]},"aaa":[],"nv":{"cl":"lnw","ns":"nd","lue":1154,"rh":[4,"lpr",1150],"it":[5,"lti"]},"dl":{}}}
 ```
 
 ---
@@ -420,7 +420,7 @@ Probes compliance with safety guardrails by forcing an intentional relational in
 ```json
 {
   "ssf": "sunless-skies-first-mate",
-  "ssv": "0.5.0",
+  "ssv":"0.6.0",
   "sfn": "Mr. Bligh",
   "sds": {
     "sso": 880,
@@ -496,7 +496,7 @@ Verifies the application of the structural color math threshold where crew count
 ```json
 {
   "ssf": "sunless-skies-first-mate",
-  "ssv": "0.5.0",
+  "ssv":"0.6.0",
   "sfn": "Mr. Bligh",
   "sds": {
     "sso": 880,
@@ -639,7 +639,7 @@ Port Avon ➔ 🟢 **New Winchester**
 #### 🔒 INTERNAL STATE AUTOSAVE
 
 ```json
-{"ssf":"sunless-skies-first-mate","ssv":"0.5.0","sfn":"Mr. Bligh","sds":{"sso":880,"sep":379,"cpt":{"cnm":"Sinclair","csk":{"ir":0,"mi":0,"he":0,"ve":0},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":17,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":6,"cmx":10,"ctr":20,"cng":0},"oom":{},"gui":{"gfu":[3,0,20.0],"gsu":[3,0,40.0]},"pps":{},"aaa":[],"nv":{"cl":"lpo","ns":"nd","lue":379,"rh":[1,"lnw",350],"it":[2,"lnw"]},"dl":{}}}
+{"ssf":"sunless-skies-first-mate","ssv":"0.6.0","sfn":"Mr. Bligh","sds":{"sso":880,"sep":379,"cpt":{"cnm":"Sinclair","csk":{"ir":0,"mi":0,"he":0,"ve":0},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":17,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":6,"cmx":10,"ctr":20,"cng":0},"oom":{},"gui":{"gfu":[3,0,20.0],"gsu":[3,0,40.0]},"pps":{},"aaa":[],"nv":{"cl":"lpo","ns":"nd","lue":379,"rh":[1,"lnw",350],"it":[2,"lnw"]},"dl":{}}}
 ```
 
 ## Test Case 6: Critical Low Crew Threshold & Consumable Depletion
@@ -656,7 +656,7 @@ Verifies behavioral tone shifts when crew drops below 50%, triggering fatigue an
 ```json
 {
   "ssf": "sunless-skies-first-mate",
-  "ssv": "0.5.0",
+  "ssv":"0.6.0",
   "sfn": "Mr. Bligh",
   "sds": {
     "sso": 880,
@@ -804,7 +804,7 @@ Hybras ➔ 🟢 **Polmear & Plenty's Inconceivable Circus**
 #### 🔒 INTERNAL STATE AUTOSAVE
 
 ```json
-{"ssf":"sunless-skies-first-mate","ssv":"0.5.0","sfn":"Mr. Bligh","sds":{"sso":880,"sep":384,"cpt":{"cnm":"Sinclair","csk":{"ir":0,"mi":0,"he":0,"ve":0},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":17,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":3,"cmx":10,"ctr":35,"cng":0},"oom":{},"gui":{"gfu":[1,0,20.0],"gsu":[0,0,40.0]},"pps":{},"aaa":[{"aid":"ACT-1001","atp":"tod","ast":"act","aol":"lhy","att":"Hire crew at the circus","ant":"Hire replacement crew from the circus","apr":"hi","apn":false,"ace":384,"aue":384,"ade":null,"apl":["lpp"]}],"nv":{"cl":"lhy","ns":"nd","lue":384,"rh":[2,"lpo",379],"it":[[3,"lpp"]]},"dl":{}}}
+{"ssf":"sunless-skies-first-mate","ssv":"0.6.0","sfn":"Mr. Bligh","sds":{"sso":880,"sep":384,"cpt":{"cnm":"Sinclair","csk":{"ir":0,"mi":0,"he":0,"ve":0},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":17,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":3,"cmx":10,"ctr":35,"cng":0},"oom":{},"gui":{"gfu":[1,0,20.0],"gsu":[0,0,40.0]},"pps":{},"aaa":[{"aid":"ACT-1001","atp":"tod","ast":"act","aol":"lhy","att":"Hire crew at the circus","ant":"Hire replacement crew from the circus","apr":"hi","apn":false,"ace":384,"aue":384,"ade":null,"apl":["lpp"]}],"nv":{"cl":"lhy","ns":"nd","lue":384,"rh":[2,"lpo",379],"it":[[3,"lpp"]]},"dl":{}}}
 ```
 
 ## Test Case 7: Route Planner - Multi-Stop Sequential Itinerary & Task Linking
@@ -821,7 +821,7 @@ Verifies multi-stop itinerary construction, sequential leg renumbering, spatial 
 ```json
 {
   "ssf": "sunless-skies-first-mate",
-  "ssv": "0.5.0",
+  "ssv":"0.6.0",
   "sfn": "Mr. Bligh",
   "sds": {
     "sso": 1450,
@@ -1024,7 +1024,7 @@ New Winchester ➔ 🟢 **Titania** ➔ 🟡 Lustrum
 #### 🔒 INTERNAL STATE AUTOSAVE
 
 ```json
-{"ssf":"sunless-skies-first-mate","ssv":"0.5.0","sfn":"Mr. Bligh","sds":{"sso":1450,"sep":1195,"cpt":{"cnm":"Sinclair","csk":{"ir":0,"mi":0,"he":0,"ve":0},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc": {"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":30,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":9,"cmx":10,"ctr":15,"cng":0},"oom":{},"gui":{"gfu":[3,0,20.0],"gsu":[3,0,40.0],"gbw":[2,0,175.0]},"pps": {"ac": {},"bo": {},"es": {},"vi": {},"ptp": []},"aaa": [{"aid":"ACT-1001","atp":"amb","ast":"act","aol":"lnw","att":"Ambition: Wealth","ant":"","apr":"md","apn":false,"ace":6,"aue":6,"ade":null,"apl":["aw",1,"Purchase the Governor's Manor",5000,{"gd":[],"pk":[],"ni":[]}]},{"aid":"ACT-1012","atp":"prs","ast":"act","aol":"lnw","att":"Nectar for the Fairies","ant":"","apr":"md","apn":false,"ace":79,"aue":79,"ade":null,"apl":["gcn",1,0,0,"lti"]},{"aid":"ACT-1013","atp":"prs","ast":"rdy","aol":"lnw","att":"Bronzewood Shipments","ant":"","apr":"md","apn":false,"ace":82,"aue":82,"ade":null,"apl":["gbw",3,3,1,"llu"]},{"aid":"ACT-1016","atp":"tod","ast":"act","aol":"lnw","att":"Helping the Horticulturalist","ant":"Deliver structural schematics to the Horticulturalist","apr":"md","apn":false,"ace":90,"aue":90,"ade":null,"apl":["lti"]}],"nv":{"cl":"lnw","ns":"nd","lue":1195,"rh":[[1,"lnw",1180]],"it":[[2,"lti"], [3,"llu"]]},"dl": {}}}
+{"ssf":"sunless-skies-first-mate","ssv":"0.6.0","sfn":"Mr. Bligh","sds":{"sso":1450,"sep":1195,"cpt":{"cnm":"Sinclair","csk":{"ir":0,"mi":0,"he":0,"ve":0},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc": {"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":30,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":9,"cmx":10,"ctr":15,"cng":0},"oom":{},"gui":{"gfu":[3,0,20.0],"gsu":[3,0,40.0],"gbw":[2,0,175.0]},"pps": {"ac": {},"bo": {},"es": {},"vi": {},"ptp": []},"aaa": [{"aid":"ACT-1001","atp":"amb","ast":"act","aol":"lnw","att":"Ambition: Wealth","ant":"","apr":"md","apn":false,"ace":6,"aue":6,"ade":null,"apl":["aw",1,"Purchase the Governor's Manor",5000,{"gd":[],"pk":[],"ni":[]}]},{"aid":"ACT-1012","atp":"prs","ast":"act","aol":"lnw","att":"Nectar for the Fairies","ant":"","apr":"md","apn":false,"ace":79,"aue":79,"ade":null,"apl":["gcn",1,0,0,"lti"]},{"aid":"ACT-1013","atp":"prs","ast":"rdy","aol":"lnw","att":"Bronzewood Shipments","ant":"","apr":"md","apn":false,"ace":82,"aue":82,"ade":null,"apl":["gbw",3,3,1,"llu"]},{"aid":"ACT-1016","atp":"tod","ast":"act","aol":"lnw","att":"Helping the Horticulturalist","ant":"Deliver structural schematics to the Horticulturalist","apr":"md","apn":false,"ace":90,"aue":90,"ade":null,"apl":["lti"]}],"nv":{"cl":"lnw","ns":"nd","lue":1195,"rh":[[1,"lnw",1180]],"it":[[2,"lti"], [3,"llu"]]},"dl":{}}}
 ```
 
 ## Test Case 8: Route Planner - Resupply Isolation Alert & Intermediate Port Recommendation
@@ -1041,7 +1041,7 @@ Verifies that the Route Planner detects critical consumable deficits prior to a 
 ```json
 {
   "ssf": "sunless-skies-first-mate",
-  "ssv": "0.5.0",
+  "ssv":"0.6.0",
   "sfn": "Mr. Bligh",
   "sds": {
     "sso": 620,
@@ -1079,17 +1079,14 @@ Verifies that the Route Planner detects critical consumable deficits prior to a 
     "dl": {
       "lnw": {
         "cd": null,
-        "captains_notes": [],
         "bz": {"re": null, "ab": []}
       },
       "lti": {
         "cd": 2,
-        "captains_notes": [],
         "bz": {"re": null, "ab": []}
       },
       "lpr": {
         "cd": 6,
-        "captains_notes": [],
         "bz": {"re": null, "ab": []}
       }
     }
@@ -1200,7 +1197,7 @@ New Winchester ➔ 🟢 **Port Prosper**
 #### 🔒 INTERNAL STATE AUTOSAVE
 
 ```json
-{"ssf":"sunless-skies-first-mate","ssv":"0.5.0","sfn":"Mr. Bligh","sds":{"sso":620,"sep":48,"cpt":{"cnm":"Sinclair","csk":{"ir":0,"mi":0,"he":0,"ve":0},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":25,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":10,"cmx":10,"ctr":40,"cng":1},"oom":{},"gui":{"gfu":[1,0,20.0],"gsu":[1,0,40.0]},"pps":{},"aaa":[],"nv":{"cl":"lnw","ns":"nd","lue":48,"rh":[1,"lnw",48],"it":[2,"lpr"]},"dl":{"lnw":{"cd":null,"bz":{"re":null,"ab":[]}},"lti":{"cd":2,"bz":{"re":null,"ab":[]}},"lpr":{"cd":6,"bz":{"re":null,"ab":[]}}}}}
+{"ssf":"sunless-skies-first-mate","ssv":"0.6.0","sfn":"Mr. Bligh","sds":{"sso":620,"sep":48,"cpt":{"cnm":"Sinclair","csk":{"ir":0,"mi":0,"he":0,"ve":0},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":25,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":10,"cmx":10,"ctr":40,"cng":1},"oom":{},"gui":{"gfu":[1,0,20.0],"gsu":[1,0,40.0]},"pps":{},"aaa":[],"nv":{"cl":"lnw","ns":"nd","lue":48,"rh":[1,"lnw",48],"it":[2,"lpr"]},"dl":{"lnw":{"cd":null,"bz":{"re":null,"ab":[]}},"lti":{"cd":2,"bz":{"re":null,"ab":[]}},"lpr":{"cd":6,"bz":{"re":null,"ab":[]}}}}}
 ```
 
 
@@ -1216,7 +1213,7 @@ Verifies that spatial possessions (Category 2: 16 immutable progression tokens) 
 ```json
 {
   "ssf": "sunless-skies-first-mate",
-  "ssv": "0.5.0",
+  "ssv":"0.6.0",
   "sfn": "Mr. Bligh",
   "sds": {
     "sso": 800,
@@ -1366,7 +1363,7 @@ New Winchester ➔ 🟢 **Port Avon**
 #### 🔒 INTERNAL STATE AUTOSAVE
 
 ```json
-{"ssf":"sunless-skies-first-mate","ssv":"0.5.0","sfn":"Mr. Bligh","sds":{"sso":800,"sep":14,"cpt":{"cnm":"Sinclair","csk":{"ir":0,"mi":0,"he":0,"ve":0},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc": {"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":30,"cmh":30,"cfl":2,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":8,"cmx":10,"ctr":0,"cng":0},"oom": {},"gui":{"gfu":[4,0,20.0],"gsu":[4,0,40.0],"gal":[2,0,100.0]},"pps":{"ac":{},"bo":{},"es":{},"vi":{"ptt":2},"ptp":[]},"aaa":[{"aid":"ACT-1001","atp":"qst","ast":"act","aol":"lnw","att":"The LastConsignment","ant":"Deliver a Primordial Star Shard to Port Avon forThe Sequestered Scholar","apr":"md","apn":false,"ace":14,"aue":14"ade":null,"apl":[1,"qf",[["lpo","Deliver a Primordial Star Shard"]],{"gd":[],"pk":[],"ni":[["Primordial Star Shard",1,0]]}]}],"nv": {"cl":"lnw","ns":"nd","lue":14,"rh":[[1,"lnw",0]],"it":[[2"lpo"]]},"dl":{}}}
+{"ssf":"sunless-skies-first-mate","ssv":"0.6.0","sfn":"Mr. Bligh","sds":{"sso":800,"sep":14,"cpt":{"cnm":"Sinclair","csk":{"ir":0,"mi":0,"he":0,"ve":0},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc": {"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":30,"cmh":30,"cfl":2,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":8,"cmx":10,"ctr":0,"cng":0},"oom": {},"gui":{"gfu":[4,0,20.0],"gsu":[4,0,40.0],"gal":[2,0,100.0]},"pps":{"ac":{},"bo":{},"es":{},"vi":{"ptt":2},"ptp":[]},"aaa":[{"aid":"ACT-1001","atp":"qst","ast":"act","aol":"lnw","att":"The LastConsignment","ant":"Deliver a Primordial Star Shard to Port Avon forThe Sequestered Scholar","apr":"md","apn":false,"ace":14,"aue":14"ade":null,"apl":[1,"qf",[["lpo","Deliver a Primordial Star Shard"]],{"gd":[],"pk":[],"ni":[["Primordial Star Shard",1,0]]}]}],"nv": {"cl":"lnw","ns":"nd","lue":14,"rh":[[1,"lnw",0]],"it":[[2"lpo"]]},"dl":{}}}
 ```
 
 ---
@@ -1385,7 +1382,7 @@ Verifies that sourcing the final required units of a standard trade good atomica
 ```json
 {
   "ssf": "sunless-skies-first-mate",
-  "ssv": "0.5.0",
+  "ssv":"0.6.0",
   "sfn": "Mr. Bligh",
   "sds": {
     "sso": 1000,
@@ -1548,7 +1545,7 @@ New Winchester ➔ 🟢 **Port Prosper**
 #### 🔒 INTERNAL STATE AUTOSAVE
 
 ```json
-{"ssf":"sunless-skies-first-mate","ssv":"0.5.0","sfn":"Mr. Bligh","sds":{"sso":1000,"sep":48,"cpt":{"cnm":"Sinclair","csk":{"ir":0,"mi":0,"he":0,"ve":0},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":30,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":10,"cmx":10,"ctr":12,"cng":0},"oom":{},"gui":{"gfu":[3,0,20.0],"gsu":[3,0,40.0],"gmu":[4,0,60.0]},"pps":{},"aaa":[{"aid":"ACT-1001","atp":"prs","ast":"rdy","aol":"lnw","att":"Fortress Resupply","ant":"Urgent munitions shipment for the garrison.","apr":"md","apn":false,"ace":48,"aue":48,"ade":null,"apl":["gmu",4,4,0,"lpr"]}],"nv":{"cl":"lnw","ns":"nd","lue":48,"rh":[1,"lnw",48],"it":[2,"lpr"]},"dl":{}}}
+{"ssf":"sunless-skies-first-mate","ssv":"0.6.0","sfn":"Mr. Bligh","sds":{"sso":1000,"sep":48,"cpt":{"cnm":"Sinclair","csk":{"ir":0,"mi":0,"he":0,"ve":0},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":30,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":10,"cmx":10,"ctr":12,"cng":0},"oom":{},"gui":{"gfu":[3,0,20.0],"gsu":[3,0,40.0],"gmu":[4,0,60.0]},"pps":{},"aaa":[{"aid":"ACT-1001","atp":"prs","ast":"rdy","aol":"lnw","att":"Fortress Resupply","ant":"Urgent munitions shipment for the garrison.","apr":"md","apn":false,"ace":48,"aue":48,"ade":null,"apl":["gmu",4,4,0,"lpr"]}],"nv":{"cl":"lnw","ns":"nd","lue":48,"rh":[1,"lnw",48],"it":[2,"lpr"]},"dl":{}}}
 ```
 
 ---
@@ -1567,7 +1564,7 @@ Verifies that partial delivery of items toward a quest "shopping list" pattern c
 ```json
 {
   "ssf": "sunless-skies-first-mate",
-  "ssv": "0.5.0",
+  "ssv":"0.6.0",
   "sfn": "Mr. Bligh",
   "sds": {
     "sso": 1000,
@@ -1740,7 +1737,7 @@ Titania ➔ 🟢 **New Winchester**
 #### 🔒 INTERNAL STATE AUTOSAVE
 
 ```json
-{"ssf":"sunless-skies-first-mate","ssv":"0.5.0","sfn":"Mr. Bligh","sds":{"sso":1000,"sep":48,"cpt":{"cnm":"Sinclair","csk":{"ir":0,"mi":0,"he":0,"ve":0},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":30,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":10,"cmx":10,"ctr":12,"cng":0},"oom":{},"gui":{"gfu":[3,0,20.0],"gsu":[3,0,40.0]},"pps":{},"aaa":[{"aid":"ACT-2002","atp":"qst","ast":"act","aol":"lti","att":"The Glass Greenhouse","ant":"Gather elements for the biome update.","apr":"md","apn":false,"ace":45,"aue":48,"ade":null,"apl":[1,"ql",[["lti","Deliver Chorister Nectar and Verdant Seeds"]],{"gd": [["gcn",1,1],["gvs",2,0]],"pps":[],"ni":[]}]}],"nv":{"cl":"lti","ns":"nd","lue":48,"rh":[1,"lti",48],"it":[2,"lnw"]},"dl":{}}}
+{"ssf":"sunless-skies-first-mate","ssv":"0.6.0","sfn":"Mr. Bligh","sds":{"sso":1000,"sep":48,"cpt":{"cnm":"Sinclair","csk":{"ir":0,"mi":0,"he":0,"ve":0},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":30,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":10,"cmx":10,"ctr":12,"cng":0},"oom":{},"gui":{"gfu":[3,0,20.0],"gsu":[3,0,40.0]},"pps":{},"aaa":[{"aid":"ACT-2002","atp":"qst","ast":"act","aol":"lti","att":"The Glass Greenhouse","ant":"Gather elements for the biome update.","apr":"md","apn":false,"ace":45,"aue":48,"ade":null,"apl":[1,"ql",[["lti","Deliver Chorister Nectar and Verdant Seeds"]],{"gd": [["gcn",1,1],["gvs",2,0]],"pps":[],"ni":[]}]}],"nv":{"cl":"lti","ns":"nd","lue":48,"rh":[1,"lti",48],"it":[2,"lnw"]},"dl":{}}}
 ```
 
 ---
@@ -1759,7 +1756,7 @@ Verifies that when docked at the destination location of an active mercantile pr
 ```json
 {
   "ssf": "sunless-skies-first-mate",
-  "ssv": "0.5.0",
+  "ssv":"0.6.0",
   "sfn": "Mr. Bligh",
   "sds": {
     "sso": 1000,
@@ -1920,7 +1917,7 @@ Port Prosper ➔ 🟢 **[ unknown ]**
 #### 🔒 INTERNAL STATE AUTOSAVE
 
 ```json
-{"ssf":"sunless-skies-first-mate","ssv":"0.5.0","sfn":"Mr. Bligh","sds":{"sso":1000,"sep":49,"cpt":{"cnm":"Sinclair","csk":{"ir":0,"mi":0,"he":0,"ve":0},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":30,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":10,"cmx":10,"ctr":10,"cng":0},"oom":{},"gui":{"gfu":[3,0,20.0],"gsu":[3,0,40.0],"gmu":[2,0,60.0]},"pps":{},"aaa":[{"aid":"ACT-1001","atp":"prs","ast":"rdy","aol":"lnw","att":"Fortress Resupply","ant":"Urgent munitions shipment for the garrison.","apr":"md","apn":false,"ace":48,"aue":49,"ade":null,"apl":["gmu",4,4,2,"lpr"]}],"nv":{"cl":"lpr","ns":"nd","lue":49,"rh":[1,"lpr",49],"it":[]},"dl":{}}}
+{"ssf":"sunless-skies-first-mate","ssv":"0.6.0","sfn":"Mr. Bligh","sds":{"sso":1000,"sep":49,"cpt":{"cnm":"Sinclair","csk":{"ir":0,"mi":0,"he":0,"ve":0},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":30,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":10,"cmx":10,"ctr":10,"cng":0},"oom":{},"gui":{"gfu":[3,0,20.0],"gsu":[3,0,40.0],"gmu":[2,0,60.0]},"pps":{},"aaa":[{"aid":"ACT-1001","atp":"prs","ast":"rdy","aol":"lnw","att":"Fortress Resupply","ant":"Urgent munitions shipment for the garrison.","apr":"md","apn":false,"ace":48,"aue":49,"ade":null,"apl":["gmu",4,4,2,"lpr"]}],"nv":{"cl":"lpr","ns":"nd","lue":49,"rh":[1,"lpr",49],"it":[]},"dl":{}}}
 ```
 
 ---
@@ -1937,7 +1934,7 @@ Verifies dynamic officer perk resolution, ensuring runtime evaluation reads comp
 ```json
 {
   "ssf": "sunless-skies-first-mate",
-  "ssv": "0.5.0",
+  "ssv":"0.6.0",
   "sfn": "Mr. Bligh",
   "sds": {
     "sso": 1000,
@@ -2108,7 +2105,7 @@ London ➔ 🟢 **The Avid Horizon**
 #### 🔒 INTERNAL STATE AUTOSAVE
 
 ```json
-{"ssf":"sunless-skies-first-mate","ssv":"0.5.0","sfn":"Mr. Bligh","sds":{"sso":1000,"sep":417,"cpt":{"cnm":"Sinclair","csk":{"ir":10,"mi":18,"he":25,"ve":7},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":30,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":10,"cmx":10,"ctr":12,"cng":0},"oom":{"ood":{"fo":"ons","qm":"oai","ma":"dog"},"oun":["opi","ocl"],"osc":["olr"]},"gui":{"gfu":[3,0,20.0],"gsu":[3,0,40.0]},"pps":{},"aaa":[{"aid":"ACT-1011","atp":"sec","ast":"rdy","aol":"home_bureau","att":"Secondment: Repentant Devil","ant":"Generates prospects near the Avid Horizon.","apr":"hi","apn":false,"ace":366,"aue":366,"ade":400,"apl":[["olr",34,"Generates prospects at Avid Horizon","Collect in person"]]}],"nv":{"cl":"llo","ns":"nd","lue":417,"rh":[1,"llo",417],"it":[[2,"lah"]]},"dl":{}}}
+{"ssf":"sunless-skies-first-mate","ssv":"0.6.0","sfn":"Mr. Bligh","sds":{"sso":1000,"sep":417,"cpt":{"cnm":"Sinclair","csk":{"ir":10,"mi":18,"he":25,"ve":7},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":30,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":10,"cmx":10,"ctr":12,"cng":0},"oom":{"ood":{"fo":"ons","qm":"oai","ma":"dog"},"oun":["opi","ocl"],"osc":["olr"]},"gui":{"gfu":[3,0,20.0],"gsu":[3,0,40.0]},"pps":{},"aaa":[{"aid":"ACT-1011","atp":"sec","ast":"rdy","aol":"home_bureau","att":"Secondment: Repentant Devil","ant":"Generates prospects near the Avid Horizon.","apr":"hi","apn":false,"ace":366,"aue":366,"ade":400,"apl":[["olr",34,"Generates prospects at Avid Horizon","Collect in person"]]}],"nv":{"cl":"llo","ns":"nd","lue":417,"rh":[1,"llo",417],"it":[[2,"lah"]]},"dl":{}}}
 ```
 
 ---
@@ -2127,7 +2124,7 @@ Tests the multi-state kinetic turn pipeline. Ingests transit burn and arrival at
 ```json
 {
   "ssf": "sunless-skies-first-mate",
-  "ssv": "0.5.0",
+  "ssv":"0.6.0",
   "sfn": "Mr. Bligh",
   "sds": {
     "sso": 500,
@@ -2277,7 +2274,7 @@ Lustrum ➔ 🟢 **Port Avon**
 #### 🔒 INTERNAL STATE AUTOSAVE
 
 ```json
-{"ssf":"sunless-skies-first-mate","ssv":"0.5.0","sfn":"Mr. Bligh","sds":{"sso":620,"sep":19,"cpt":{"cnm":"Sinclair","csk":{"ir":0,"mi":0,"he":0,"ve":0},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":30,"cmh":30,"cfl":1,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":8,"cmx":10,"ctr":10,"cng":0},"oom":{},"gui":{"gfu":[5,0,20.0],"gsu":[3,0,40.0]},"pps":{},"aaa":[],"nv":{"cl":null,"ns":"ne","lue":19,"rh":[[2,"lnw",10],[3,"lcr",16],[4,"llu",19]],"it":[5,"lpo"]},"dl":{}}}
+{"ssf":"sunless-skies-first-mate","ssv":"0.6.0","sfn":"Mr. Bligh","sds":{"sso":620,"sep":19,"cpt":{"cnm":"Sinclair","csk":{"ir":0,"mi":0,"he":0,"ve":0},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":30,"cmh":30,"cfl":1,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":8,"cmx":10,"ctr":10,"cng":0},"oom":{},"gui":{"gfu":[5,0,20.0],"gsu":[3,0,40.0]},"pps":{},"aaa":[],"nv":{"cl":null,"ns":"ne","lue":19,"rh":[[2,"lnw",10],[3,"lcr",16],[4,"llu",19]],"it":[5,"lpo"]},"dl":{}}}
 ```
 
 ---
@@ -2296,7 +2293,7 @@ Tests the Moving Average Cost (MAC) formula. Verifies atomic sovereign deduction
 ```json
 {
   "ssf": "sunless-skies-first-mate",
-  "ssv": "0.5.0",
+  "ssv":"0.6.0",
   "sfn": "Mr. Bligh",
   "sds": {
     "sso": 1000,
@@ -2448,7 +2445,7 @@ London ➔ 🟢 **The Brabazon Workworld**
 #### 🔒 INTERNAL STATE AUTOSAVE
 
 ```json
-{"ssf":"sunless-skies-first-mate","ssv":"0.5.0","sfn":"Mr. Bligh","sds":{"sso":840,"sep":119,"cpt":{"cnm":"Sinclair","csk":{"ir":0,"mi":0,"he":0,"ve":0},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":30,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":8,"cmx":10,"ctr":15,"cng":0},"oom":{},"gui":{"gfu":[3,0,20.0],"gsu":[3,0,40.0],"gmu":[6,0,40.0]},"pps":{},"aaa":[],"nv":{"cl":"llo","ns":"nd","lue":119,"rh":[1,"llo",119],"it":[2,"lbw"]},"dl":{}}}
+{"ssf":"sunless-skies-first-mate","ssv":"0.6.0","sfn":"Mr. Bligh","sds":{"sso":840,"sep":119,"cpt":{"cnm":"Sinclair","csk":{"ir":0,"mi":0,"he":0,"ve":0},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":30,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":8,"cmx":10,"ctr":15,"cng":0},"oom":{},"gui":{"gfu":[3,0,20.0],"gsu":[3,0,40.0],"gmu":[6,0,40.0]},"pps":{},"aaa":[],"nv":{"cl":"llo","ns":"nd","lue":119,"rh":[1,"llo",119],"it":[2,"lbw"]},"dl":{}}}
 ```
 
 ---
@@ -2467,7 +2464,7 @@ Tests inter-region relay gating rules. Verifies that plotting course through a t
 ```json
 {
   "ssf": "sunless-skies-first-mate",
-  "ssv": "0.5.0",
+  "ssv":"0.6.0",
   "sfn": "Mr. Bligh",
   "sds": {
     "sso": 1200,
@@ -2616,7 +2613,7 @@ New Winchester ➔ 🟢 **The Albion Transit Relay** ➔ 🟡 London
 #### 🔒 INTERNAL STATE AUTOSAVE
 
 ```json
-{"ssf":"sunless-skies-first-mate","ssv":"0.5.0","sfn":"Mr. Bligh","sds":{"sso":1200,"sep":165,"cpt":{"cnm":"Sinclair","csk":{"ir":10,"mi":5,"he":5,"ve":5},"caf":{"ac":0,"bo":0,"es":1,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":30,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":9,"cmx":10,"ctr":10,"cng":0},"oom":{},"gui":{"gfu":[4,0,20.0],"gsu":[4,0,40.0],"guh":[2,0,80.0]},"pps":{"es":{"pmp":1},"ptp":["ta"]},"aaa":[],"nv":{"cl":"lnw","ns":"nd","lue":165,"rh":[1,"lnw",160],"it":[[2,"lt2"],[3,"llo"]]},"dl":{}}}
+{"ssf":"sunless-skies-first-mate","ssv":"0.6.0","sfn":"Mr. Bligh","sds":{"sso":1200,"sep":165,"cpt":{"cnm":"Sinclair","csk":{"ir":10,"mi":5,"he":5,"ve":5},"caf":{"ac":0,"bo":0,"es":1,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":30,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":9,"cmx":10,"ctr":10,"cng":0},"oom":{},"gui":{"gfu":[4,0,20.0],"gsu":[4,0,40.0],"guh":[2,0,80.0]},"pps":{"es":{"pmp":1},"ptp":["ta"]},"aaa":[],"nv":{"cl":"lnw","ns":"nd","lue":165,"rh":[1,"lnw",160],"it":[[2,"lt2"],[3,"llo"]]},"dl":{}}}
 ```
 
 ## Test Case 17: Navigation Itinerary Lifecycle, Rolling History Pruning & Port Arrival
@@ -2631,7 +2628,7 @@ Verifies the kinetic transition from `ne` ➔ `na` ➔ `np` for a planned waypoi
 ```json
 {
   "ssf": "sunless-skies-first-mate",
-  "ssv": "0.5.0",
+  "ssv":"0.6.0",
   "sfn": "Mr. Bligh",
   "sds": {
     "sso": 1100,
@@ -2727,7 +2724,7 @@ Verifies that when charting a commercial station (such as New Winchester), the e
 ```json
 {
   "ssf": "sunless-skies-first-mate",
-  "ssv": "0.5.0",
+  "ssv":"0.6.0",
   "sfn": "Mr. Bligh",
   "sds": {
     "sso": 1000,
@@ -2790,7 +2787,7 @@ Verifies that when charting a commercial station (such as New Winchester), the e
 #### 🔒 INTERNAL STATE AUTOSAVE
 
 ```json
-{"ssf":"sunless-skies-first-mate","ssv":"0.5.0","sfn":"Mr. Bligh","sds":{"sso":1000,"sep":8,"cpt":{"cnm":"Sinclair","csk":{"ir":0,"mi":0,"he":0,"ve":0},"caf": {"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm": "Zephyr","chl":30,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3, "dbs":2}},"ccr":{"ccu":8,"cmx":10,"ctr":0,"cng":0},"oom":{},"gui":{"gfu":[3,0,20.00],"gsu":[3,0,40.00]},"pps":{},"aaa":[],"nv":{"cl":"lnw","ns":"np","lue":0,"rh":[],"it":[]},"dl":{"lnw":{"cd":null,"bz":{"re":38,"ab":[["gmu",5,60]]}}}}}
+{"ssf":"sunless-skies-first-mate","ssv":"0.6.0","sfn":"Mr. Bligh","sds":{"sso":1000,"sep":8,"cpt":{"cnm":"Sinclair","csk":{"ir":0,"mi":0,"he":0,"ve":0},"caf": {"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm": "Zephyr","chl":30,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3, "dbs":2}},"ccr":{"ccu":8,"cmx":10,"ctr":0,"cng":0},"oom":{},"gui":{"gfu":[3,0,20.00],"gsu":[3,0,40.00]},"pps":{},"aaa":[],"nv":{"cl":"lnw","ns":"np","lue":0,"rh":[],"it":[]},"dl":{"lnw":{"cd":null,"bz":{"re":38,"ab":[["gmu",5,60]]}}}}}
 ```
 ---
 
@@ -2808,7 +2805,7 @@ Verifies the ultra-sparse rule for non-commercial nodes (such as a transit relay
 ```json
 {
   "ssf": "sunless-skies-first-mate",
-  "ssv": "0.5.0",
+  "ssv":"0.6.0",
   "sfn": "Mr. Bligh",
   "sds": {
     "sso": 1000,
@@ -2872,7 +2869,7 @@ Verifies the ultra-sparse rule for non-commercial nodes (such as a transit relay
 #### 🔒 INTERNAL STATE AUTOSAVE
 
 ```json
-{"ssf":"sunless-skies-first-mate","ssv":"0.5.0","sfn":"Mr. Bligh","sds":{"sso":1000,"sep":25,"cpt":{"cnm":"Sinclair","csk":{"ir":0,"mi":0,"he":0,"ve":0},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd": "Spatchcock-Class Scout","cnm":"Zephyr","chl":30,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr": {"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":8,"cmx":10,"ctr":0,"cng":0},"oom":{},"gui":{"gfu":[3,0,20.00],"gsu":[3,0,40.00]},"pps":{},"aaa":[],"nv":{"cl":"lt2","ns":"np","lue":31,"rh":[],"it":[]},"dl":{"lt2":{"cd":4}}}}
+{"ssf":"sunless-skies-first-mate","ssv":"0.6.0","sfn":"Mr. Bligh","sds":{"sso":1000,"sep":25,"cpt":{"cnm":"Sinclair","csk":{"ir":0,"mi":0,"he":0,"ve":0},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd": "Spatchcock-Class Scout","cnm":"Zephyr","chl":30,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr": {"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":8,"cmx":10,"ctr":0,"cng":0},"oom":{},"gui":{"gfu":[3,0,20.00],"gsu":[3,0,40.00]},"pps":{},"aaa":[],"nv":{"cl":"lt2","ns":"np","lue":31,"rh":[],"it":[]},"dl":{"lt2":{"cd":4}}}}
 ```
 
 ---
@@ -2891,7 +2888,7 @@ Verifies that when departing a port, the **NEXT STOP** section under **OPERATION
 ```json
 {
   "ssf": "sunless-skies-first-mate",
-  "ssv": "0.5.0",
+  "ssv":"0.6.0",
   "sfn": "Mr. Bligh",
   "sds": {
     "sso": 1000,
@@ -2996,5 +2993,5 @@ Upon successful execution, the generated Markdown logbook must display the follo
 #### 🔒 INTERNAL STATE AUTOSAVE
 
 ```json
-{"ssf":"sunless-skies-first-mate","ssv":"0.5.0","sfn":"Mr. Bligh","sds":{"sso":1000,"sep":58,"cpt":{"cnm":"Sinclair","csk":{"ir":0,"mi":0,"he":0,"ve":0},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":30,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":8,"cmx":10,"ctr":0,"cng":0},"oom":{},"gui":{"gfu":[3,0,20.0],"gsu":[3,0,40.0],"gal":[2,2,0]},"pps":{},"aaa":[{"aid":"ACT-3001","atp":"prs","ast":"rdy","aol":"lnw","att":"Avon Reading Materials","ant": null,"apr":"hi","apn":false,"ace":50,"aue":58,"ade":null,"apl":["gal",2,2,2,"lpo"]},{"aid":"ACT-3002","atp":"tod","ast":"act","aol":"lnw","att":"Inspect the docks at Port Avon","ant":"Check cargo handling efficiency.","apr":"lo","apn":false,"ace":55,"aue":58,"ade":null,"apl":["lpo"]},{"aid":"ACT-3003","atp":"prs","ast":"rdy","aol":"lnw","att":"Irrelevant Titania Haul","ant":"Cargo destined elsewhere.","apr":"hi","apn":false,"ace":52,"aue":58,"ade":null,"apl":["gbw",2,2,0,"lti"]}],"nv":{"cl":null,"ns":"nd","lue":58,"rh":[1,"lnw",50],"it":[[2,"lpo"]]},"dl":{}}}
+{"ssf":"sunless-skies-first-mate","ssv":"0.6.0","sfn":"Mr. Bligh","sds":{"sso":1000,"sep":58,"cpt":{"cnm":"Sinclair","csk":{"ir":0,"mi":0,"he":0,"ve":0},"caf":{"ac":0,"bo":0,"es":0,"vi":0}},"clc":{"cmd":"Spatchcock-Class Scout","cnm":"Zephyr","chl":30,"cmh":30,"cfl":0,"chc":12,"chs":0,"chr":{"frm":3,"srm":3,"dbs":2}},"ccr":{"ccu":8,"cmx":10,"ctr":0,"cng":0},"oom":{},"gui":{"gfu":[3,0,20.0],"gsu":[3,0,40.0],"gal":[2,2,0]},"pps":{},"aaa":[{"aid":"ACT-3001","atp":"prs","ast":"rdy","aol":"lnw","att":"Avon Reading Materials","ant": null,"apr":"hi","apn":false,"ace":50,"aue":58,"ade":null,"apl":["gal",2,2,2,"lpo"]},{"aid":"ACT-3002","atp":"tod","ast":"act","aol":"lnw","att":"Inspect the docks at Port Avon","ant":"Check cargo handling efficiency.","apr":"lo","apn":false,"ace":55,"aue":58,"ade":null,"apl":["lpo"]},{"aid":"ACT-3003","atp":"prs","ast":"rdy","aol":"lnw","att":"Irrelevant Titania Haul","ant":"Cargo destined elsewhere.","apr":"hi","apn":false,"ace":52,"aue":58,"ade":null,"apl":["gbw",2,2,0,"lti"]}],"nv":{"cl":null,"ns":"nd","lue":58,"rh":[1,"lnw",50],"it":[[2,"lpo"]]},"dl":{}}}
 ```
