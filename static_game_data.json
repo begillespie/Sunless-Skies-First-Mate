@@ -8,7 +8,7 @@
     },
     "description": "Authoritative immutable game data, enums, schemas, and object blueprints for the Sunless Skies First Mate Engine.",
     "file_type": "static_game_data",
-    "static_data_version": "0.4.2",
+    "static_data_version": "0.4.3",
     "supported_save_format": "sunless-skies-first-mate"
   },
   "static_game_data": {
@@ -1572,6 +1572,7 @@
     },
     "object_blueprints": {
       "aaa": {
+        "type": "object",
         "additionalProperties": false,
         "properties": {
           "ace": {
@@ -1618,8 +1619,8 @@
             "type": "string"
           },
           "aue": {
-            "minimum": 0,
-            "type": "integer"
+            "type": "integer",
+            "minimum": 0
           }
         },
         "required": [
@@ -1635,44 +1636,60 @@
           "aue",
           "ade",
           "apl"
-        ],
-        "type": "object"
+        ]
       },
       "dl": {
+        "type": "object",
         "additionalProperties": false,
         "properties": {
-          "gbz": {
-            "items": [
-              {
-                "$ref": "#/static_game_data/enums/kg"
-              },
-              {
+          "bz": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "re": {
                 "type": "integer",
                 "minimum": 0
               },
-              {
-                "type": "integer",
-                "minimum": 0
+              "ab": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "prefixItems": [
+                    {
+                      "$ref": "#/static_game_data/enums/kg"
+                    },
+                    {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    {
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  ],
+                  "minItems": 3,
+                  "maxItems": 3
+                }
               }
-            ],
-            "maxItems": 3,
-            "minItems": 3,
-            "type": "array"
+            },
+            "required": [
+              "re",
+              "ab"
+            ]
           },
           "cd": {
             "description": "Relative clock position (1-12) on the regional chart, or null if unobserved.",
-            "maximum": 12,
-            "minimum": 1,
             "type": [
               "integer",
               "null"
-            ]
+            ],
+            "maximum": 12,
+            "minimum": 1
           }
         },
         "required": [
           "cd"
-        ],
-        "type": "object"
+        ]
       },
       "payload_variants": {
         "amb": {
@@ -1681,35 +1698,38 @@
               "$ref": "#/static_game_data/enums/ambition_types"
             },
             {
-              "minimum": 1,
-              "type": "integer"
+              "type": "integer",
+              "minimum": 1
             },
             {
               "type": "string"
             },
             {
-              "minimum": 0,
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             },
             {
               "$ref": "#/static_game_data/object_blueprints/shared_components/properties/items_manifest"
             }
           ],
+          "type": "array",
           "maxItems": 5,
-          "minItems": 5,
-          "type": "array"
+          "minItems": 5
         },
         "off": {
+          "type": "array",
           "items": [
             {
               "$ref": "#/static_game_data/enums/ko"
             },
             {
-              "minimum": 0,
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             },
             {
+              "type": "array",
               "items": {
+                "type": "array",
                 "items": [
                   {
                     "$ref": "#/static_game_data/enums/kl"
@@ -1719,20 +1739,18 @@
                   }
                 ],
                 "maxItems": 2,
-                "minItems": 2,
-                "type": "array"
-              },
-              "type": "array"
+                "minItems": 2
+              }
             },
             {
               "$ref": "#/static_game_data/object_blueprints/shared_components/properties/items_manifest"
             }
           ],
           "maxItems": 4,
-          "minItems": 4,
-          "type": "array"
+          "minItems": 4
         },
         "prs": {
+          "type": "array",
           "items": [
             {
               "$ref": "#/static_game_data/enums/kg"
@@ -1754,10 +1772,10 @@
             }
           ],
           "maxItems": 5,
-          "minItems": 5,
-          "type": "array"
+          "minItems": 5
         },
         "psg": {
+          "type": "array",
           "items": [
             {
               "type": "string"
@@ -1766,34 +1784,35 @@
               "$ref": "#/static_game_data/enums/kl"
             },
             {
-              "minimum": 0,
               "type": [
                 "integer",
                 "null"
-              ]
+              ],
+              "minimum": 0
             }
           ],
           "maxItems": 3,
-          "minItems": 3,
-          "type": "array"
+          "minItems": 3
         },
         "qst": {
+          "type": "array",
           "items": [
             {
               "minimum": 0,
               "type": "integer"
             },
             {
+              "type": "string",
               "enum": [
                 "qf",
                 "qs",
                 "qh",
                 "ql"
-              ],
-              "type": "string"
+              ]
             },
             {
               "items": {
+                "type": "array",
                 "items": [
                   {
                     "$ref": "#/static_game_data/enums/kl"
@@ -1803,20 +1822,18 @@
                   }
                 ],
                 "maxItems": 2,
-                "minItems": 2,
-                "type": "array"
-              },
-              "type": "array"
+                "minItems": 2
+              }
             },
             {
               "$ref": "#/static_game_data/object_blueprints/shared_components/properties/items_manifest"
             }
           ],
           "maxItems": 4,
-          "minItems": 4,
-          "type": "array"
+          "minItems": 4
         },
         "sec": {
+          "type": "array",
           "items": [
             {
               "$ref": "#/static_game_data/enums/ko"
@@ -1833,22 +1850,22 @@
             }
           ],
           "maxItems": 4,
-          "minItems": 4,
-          "type": "array"
+          "minItems": 4
         },
         "tod": {
+          "type": "array",
           "items": [
             {
               "$ref": "#/static_game_data/enums/kl"
             }
           ],
           "maxItems": 1,
-          "minItems": 0,
-          "type": "array"
+          "minItems": 0
         }
       },
       "shared_components": {
         "additionalProperties": false,
+        "type": "object",
         "properties": {
           "items_manifest": {
             "additionalProperties": false,
@@ -1867,67 +1884,67 @@
             "required": ["gd", "ni", "pk"]
           },
           "gd": {
+            "type": "array",
             "items": {
+              "type": "array",
               "items": [
                 {
                   "$ref": "#/static_game_data/enums/kg"
                 },
                 {
-                  " minimum": 1,
-                  "type": "integer"
+                  "type": "integer",
+                  "minimum": 1
                 },
                 {
-                  "minimum": 0,
-                  "type": "integer"
+                  "type": "integer",
+                  "minimum": 0
                 }
               ],
               "maxItems": 3,
-              "minItems": 3,
-              "type": "array"
-            },
-            "type": "array"
+              "minItems": 3
+            }
           },
           "ni": {
+            "type": "array",
             "items": {
+              "type": "array",
               "items": [
                 {
                   "type": "string"
                 },
                 {
-                  "minimum": 1,
-                  "type": "integer"
+                  "type": "integer",
+                  "minimum": 1
                 },
                 {
-                  "minimum": 0,
-                  "type": "integer"
+                  "type": "integer",
+                  "minimum": 0
                 }
               ],
               "maxItems": 3,
-              "minItems": 3,
-              "type": "array"
-            },
-            "type": "array"
+              "minItems": 3
+            }
           },
           "pk": {
+            "type": "array",
             "items": {
+              "type": "array",
               "items": [
                 {
                   "$ref": "#/static_game_data/enums/kp"
                 },
                 {
-                  "minimum": 1,
-                  "type": "integer"
+                  "type": "integer",
+                  "minimum": 1
                 },
                 {
-                  "minimum": 0,
-                  "type": "integer"
+                  "type": "integer",
+                  "minimum": 0
                 }
               ],
               "maxItems": 3,
-              "minItems": 3,
-              "type": "array"
-            },
-            "type": "array"
+              "minItems": 3
+            }
           }
         },
         "required": [
@@ -1935,8 +1952,7 @@
           "pk",
           "ni",
           "items_manifest"
-        ],
-        "type": "object"
+        ]
       }
     },
     "officer_directory": {

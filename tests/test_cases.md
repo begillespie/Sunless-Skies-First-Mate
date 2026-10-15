@@ -7,7 +7,7 @@ Tests version: 0.5.0
 Rules version: 0.7.0
 Logbook version: 0.5.1
 Save schema version: 0.5.1
-Static data version: 0.4.2
+Static data version: 0.4.3
 -->
 
 ## MASTER TEST SUITE INDEX
