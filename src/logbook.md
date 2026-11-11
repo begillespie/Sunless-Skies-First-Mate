@@ -1,6 +1,6 @@
 <!--
 Sunless SKies First Mate Logbook Template
-Version 0.5.1
+Version 0.6.0
 -->
 
 # 🚂 CAPTAIN'S LOG 🚀
@@ -90,11 +90,3 @@ Version 0.5.1
 *   **[ Officer Lexical Name]** ([Station Slot]) ➔ Deployed at: [Origin Port]  
     *   *Maturity Condition:* 🟢 **Ready**  
     *   *Pending Interaction Reward:* [ Reward ]
-
----
-
-## 🔒 INTERNAL STATE AUTOSAVE
-
-```json
-{"dynamic_save_state":{"..."}}
-```

@@ -1,0 +1,401 @@
+{
+  "$schema": "https://specs.frictionlessdata.io/data-package.json",
+  "name": "sunless-skies-first-mate-engine",
+  "title": "Sunless Skies First Mate Engine Datastore",
+  "version": "1.0.0",
+  "description": "Authoritative Frictionless Data Package spec for the Sunless Skies First Mate engine datastore.",
+  "resources": [
+    {
+      "name": "Lkup_BridgeSlots",
+      "data": [
+        ["slot_code", "display_label"],
+        ["chief_engineer", "Chief Engineer"],
+        ["first_officer", "First Officer"],
+        ["mascot", "Mascot"],
+        ["quartermaster", "Quartermaster"],
+        ["signaller", "Signaller"]
+      ],
+      "schema": {
+        "fields": [ 
+          { "name": "slot_code", "type": "string", "description": "Primary key slug for bridge slot domain" }, 
+          { "name": "display_label", "type": "string", "description": "Human-readable label" }
+        ],
+        "primaryKey": [ "slot_code" ]
+      }
+    },
+    {
+      "name": "Lkup_LocationTypes",
+      "data": [
+        ["type_code", "display_label"],
+        ["platform", "Platform"],
+        ["relay", "Transit Relay"],
+        ["spectacle_horror", "Spectacle"],
+        ["spectacle_wonder", "Spectacle"],
+        ["station", "Station"]
+      ],
+      "schema": {
+        "fields": [
+          { "name": "type_code", "type": "string", "description": "Primary key slug for location type domain" }, 
+          { "name": "display_label", "type": "string", "description": "Human-readable label" }
+        ],
+        "primaryKey": [ "type_code" ]
+      }
+    },
+    {
+      "name": "Lkup_Regions",
+      "data": [
+        ["region_code", "display_label"],
+        ["albion", "Albion"],
+        ["blue_kingdom", "The Blue Kingdom"],
+        ["eleutheria", "Eleutheria"],
+        ["reach", "The Reach"]
+      ],
+      "schema": {
+        "fields": [
+          { "name": "region_code", "type": "string", "description": "Primary key slug for region domain" },
+          { "name": "display_label", "type": "string", "description": "Human-readable label" }
+        ],
+        "primaryKey": [ "region_code" ]
+      }
+    },
+    {
+      "name": "Lkup_ServiceTypes",
+      "data": [
+        ["service_code", "display_label"],
+        ["bank", "Central Hub Bank"],
+        ["port_reports", "Turn in Port Reports"],
+        ["recruitment", "Crew Recruitment"],
+        ["shipyard", "Ship Repair and Upgrades"],
+        ["smuggling", "Smuggling"]
+      ],
+      "schema": {
+        "fields": [
+          { "name": "service_code", "type": "string", "description": "Primary key slug for port service domain" },
+          { "name": "display_label", "type": "string", "description": "Human-readable label" }
+        ],
+        "primaryKey": [ "service_code" ]
+      }
+    },
+    {
+      "name": "Ref_Goods",
+      "path": "data/tables/Ref_Goods.csv",
+      "format": "csv",
+      "schema": {
+        "fields": [
+          { "name": "good_key", "type": "string" },
+          { "name": "display_name", "type": "string" },
+          { "name": "base_price", "type": "integer", "constraints": { "minimum": 0 } },
+          { "name": "weight", "type": "integer", "constraints": { "minimum": 0 } },
+          { "name": "is_contraband", "type": "boolean" }
+        ],
+        "primaryKey": [ "good_key" ]
+      }
+    },
+    {
+      "name": "Ref_Locations",
+      "path": "data/tables/Ref_Locations.csv",
+      "format": "csv",
+      "schema": {
+        "fields": [ 
+          { "name": "location_key", "type": "string" }, 
+          { "name": "display_name", "type": "string" }, 
+          { "name": "region", "type": "string" },
+          { "name": "ring_depth", "type": "string", "constraints": { "enum": [ "center", "inner", "middle", "outer" ] } },
+          { "name": "location_type", "type": "string" },
+          { "name": "waypoint_location_key", "type": "string", "constraints": { "required": false } }, 
+          { "name": "export_goods", "type": "string", "description": "Native array of good keys acting as foreign keys to Ref_Goods.good_key" }, 
+          { "name": "services", "type": "string", "description": "Native array of service codes acting as foreign keys to Lkup_ServiceTypes.service_code" }, 
+          { "name": "lore_snippet", "type": "string" }
+        ],
+        "primaryKey": [ "location_key" ],
+        "foreignKeys": [
+          {
+            "fields": ["region"],
+            "reference": { "resource": "Lkup_Regions", "fields": [ "region_code" ] }
+          },
+          {
+            "fields": [ "location_type" ],
+            "reference": { "resource": "Lkup_LocationTypes", "fields": [ "type_code" ] }
+          },
+          {
+            "fields": [ "waypoint_location_key" ],
+            "reference": { "resource": "Ref_Locations", "fields": [ "location_key" ] }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Ref_Officers",
+      "path": "data/tables/Ref_Officers.csv",
+      "format": "csv",
+      "schema": {
+        "fields": [
+          { "name": "officer_key", "type": "string" }, 
+          { "name": "lexical_name", "type": "string" }, 
+          { "name": "lineage", "type": "string" }, 
+          { "name": "parent_key", "type": "string", "constraints": { "required": false } }, 
+          { "name": "position_slot", "type": "string" }, 
+          { "name": "tier", "type": "integer", "constraints": { "minimum": 1 } }, 
+          { "name": "perk_academe", "type": "integer", "constraints": { "minimum": 0 } }, 
+          { "name": "perk_bohemia", "type": "integer", "constraints": { "minimum": 0 } }, 
+          { "name": "perk_establishment", "type": "integer", "constraints": { "minimum": 0 } }, 
+          { "name": "perk_villainy", "type": "integer", "constraints": { "minimum": 0 } }, 
+          { "name": "perk_hearts", "type": "integer", "constraints": { "minimum": -1 } }, 
+          { "name": "perk_iron", "type": "integer", "constraints": { "minimum": 0 } }, 
+          { "name": "perk_mirrors", "type": "integer", "constraints": { "minimum": 0 } }, 
+          { "name": "perk_veils", "type": "integer", "constraints": { "minimum": 0 } }
+        ],
+        "primaryKey": [ "officer_key" ],
+        "foreignKeys": [
+          { 
+            "fields": [ "parent_key" ], 
+            "reference": { "resource": "Ref_Officers", "fields": [ "officer_key" ] }
+          },
+          { 
+            "fields": [ "position_slot" ], 
+            "reference": { "resource": "Lkup_BridgeSlots", "fields": [ "slot_code" ] }
+          }
+        ]
+      }
+    },
+    {
+      "name": "State_Action",
+      "data": [
+        ["action_id", "parent_action_id", "action_type", "action_status", "target_location_key", "target_entity_key", "title", "quantity_required", "quantity_delivered", "notes", "priority", "is_pinned", "created_epoch", "updated_epoch", "deadline_epoch"]
+      ],
+      "schema": {
+        "fields": [
+          { "name": "action_id", "type": "string", "constraints": { "pattern": "^ACT-[0-9]{4}(\\.[0-9]{2})?$" } }, 
+          { "name": "parent_action_id", "type": "string", "constraints": { "required": false } }, 
+          { "name": "action_type", "type": "string", "constraints": { "enum": [ "ambition", "officer", "officer_secondment", "passenger", "prospect", "quest", "todo" ] } }, 
+          { "name": "action_status", "type": "string", "constraints": { "enum": [ "active", "blocked", "cancelled", "completed", "failed", "ready" ] } }, 
+          { "name": "target_location_key", "type": "string", "constraints": { "required": false } }, 
+          { "name": "target_entity_key", "type": "string", "constraints": { "required": false } }, 
+          { "name": "title", "type": "string" }, { "name": "quantity_required", "type": "integer", "constraints": { "minimum": 0 } }, 
+          { "name": "quantity_delivered", "type": "integer", "constraints": { "minimum": 0 } }, { "name": "notes", "type": "string", "constraints": { "required": false } }, 
+          { "name": "priority", "type": "string", "constraints": { "enum": [ "high", "routine", "low" ] } }, 
+          { "name": "is_pinned", "type": "boolean" }, { "name": "created_epoch", "type": "integer", "constraints": { "minimum": 0 } }, 
+          { "name": "updated_epoch", "type": "integer", "constraints": { "minimum": 0 } }, 
+          { "name": "deadline_epoch", "type": "integer", "constraints": { "minimum": 0, "required": false } }
+        ],
+        "primaryKey": [ "action_id" ],
+        "foreignKeys": [
+          {
+            "fields": [ "parent_action_id" ],
+            "reference": { "resource": "State_Action", "fields": [ "action_id" ] }
+          },
+          {
+            "fields": [ "target_location_key" ],
+            "reference": { "resource": "Ref_Locations", "fields": [ "location_key" ] }
+          }
+        ]
+      }
+    },
+    {
+      "name": "State_Bazaar_Stock",
+      "data": [
+        ["location_key", "good_key", "qty_available", "cost", "expiration_epoch"]
+      ],
+      "schema": {
+        "fields": [
+          { "name": "location_key", "type": "string" },
+          { "name": "good_key", "type": "string" },
+          { "name": "qty_available", "type": "integer", "constraints": { "minimum": 1 } },
+          { "name": "cost", "type": "integer", "constraints": { "minimum": 0 } },
+          { "name": "expiration_epoch", "type": "integer", "constraints": { "minimum": 0 } }
+        ],
+        "primaryKey": ["location_key", "good_key"],
+        "foreignKeys": [
+          {
+            "fields": ["location_key"],
+            "reference": { "resource": "Ref_Locations", "fields": ["location_key"] }
+          },
+          {
+            "fields": ["good_key"],
+            "reference": { "resource": "Ref_Goods", "fields": ["good_key"] }
+          }
+        ]
+      }
+    },
+    {
+      "name": "State_Captain",
+      "data": [
+        ["captain_name", "affiliation_academe", "affiliation_bohemia", "affiliation_establishment", "affiliation_villainy", "skill_hearts", "skill_iron", "skill_mirrors", "skill_veils"],
+        ["", 0, 0, 0, 0, 0, 0, 0, 0]
+      ],
+      "schema": {
+        "fields": [
+          { "name": "captain_name", "type": "string" }, 
+          { "name": "affiliation_academe", "type": "integer", "constraints": { "minimum": 0 } }, 
+          { "name": "affiliation_bohemia", "type": "integer", "constraints": { "minimum": 0 } }, 
+          { "name": "affiliation_establishment", "type": "integer", "constraints": { "minimum": 0 } }, 
+          { "name": "affiliation_villainy", "type": "integer", "constraints": { "minimum": 0 } }, 
+          { "name": "skill_hearts", "type": "integer", "constraints": { "minimum": 0 } }, 
+          { "name": "skill_iron", "type": "integer", "constraints": { "minimum": 0 } }, 
+          { "name": "skill_mirrors", "type": "integer", "constraints": { "minimum": 0 } }, 
+          { "name": "skill_veils", "type": "integer", "constraints": { "minimum": 0 } }
+        ]
+      }
+    },
+    {
+      "name": "State_Crew",
+      "data": [
+        ["current_crew", "max_crew", "terror", "nightmares"],
+        [10, 10, 0, 0]
+      ],
+      "schema": {
+        "fields": [
+          { "name": "current_crew", "type": "integer", "constraints": { "minimum": 0 } }, 
+          { "name": "max_crew", "type": "integer", "constraints": { "minimum": 1 } }, 
+          { "name": "terror", "type": "integer", "constraints": { "minimum": 0, "maximum": 100 } }, 
+          { "name": "nightmares", "type": "integer", "constraints": { "minimum": 0, "maximum": 4 } }
+        ]
+      }
+    },
+    {
+      "name": "State_Discovered_Locations",
+      "data": [
+        ["location_key", "clock_position", "bazaar_reset_epoch"],
+        ["blue_kingdom_transit_relay", null, null]
+      ],
+      "schema": {
+        "fields": [
+          { "name": "location_key", "type": "string" },
+          { "name": "clock_position", "type": "integer", "constraints": { "minimum": 1, "maximum": 12, "required": false } },
+          { "name": "bazaar_reset_epoch", "type": "integer", "constraints": { "minimum": 0, "required": false } }
+        ],
+        "primaryKey": ["location_key"],
+        "foreignKeys": [
+          {
+            "fields": ["location_key"],
+            "reference": { "resource": "Ref_Locations", "fields": ["location_key"] }
+          }
+        ]
+      }
+    },
+    {
+      "name": "State_Inventory",
+      "data": [
+        ["good_key", "hold_qty", "bank_qty", "average_unit_cost"],
+        ["fuel", 1, 0, 0.0],
+        ["supplies", 1, 0, 0.0]
+      ],
+      "schema": {
+        "fields": [
+          { "name": "good_key", "type": "string" }, 
+          { "name": "hold_qty", "type": "integer", "constraints": { "minimum": 0 } }, 
+          { "name": "bank_qty", "type": "integer", "constraints": { "minimum": 0 } }, 
+          { "name": "average_unit_cost", "type": "number", "constraints": { "minimum": 0.0 } }
+        ],
+        "foreignKeys": [
+          {
+            "fields": [ "good_key" ],
+            "reference": { "resource": "Ref_Goods", "fields": [ "good_key" ] }
+          }
+        ]
+      }
+    },
+    {
+      "name": "State_Locomotive",
+      "data": [
+        ["model", "vessel_name", "current_hull", "max_hull", "fuel_used_last_leg", "hold_capacity", "hidden_slots", "reserve_fuel_min", "reserve_supplies_min"],
+        ["Spatchcock", "The Orphean", 30, 30, 0, 12, 0, 3, 3]
+      ],
+      "schema": {
+        "fields": [
+          { "name": "model", "type": "string" }, 
+          { "name": "vessel_name", "type": "string" }, 
+          { "name": "current_hull", "type": "integer", "constraints": { "minimum": 0 } }, 
+          { "name": "max_hull", "type": "integer", "constraints": { "minimum": 1 } }, 
+          { "name": "fuel_used_last_leg", "type": "integer", "constraints": { "minimum": 0 } }, 
+          { "name": "hold_capacity", "type": "integer", "constraints": { "minimum": 0 } }, 
+          { "name": "hidden_slots", "type": "integer", "constraints": { "minimum": 0 } }, 
+          { "name": "reserve_fuel_min", "type": "integer", "constraints": { "minimum": 0 } }, 
+          { "name": "reserve_supplies_min", "type": "integer", "constraints": { "minimum": 0 } }
+        ]
+      }
+    },
+    {
+      "name": "State_Metadata",
+      "data": [
+        ["first_mate_name", "current_epoch", "sovereigns", "current_location_key", "navigation_state"],
+        ["", 0, 0, "new_winchester", "docked"]
+      ],
+      "schema": {
+        "fields": [
+          { "name": "first_mate_name", "type": "string" }, 
+          { "name": "current_epoch", "type": "integer", "constraints": { "minimum": 0 } }, 
+          { "name": "sovereigns", "type": "integer", "constraints": { "minimum": 0 } }, 
+          { "name": "current_location_key", "type": "string" }, 
+          { "name": "navigation_state", "type": "string", "constraints": { "enum": [ "arriving", "departing", "docked", "enroute" ] } }
+        ],
+        "foreignKeys": [
+          { 
+            "fields": [ "current_location_key" ],
+            "reference": { "resource": "Ref_Locations", "fields": [ "location_key" ] }
+          }
+        ]
+      }
+    },
+    {
+      "name": "State_Navigation_History",
+      "data": [
+        ["leg_index", "location_key", "arrived_epoch"],
+        [1, "blue_kingdom_transit_relay", 0]
+      ],
+      "schema": {
+        "fields": [
+          { "name": "leg_index", "type": "integer", "constraints": { "minimum": 1 } }, 
+          { "name": "location_key", "type": "string" }, 
+          { "name": "arrived_epoch", "type": "integer", "constraints": { "minimum": 0 } }
+        ],
+        "primaryKey": [ "leg_index" ],
+        "foreignKeys": [
+          {
+            "fields": [ "location_key" ],
+            "reference": { "resource": "Ref_Locations", "fields": [ "location_key" ] }
+          }
+        ]
+      }
+    },
+    {
+      "name": "State_Navigation_Itinerary",
+      "data": [
+        ["sequence_order", "location_key"],
+        [1, "new_winchester"]
+      ],
+      "schema": {
+        "fields": [
+          { "name": "sequence_order", "type": "integer", "constraints": { "minimum": 1 } }, 
+          { "name": "location_key", "type": "string" }
+        ],
+        "primaryKey": [ "sequence_order" ],
+        "foreignKeys": [
+          {
+            "fields": [ "location_key" ],
+            "reference": { "resource": "Ref_Locations", "fields": [ "location_key" ] }
+          }
+        ]
+      }
+    },
+    {
+      "name": "State_Officers",
+      "data": [
+        ["officer_key", "officer_status"]
+      ],
+      "schema": {
+        "fields": [
+          { "name": "officer_key", "type": "string" }, 
+          { "name": "officer_status", "type": "string", "constraints": { "enum": [ "active", "departed", "seconded", "unassigned" ] } }
+        ],
+        "primaryKey": [ "officer_key" ],
+        "foreignKeys": [
+          {
+            "fields": [ "officer_key" ],
+            "reference": { "resource": "Ref_Officers", "fields": [ "officer_key" ] }
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+good_key,display_name,base_price,weight,is_contraband
+approved_literature,Approved Literature,100,5,False
+bronzewood,Bronzewood,175,10,False
+bombazine,Bombazine,150,5,False
+caged_catch,Caged Catch,200,5,False
+chorister_nectar,Chorister Nectar,120,5,False
+dried_tea,Dried Tea,90,5,False
+fuel,Barrel of Fuel,20,5,False
+gemstones,Gemstones,300,5,False
+illicit_literature,Illicit Literature,150,5,True
+immaculate_souls,Immaculate Souls,250,2,False
+munitions,Crate of Munitions,60,5,False
+nostalgic_crockery,Nostalgic Crockery,50,5,False
+petrichor,Petrichor,60,0,False
+red_honey,Red Honey,250,5,True
+stained_glass,Stained Glass,135,5,False
+starshine,Starshine,180,5,True
+supplies,Crate of Supplies,40,5,False
+unseasoned_hours,Unseasoned Hours,80,5,False
+undistinguished_souls,Undistinguished Souls,70,2,False
+verdant_seeds,Verdant Seeds,40,5,False
