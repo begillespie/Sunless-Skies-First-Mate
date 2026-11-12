@@ -1,7 +1,7 @@
 <!--
 Sunless Skies First Mate Logbook Template
 Version 1.0.1
-Data Package Compatibility: 1.1.1
+Data Package Compatibility: 1.1.2
 -->
 
 # 🚂 CAPTAIN'S LOG 🚀
