@@ -1,92 +1,132 @@
 <!--
-Sunless SKies First Mate Logbook Template
-Version 0.6.0
+Sunless Skies First Mate Logbook Template
+Version 1.0.0
+Data Package Compatibility: 1.1.1
 -->
 
 # 🚂 CAPTAIN'S LOG 🚀
 
-## 📅 [DATE] (Day [CURRENT_DAY_EPOCH]) · ⚓ [PORT JUST LEFT]
+## 📅 [DATE] (Day [current_epoch]) · ⚓ [last_location_visited_key.display_name]
 
-**🗺️ Region:** [REGION_NAME] | **👤 Captain:** [CAPTAIN_NAME] | **🪙 Wallet:** [SOVEREIGNS] Sovereigns
+**🗺️ Region:** [last_location_visited_key.region.display_label] | **👤 Captain:** [captain_name] | **🪙 Wallet:** [sovereigns] Sovereigns
 
-**🚂 Current Engine:** [LOCOMOTIVE.NAME] ([LOCOMOTIVE.MODEL])
+**🚂 Current Engine:** [vessel_name] ([model])
 
 ---
 
 ## ⚙️ VESSEL SYSTEMS & RECOVERY STATUS
 | System          | Status                                   |
 | :---            | :---                                     |
-| **Crew:**       | [🟢/🟡/🔴] [CURRENT_CREW] / [MAX_CREW] |
-| **Hull:**       | [🟢/🟡/🔴] [CURRENT_HULL] / [MAX_HULL] |
-| **Terror:**     | [🟢/🟡/🔴] [CURRENT_TERROR] / 100      |
-| **Nightmares:** | [🟢/🟡/🔴] [CURRENT_NIGHTMARES] / 4    |
+| **Crew:**       | [🟢/🟡/🔴] [current_crew] / [max_crew]  |
+| **Hull:**       | [🟢/🟡/🔴] [current_hull] / [max_hull]  |
+| **Terror:**     | [🟢/🟡/🔴] [terror] / 100               |
+| **Nightmares:** | [🟢/🟡/🔴] [nightmares] / 4             |
 
 ## 🔮 VESSEL APTITUDE & STAT BALANCES
 
-| 📐 SKILLS           | Base     |  Perks    |   Total   |
-| :---                | :---:    |  :---:    |   :---:   |
-| - 👊 Iron           | [ B ]    | [ +M ]    | **[ T ]** |
-| - 👁️ Mirrors        | [ B ]    | [ +M ]    | **[ T ]** |
-| - ❤️ Hearts         | [ B ]    | [ +M ]    | **[ T ]** |
-| - 🎭 Veils          | [ B ]    | [ +M ]    | **[ T ]** |
-| 🔍 **AFFILIATIONS** | **Base** | **Perks** | **Total** |
-| - 🔍 Academe        | [ B ]    | [ +M ]    | **[ T ]** |
-| - 🍷 Bohemia        | [ B ]    | [ +M ]    | **[ T ]** |
-| - 👑 Establishment  | [ B ]    | [ +M ]    | **[ T ]** |
-| - 🎩 Villainy       | [ B ]    | [ +M ]    | **[ T ]** |
+| 📐 SKILLS           | Base                   | Perks     | Total     |
+| :---                | :---:                  | :---:     | :---:     |
+| - 👊 Iron           | [ skill_iron ]         | [ +Perk ] | **[ T ]** |
+| - 👁️ Mirrors        | [ skill_mirrors ]      | [ +Perk ] | **[ T ]** |
+| - ❤️ Hearts         | [ skill_hearts ]       | [ +Perk ] | **[ T ]** |
+| - 🎭 Veils          | [ skill_veils ]        | [ +Perk ] | **[ T ]** |
+| 🔍 **AFFILIATIONS** | **Base**               | **Perks** | **Total** |
+| - 🔍 Academe        | [ affiliation_academe ]| [ +Perk ] | **[ T ]** |
+| - 🍷 Bohemia        | [ affiliation_bohemia ]| [ +Perk ] | **[ T ]** |
+| - 👑 Establishment  | [ affiliation_establishment ] | [ +Perk ] | **[ T ]** |
+| - 🎩 Villainy       | [ affiliation_villainy ]| [ +Perk ] | **[ T ]** |
 
 ---
 
 ## 🗺️ OPERATIONS & TRANSIT
 
-**🎯 Ambition:** [AMBITION_TYPE] (Tier [TIER]) — *Next Milestone: [MILESTONE_DESCRIPTION]*
+**🎯 Ambition:** [Ambition Root Wrapper `title`] ([Ambition Root Wrapper `notes`]) — *Current Focus: [Active Ambition Subtask `title`]*
 
-📋 **First Officer's Counsel:**
-> [Tight, tactical synopsis combining routing reasoning, consumable spend predictions, resource pitfalls, and upcoming transit gate or contract warnings. Progress toward tactical, regional, and strategic goals.]
+📋 **Executive Officer's Counsel ([first_mate_name] — Concept of Maneuver):**
+> [Tactical Concept of Maneuver: routing rationale, fuel/supply burn projections across upcoming legs, resupply bottlenecks, bazaar arbitrage or contract expirations, and staleness reminders for open actions.]
 
 ### 🧭 Active Trajectory:
-[recent_history[-1].location] ➔ 🟢 **[itinerary[0].location]** ➔ 🟡 [itinerary[1].location] ➔ 🟡 [itinerary[n].location]
+<!--
+Resupply Badges per waypoint (evaluated via Ref_Location_Goods for that location_key, or its parent waypoint_location_key):
+🟢 = Full Resupply (exports BOTH `fuel` and `supplies`)
+🟡 = Partial Resupply (exports EITHER `fuel` OR `supplies`)
+🔴 = No Resupply (exports NEITHER `fuel` NOR `supplies`)
+-->
+⚓ [last_location_visited_key.display_name] ➔ [🟢/🟡/🔴] **[itinerary[1].display_name]** ➔ [🟢/🟡/🔴] [itinerary[2].display_name] ➔ [🟢/🟡/🔴] [itinerary[n].display_name]
 
-### ➡️ NEXT STOP: [NEXT_PORT_NAME]
-* `[Priority Indicator: ‼️ (high) /🔻 (low) if applicable]` 🎯 **AMBITION:** [MILESTONE_DESCRIPTION]. Items Needed: [ITEMS_REQUIRED_NEXT_TIER]
-* `[Priority Indicator]`🔑 **READY FOR DELIVERY:** [PROSPECT_TITLE] — Deliver [QTY_REMAINING] [GOOD_NAME] to [DESTINATION_PORT] to complete contract
-* `[Priority Indicator]`📖 **QUEST PLOTLINE:** [QUESTLINE_NAME] — Step [NUM]: [TARGET_OBJECTIVE_NOTES]
-* `[Priority Indicator]`👤 **OFFICER QUEST:** [QUESTLINE_NAME] ([OFFICER_NAME]) — [MILESTONE_TRIGGER_NOTES]. Requires: [OFFICER_ITEM]
-* `[Priority Indicator]`💼 **SECONDMENT:** [OFFICER_NAME] at [STATION_NAME]. Effect: [CONTRIBUTION_EFFECT] — Return Conditions: [RETURN_CONDITION]
-* `[Priority Indicator]`📌 **BRIDGE NOTE:** [USER_NOTES]
+<!--
+ITINERARY STOP BLOCKS:
+Replicate the `### ➡️ STOP [sequence_order]: [PORT_DISPLAY_NAME]` block below for each waypoint in `State_Navigation_Itinerary` (in sequence_order 1..n) that has active/ready/blocked actions.
+- Only include bullet types that have an active record at that stop.
+- Priority Indicator prefix: `‼️ ` for `high`, omit for `routine`, `🔻 ` for `low`.
+- Include `🎯 AMBITION:` ONLY if an active/ready/blocked Ambition child subtask (`ACT-XXXX.YY`) resolves at this stop.
+- Include `💼 SECONDMENT READY:` ONLY if a seconded officer at this stop has `action_status == 'ready'` (or unlocks upon arrival at this stop).
+-->
+### ➡️ STOP [sequence_order]: [itinerary_location.display_name]
+* `[Priority]`🎯 **AMBITION:** [Subtask `title`] (`[action_id]`) — [Subtask `notes` / Quota: `quantity_delivered`/`quantity_required` `target_entity_key`]
+* `[Priority]`🔑 **PROSPECT:** [Prospect `title`] (`[action_id]`) — Deliver [quantity_required - quantity_delivered] [target_entity_key.display_name] ([`action_status`])
+* `[Priority]`📖 **QUEST:** [Root Wrapper `title`] — Step [.YY]: [Subtask `title`] (`[action_id]`) — [Subtask `notes`]
+* `[Priority]`👤 **OFFICER STORY:** [target_entity_key.lexical_name] (`[action_id]`) — [Subtask/Action `title`] — [Subtask/Action `notes`]
+* `[Priority]`💼 **SECONDMENT READY:** Reclaim **[target_entity_key.lexical_name]** (`[action_id]`) — Outcome: [Action `notes`]
+* `[Priority]`📌 **TODO:** [Action `title`] (`[action_id]`) — [Action `notes`]
 
-### 👤 ACTIVE PASSENGERS & BRIDGE TRANSIT
-* **[PASSENGER/TRANSIT NAME] ([ID])** ➔ Bound for: [DESTINATION_PORT] ([REGION]) — Complication: *[COMPLICATION_NOTES]* — Timeline: [ACCEPTED_DATE] ➔ [DEADLINE_DATE / Open Timeline]
+<!--
+OPTIONAL PINNED OFF-ROUTE BLOCK:
+Render ONLY if there are actions with `is_pinned == TRUE` whose `target_location_key` is NOT on the current `State_Navigation_Itinerary`. Suppress otherwise.
+-->
+### 📌 PINNED OBJECTIVES (OFF-ITINERARY)
+* `[Priority]`**[action_type]**: [Action `title`] (`[action_id]`) at **[target_location_key.display_name]** — [Action `notes`]
+
+<!--
+ACTIVE PASSENGERS:
+Render continuously while any `action_type == 'passenger'` has `action_status == 'active'`. Suppress if no passengers are aboard.
+-->
+### 👤 ACTIVE PASSENGERS & BERTH TRANSIT
+* **[Action `title`] (`[action_id]`)** ➔ Bound for: **[target_location_key.display_name]** ([target_location_key.region.display_label]) — Notes: *[notes]* — Timeline: [created_epoch Date] ➔ [deadline_epoch Date / Open Timeline]
 
 ---
 
 ## 📦 LOGISTICS
 
-**📦 Hold Utilization:** [X] / [HOLD_CAPACITY]
+<!--
+Render `| **🗝️ Hidden Hold Utilization:** [CONTRABAND_HIDDEN] / [hidden_slots]` ONLY when `State_Scalars.hidden_slots > 0`. Suppress when `hidden_slots == 0`.
+-->
+**📦 Hold Utilization:** [STANDARD_HOLD_USED] / [hold_capacity] | **🗝️ Hidden Hold Utilization:** [CONTRABAND_HIDDEN] / [hidden_slots]
 
-| Trade Good Name | Physical Hold | Hub Bank Stock | Active Sourcing Progress / Status | Destination Port |
-| :--- | :---: | :---: | :--- | :--- |
-| **🔥 Fuel** | [QTY] | [QTY] | [🟢/⚠️/🚨] | — |
-| **📦 Supplies** | [QTY] | [QTY] | [🟢/⚠️/🚨] | — |
-| **[GOOD DISPLAY NAME]** | [QTY] | [QTY] | [SOURCED Qty] / [REQUIRED Qty] Loaded ([ID]) | [DESTINATION PORT] |
+| Trade Good Name | Physical Hold (`hold_qty`) | Hub Bank (`bank_qty`) | Unit Cost (`MAC`) | Status / Earmark | Destination Port |
+| :--- | :---: | :---: | :---: | :--- | :--- |
+| **🔥 Barrel of Fuel** | [hold_qty] | [bank_qty] | [average_unit_cost] | [🟢/⚠️/🚨 Reserve Status] | — |
+| **📦 Crate of Supplies** | [hold_qty] | [bank_qty] | [average_unit_cost] | [🟢/⚠️/🚨 Reserve Status] | — |
+| **[good_key.display_name]** | [hold_qty] | [bank_qty] | [average_unit_cost] | [Earmarked for `[action_id]`: [Action `title`] ([hold_qty]/[rem_req]) / `Unassigned Cargo`] | [target_location_key.display_name / —] |
 
 ---
 
 ## 🛞 BRIDGE ROSTER
 
-| Station                   | Active Officer       | Skill Perks | Affiliation Perks |
-| ---                       | ---                  | ---         | ---               |
-| ⚓ **First Officer**  | [ Name / 🔘 Vacant ] | [ +X Skill / -Y Skill ] | [ +Z Faction ] |
-| 🛞 **Quartermaster**  | [ Name / 🔘 Vacant ] | [ — ] | [ — ] |
-| 🏮 **Signaller**      | [ Name / 🔘 Vacant ] | [ — ] | [ — ] |
-| ⚙️ **Chief Engineer** | [ Name / 🔘 Vacant ] | [ — ] | [ — ] |
-| 🐶 **Mascot**         | [ Name / 🔘 Vacant ] | [ — ] | [ — ] |
+| Station                   | Active Officer                          | Skill Perks                  | Affiliation Perks                  |
+| :---                      | :---                                    | :---                         | :---                               |
+| ⚓ **First Officer**      | [ lexical_name / 🔘 Vacant ]            | [ +X Skill / -Y Skill / — ]  | [ +Z Affiliation / — ]             |
+| 🛞 **Quartermaster**      | [ lexical_name / 🔘 Vacant ]            | [ +X Skill / -Y Skill / — ]  | [ +Z Affiliation / — ]             |
+| 🏮 **Signaller**          | [ lexical_name / 🔘 Vacant ]            | [ +X Skill / -Y Skill / — ]  | [ +Z Affiliation / — ]             |
+| ⚙️ **Chief Engineer**     | [ lexical_name / 🔘 Vacant ]            | [ +X Skill / -Y Skill / — ]  | [ +Z Affiliation / — ]             |
+| 🐶 **Mascot**             | [ lexical_name / 🔘 Vacant ]            | [ +X Skill / -Y Skill / — ]  | [ +Z Affiliation / — ]             |
 
+<!--
+SECONDMENT OUTLOOK:
+Join `State_Officers` (`officer_status == 'seconded'`) with active `State_Action` (`action_type == 'secondment'`).
+Suppress this entire `### ⏳ SECONDMENT OUTLOOK` sub-section if no officers currently have `officer_status == 'seconded'`.
+-->
 ### ⏳ SECONDMENT OUTLOOK
+* **[target_entity_key.lexical_name]** ([position_slot.display_label]) ➔ Ashore at **[target_location_key.display_name]** (`[action_id]`)
+  * *Status:* [🔒 **Working Ashore** (Unlocks: [deadline_epoch Date] · Day [deadline_epoch]) / 🟢 **Ready for Pickup** (Unlocked: [deadline_epoch Date])]
+  * *Assignment & Expected Outcome:* [Action `notes`]
 
-*   **[ Officer Lexical Name]** ([Station Slot]) ➔ Deployed at: [Origin Port]  
-    *   *Maturity Condition:* 🔒 **Locked Underway** · Unlocks after: [ Return-After Date ] (Current Ledger Date: [ Ledger Date ])  
-    
-*   **[ Officer Lexical Name]** ([Station Slot]) ➔ Deployed at: [Origin Port]  
-    *   *Maturity Condition:* 🟢 **Ready**  
-    *   *Pending Interaction Reward:* [ Reward ]
+  ---
+
+*Respectfully submitted,*  
+
+### 🪶 **_[first_mate_name]_**
+
+*Executive Officer, [vessel_name]*
+
+⚜️ ─── ✦ 🧭 ۞ ⚓ ✦ ─── ⚜️
