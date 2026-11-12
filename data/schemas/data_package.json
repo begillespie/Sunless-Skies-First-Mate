@@ -2,7 +2,7 @@
   "$schema": "https://specs.frictionlessdata.io/schemas/data-package.json",
   "name": "sunless-skies-first-mate-engine",
   "title": "Sunless Skies First Mate Engine Datastore",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Authoritative Frictionless Data Package spec for the Sunless Skies First Mate engine datastore.",
   "resources": [
     {
@@ -140,7 +140,8 @@
           { "name": "target_subsystem", "type": "string"},
           { "name": "current_version", "type": "string"},
           { "name": "minimum_version", "type": "string"}
-        ]
+        ],
+        "primaryKey": [ "contract_key" ]
       }
     },
     {
@@ -380,7 +381,7 @@
       "name": "State_Discovered_Locations",
       "data": [
         ["location_key", "clock_position", "bazaar_reset_epoch"],
-        ["blue_kingdom_transit_relay", null, null]
+        ["blue_kingdom_transit_relay", "", ""]
       ],
       "schema": {
         "fields": [
@@ -411,6 +412,7 @@
           { "name": "bank_qty", "type": "integer", "constraints": { "minimum": 0 } }, 
           { "name": "average_unit_cost", "type": "number", "constraints": { "minimum": 0.0 } }
         ],
+        "primaryKey": [ "good_key" ],
         "foreignKeys": [
           {
             "fields": [ "good_key" ],

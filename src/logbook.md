@@ -1,6 +1,6 @@
 <!--
 Sunless Skies First Mate Logbook Template
-Version 1.0.0
+Version 1.0.1
 Data Package Compatibility: 1.1.1
 -->
 
@@ -57,10 +57,10 @@ Resupply Badges per waypoint (evaluated via Ref_Location_Goods for that location
 <!--
 ITINERARY STOP BLOCKS:
 Replicate the `### ➡️ STOP [sequence_order]: [PORT_DISPLAY_NAME]` block below for each waypoint in `State_Navigation_Itinerary` (in sequence_order 1..n) that has active/ready/blocked actions.
-- Only include bullet types that have an active record at that stop.
+- Only include bullet types that have an active/ready/blocked record at that stop.
 - Priority Indicator prefix: `‼️ ` for `high`, omit for `routine`, `🔻 ` for `low`.
 - Include `🎯 AMBITION:` ONLY if an active/ready/blocked Ambition child subtask (`ACT-XXXX.YY`) resolves at this stop.
-- Include `💼 SECONDMENT READY:` ONLY if a seconded officer at this stop has `action_status == 'ready'` (or unlocks upon arrival at this stop).
+- Include `💼 SECONDMENT READY:` ONLY if a seconded officer at this stop has `action_status == 'ready'` (or unlocks upon arrival at this stop: `current_epoch + sequence_order >= deadline_epoch`).
 -->
 ### ➡️ STOP [sequence_order]: [itinerary_location.display_name]
 * `[Priority]`🎯 **AMBITION:** [Subtask `title`] (`[action_id]`) — [Subtask `notes` / Quota: `quantity_delivered`/`quantity_required` `target_entity_key`]
@@ -97,7 +97,7 @@ Render `| **🗝️ Hidden Hold Utilization:** [CONTRABAND_HIDDEN] / [hidden_slo
 | :--- | :---: | :---: | :---: | :--- | :--- |
 | **🔥 Barrel of Fuel** | [hold_qty] | [bank_qty] | [average_unit_cost] | [🟢/⚠️/🚨 Reserve Status] | — |
 | **📦 Crate of Supplies** | [hold_qty] | [bank_qty] | [average_unit_cost] | [🟢/⚠️/🚨 Reserve Status] | — |
-| **[good_key.display_name]** | [hold_qty] | [bank_qty] | [average_unit_cost] | [Earmarked for `[action_id]`: [Action `title`] ([hold_qty]/[rem_req]) / `Unassigned Cargo`] | [target_location_key.display_name / —] |
+| **[good_key.display_name]** | [hold_qty] | [bank_qty] | [average_unit_cost] | [Earmarked for `[action_id]`: [Action `title`] ([allocated_hold_qty]/[rem_req]) (join multiple with `; `) / `Unassigned Cargo`] | [target_location_key.display_name (join multiple with `; `) / —] |
 
 ---
 
