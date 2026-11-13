@@ -1,0 +1,48 @@
+domain_group,property_key,property_value,data_type,description
+captain,captain_name,Sinclair,string,Active captain's callsign
+captain,affiliation_academe,0,integer,Academe affiliation rank
+captain,affiliation_bohemia,0,integer,Bohemia affiliation rank
+captain,affiliation_establishment,0,integer,Establishment affiliation rank
+captain,affiliation_villainy,0,integer,Villainy affiliation rank
+captain,skill_hearts,0,integer,Hearts attribute score
+captain,skill_iron,0,integer,Iron attribute score
+captain,skill_mirrors,0,integer,Mirrors attribute score
+captain,skill_veils,0,integer,Veils attribute score
+captain,possession_cryptic_benefactor,0,integer,Possession count for cryptic_benefactor
+captain,possession_condemned_experiment,0,integer,Possession count for condemned_experiment
+captain,possession_crimson_promise,0,integer,Possession count for crimson_promise
+captain,possession_captivating_treasure,0,integer,Possession count for captivating_treasure
+captain,possession_moment_of_inspiration,0,integer,Possession count for moment_of_inspiration
+captain,possession_ministry_stamped_permit,0,integer,Possession count for ministry_stamped_permit
+captain,possession_otherworldly_artifact,0,integer,Possession count for otherworldly_artifact
+captain,possession_royal_dispensation,0,integer,Possession count for royal_dispensation
+captain,possession_searing_enigma,0,integer,Possession count for searing_enigma
+captain,possession_salon_stewed_gossip,0,integer,Possession count for salon_stewed_gossip
+captain,possession_sky_story,0,integer,Possession count for sky_story
+captain,possession_savage_secret,0,integer,Possession count for savage_secret
+captain,possession_tale_of_terror,0,integer,Possession count for tale_of_terror
+captain,possession_unlicensed_chart,0,integer,Possession count for unlicensed_chart
+captain,possession_uncanny_specimen,0,integer,Possession count for uncanny_specimen
+captain,possession_vision_of_the_heavens,0,integer,Possession count for vision_of_the_heavens
+captain,albion_transit_permit,FALSE,boolean,Whether the captain has an Albion transit permit
+captain,blue_kingdom_transit_permit,FALSE,boolean,Whether the captain has a Blue Kingdom transit permit
+captain,eleutheria_transit_permit,FALSE,boolean,Whether the captain has an Eleutheria transit permit
+crew,current_crew,10,integer,Current number of crew aboard
+crew,max_crew,10,integer,Maximum crew capacity
+crew,terror,0,integer,Current terror level (0-100)
+crew,nightmares,0,integer,Current nightmares level (0-4)
+locomotive,model,Spatchcock,string,Locomotive class model
+locomotive,vessel_name,Zephyr,string,Name of the vessel
+locomotive,current_hull,30,integer,Current hull integrity
+locomotive,max_hull,30,integer,Maximum hull integrity
+locomotive,fuel_used_last_leg,0,integer,Fuel consumed on the previous leg
+locomotive,hold_capacity,12,integer,Cargo hold capacity
+locomotive,hidden_slots,0,integer,Hidden contraband slot capacity
+locomotive,reserve_fuel_min,3,integer,Minimum reserve fuel threshold
+locomotive,reserve_supplies_min,3,integer,Minimum reserve supplies threshold
+session,first_mate_name,Mr. Bligh,string,Active first mate name
+session,current_epoch,0,integer,Current game time epoch
+session,sovereigns,0,integer,Sovereigns currency balance
+session,current_location_key,new_winchester,string,Current location key. Foreign key: Ref_Locations.location_key
+session,last_location_visited_key,blue_kingdom_transit_relay,string,Last visited location key. Foreign key: Ref_Locations.location_key
+session,navigation_state,docked,string,"Navigation state (arriving, departing, docked, enroute)"

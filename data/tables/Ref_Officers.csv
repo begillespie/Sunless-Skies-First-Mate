@@ -1,0 +1,45 @@
+officer_key,lexical_name,lineage,parent_key,position_slot,tier,perk_academe,perk_bohemia,perk_establishment,perk_villainy,perk_hearts,perk_iron,perk_mirrors,perk_veils
+aunt_inconvenient,Inconvenient Aunt,aunt,,quartermaster,1,0,0,1,0,0,6,2,0
+aunt_revolutionary,Your Revolutionary Aunt,aunt,aunt_inconvenient,quartermaster,2,0,0,0,2,0,0,0,10
+aunt_spymaster,Your Spymaster Aunt,aunt,aunt_inconvenient,quartermaster,2,0,0,2,0,0,10,0,0
+conductor_caring,Caring Conductor,conductor,conductor_clay,first_officer,2,2,0,0,0,10,0,0,0
+conductor_clay_and_copper,Clay Conductor and Copper Companion,conductor,conductor_clay,first_officer,2,2,0,0,0,0,0,10,0
+conductor_clay,Clay Conductor,conductor,,first_officer,1,1,0,0,0,6,2,0,0
+driver_incautious,Incautious Driver,driver,,chief_engineer,1,0,0,1,0,2,6,0,0
+driver_judicious,Judicious Driver,driver,driver_incautious,chief_engineer,2,0,0,2,0,0,10,0,0
+driver_reckless,Reckless Driver,driver,driver_incautious,chief_engineer,2,0,0,2,0,0,10,0,0
+eccentric_brilliant,Brilliant Eccentric,eccentric,eccentric_felined,chief_engineer,2,0,1,0,1,0,0,10,0
+eccentric_felined,Felined Eccentric,eccentric,,chief_engineer,1,0,0,0,1,2,0,6,0
+eccentric_gentile,Gentile Eccentric,eccentric,eccentric_felined,chief_engineer,2,1,0,0,1,10,0,0,0
+forged-companion_illusive,Illusive Forged Companion,companion,,quartermaster,1,0,0,0,0,0,0,0,10
+forged-companion_poetic,Poetic Forged Companion,companion,eccentric_felined,quartermaster,1,0,0,0,0,10,0,0,0
+forged-companion_studious,Studious Forged Companion,companion,eccentric_felined,quartermaster,1,0,0,0,0,0,0,10,0
+forged-companion_pugilistic,Pugilistic Forged Companion,companion,eccentric_felined,quartermaster,1,0,0,0,0,0,10,0,0
+hoarder_chiropterous,Chiropterous Hoarder,hoarder,,quartermaster,1,0,1,0,0,0,0,2,6
+hoarder_immutable,Immutable Hoarder,hoarder,hoarder_chiropterous,quartermaster,2,0,2,0,0,0,0,0,10
+hoarder_multiplicitous,Multiplicitous Hoarder,hoarder,hoarder_chiropterous,quartermaster,2,0,0,2,0,0,10,0,0
+devil_defiant,Defiant Devil,devil,devil_repentant,signaller,2,2,0,0,0,0,0,0,10
+devil_repentant,Repentant Devil,devil,,signaller,1,1,0,0,0,0,2,0,6
+mascot_blemmigan_voyager,Blemmigan Voyager,blemmigan,,mascot,1,0,0,0,0,0,2,1,0
+mascot_useless_cat,Useless Cat,cat,,mascot,1,0,0,0,0,0,0,1,0
+mascot_dilly,Dilly,dilly,,mascot,1,0,0,0,0,-1,0,0,3
+mascot_big_dog,Inadvisably Big Dog,dog,,mascot,1,0,0,0,0,0,1,0,0
+mascot_perfect_pangolin,Perfect Pangolin,pangolin,,mascot,1,0,0,0,0,0,0,0,1
+mascot_sky_work_urchin,Sky-Work Urchin,urchin,,mascot,1,0,0,0,0,1,0,0,0
+navigator_fortunate,Fortunate Navigator,navigator,,first_officer,1,0,0,1,0,0,6,0,2
+navigator_stalwart,Stalwart Navigator,navigator,navigator_fortunate,first_officer,2,0,1,1,0,0,10,0,0
+old_friend,Old Friend,friend,,first_officer,1,0,0,0,0,2,2,2,2
+princess_analytical,Analytical Princess,princess,princess_shed_skin,first_officer,3,2,0,0,0,0,0,10,0
+princess_incognito,Incognito Princess,princess,,first_officer,1,0,1,0,0,2,0,6,0
+princess_political,Political Princess,princess,princess_shed_skin,first_officer,3,0,2,0,0,0,0,10,0
+princess_shed_skin,The Shed Skin of the Incognito Princess,princess,princess_incognito,first_officer,2,0,0,0,0,0,0,0,0
+unseen_queen_cup,"The Unseen Queen, depicted with the Martyr-King's Cup",queen,,first_officer,1,0,0,0,0,3,0,0,2
+unseen_queen_portrait,The Portrait of the Unseen Queen,queen,,first_officer,1,0,0,0,0,3,0,0,2
+rat_brigade,The Rat Brigade,rat,,chief_engineer,1,0,0,0,1,0,2,0,6
+rat_ratty_reunion,The Ratty Reunion,rat,rat_brigade,chief_engineer,2,0,0,2,0,10,0,0,0
+rat_ratty_revengers,The Ratty Revengers,rat,rat_brigade,chief_engineer,2,0,0,0,2,0,0,0,10
+signalman_fatalistic,Fatalistic Signalman,signalman,,signaller,1,0,0,0,1,0,0,6,2
+signalman_omnibus,Signs and Signals of the High Wilderness: An Omnibus,signalman,signalman_fatalistic,signaller,2,0,0,0,2,0,0,10,0
+vagabond_amiable,Amiable Vagabond,vagabond,,signaller,1,0,1,0,0,4,0,0,4
+vagabond_dendrified,Dendrified Vagabond,vagabond,vagabond_amiable,signaller,2,0,2,0,0,10,0,0,0
+vagabond_incorrigible,Incorrigible Vagabond,vagabond,vagabond_amiable,signaller,2,0,0,0,2,0,0,0,10 
