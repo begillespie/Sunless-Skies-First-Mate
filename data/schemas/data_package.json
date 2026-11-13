@@ -426,7 +426,7 @@
       "name": "State_Navigation_History",
       "data": [
         ["leg_index", "location_key", "arrived_epoch"],
-        [1, "blue_kingdom_transit_relay", 0]
+        [1, "blue_kingdom_transit_relay", 73]
       ],
       "schema": {
         "fields": [
