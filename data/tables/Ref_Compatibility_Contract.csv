@@ -1,7 +1,6 @@
 contract_key,target_subsystem,current_version,minimum_version
 CNT-01,skill_entrypoint,1.0.1,1.0.0
-CNT-02,engine_core,1.0.1,1.0.0
+CNT-02,engine_core,1.0.2,1.0.0
 CNT-03,logbook,1.0.1,1.0.0
-CNT-04,data_package,1.1.4,1.1.0
-CNT-05,state_scalars,1.0.1,1.0.0
-CNT-06,sunles_skies_game,2.0.7,2.0.0
+CNT-04,data_package,1.2.0,1.2.0
+CNT-05,sunless_skies_game,2.0.7,2.0.0

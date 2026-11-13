@@ -1,12 +1,12 @@
 {
   "$schema": "https://specs.frictionlessdata.io/schemas/data-package.json",
-  "name": "sunless-skies-first-mate-engine",
+  "name": "data_package",
   "title": "Sunless Skies First Mate Engine Datastore",
-  "version": "1.1.4",
+  "version": "1.2.0",
   "description": "Authoritative Frictionless Data Package spec for the Sunless Skies First Mate engine datastore.",
   "resources": [
     {
-      "name": "Lkup_BridgeSlots",
+      "name": "lkup_bridge_slots",
       "data": [
         ["slot_code", "display_label"],
         ["chief_engineer", "Chief Engineer"],
@@ -17,14 +17,14 @@
       ],
       "schema": {
         "fields": [ 
-          { "name": "slot_code", "type": "string", "description": "Primary key slug for bridge slot domain" }, 
-          { "name": "display_label", "type": "string", "description": "Human-readable label" }
+          { "name": "slot_code", "type": "string", "description": "primary key slug for bridge slot domain" }, 
+          { "name": "display_label", "type": "string", "description": "human-readable label" }
         ],
         "primaryKey": [ "slot_code" ]
       }
     },
     {
-      "name": "Lkup_LocationTypes",
+      "name": "lkup_location_types",
       "data": [
         ["type_code", "display_label"],
         ["platform", "Platform"],
@@ -35,14 +35,14 @@
       ],
       "schema": {
         "fields": [
-          { "name": "type_code", "type": "string", "description": "Primary key slug for location type domain" }, 
-          { "name": "display_label", "type": "string", "description": "Human-readable label" }
+          { "name": "type_code", "type": "string", "description": "primary key slug for location type domain" }, 
+          { "name": "display_label", "type": "string", "description": "human-readable label" }
         ],
         "primaryKey": [ "type_code" ]
       }
     },
     {
-      "name": "Lkup_Possessions",
+      "name": "lkup_possessions",
       "data": [
         ["possession_key", "display_name", "affiliation"],
         ["cryptic_benefactor", "Cryptic Benefactor", "establishment"],
@@ -72,7 +72,7 @@
       }
     },
     {
-      "name": "Lkup_Regions",
+      "name": "lkup_regions",
       "data": [
         ["region_code", "display_label"],
         ["albion", "Albion"],
@@ -82,14 +82,14 @@
       ],
       "schema": {
         "fields": [
-          { "name": "region_code", "type": "string", "description": "Primary key slug for region domain" },
-          { "name": "display_label", "type": "string", "description": "Human-readable label" }
+          { "name": "region_code", "type": "string", "description": "primary key slug for region domain" },
+          { "name": "display_label", "type": "string", "description": "human-readable label" }
         ],
         "primaryKey": [ "region_code" ]
       }
     },
     {
-      "name": "Lkup_ServiceTypes",
+      "name": "lkup_service_types",
       "data": [
         ["service_code", "display_label"],
         ["bank", "Central Hub Bank"],
@@ -100,14 +100,14 @@
       ],
       "schema": {
         "fields": [
-          { "name": "service_code", "type": "string", "description": "Primary key slug for port service domain" },
-          { "name": "display_label", "type": "string", "description": "Human-readable label" }
+          { "name": "service_code", "type": "string", "description": "primary key slug for port service domain" },
+          { "name": "display_label", "type": "string", "description": "human-readable label" }
         ],
         "primaryKey": [ "service_code" ]
       }
     },
     {
-      "name": "Lkup_TransitPermits",
+      "name": "lkup_transit_permits",
       "data": [
         ["transit_permit_key", "display_name", "region"],
         ["albion_transit_permit", "Albion Transit Permit", "albion"],
@@ -124,16 +124,15 @@
         "foreignKeys": [
           {
             "fields": [ "region" ],
-            "reference": { "resource": "Lkup_Regions", "fields": [ "region_code" ] }
+            "reference": { "resource": "lkup_regions", "fields": [ "region_code" ] }
           }
         ]
       }
     },
     {
-      "name": "Ref_Compatibility_Contract",
-      "path": "tables/Ref_Compatibility_Contract.csv",
+      "name": "ref_compatibility_contract",
+      "path": "tables/ref_compatibility_contract.csv",
       "format": "csv",
-      "version": "1.0.1",
       "schema": {
         "fields": [
           { "name": "contract_key", "type": "string" },
@@ -145,8 +144,8 @@
       }
     },
     {
-      "name": "Ref_Goods",
-      "path": "tables/Ref_Goods.csv",
+      "name": "ref_goods",
+      "path": "tables/ref_goods.csv",
       "format": "csv",
       "schema": {
         "fields": [
@@ -160,10 +159,9 @@
       }
     },
     {
-      "name": "Ref_Location_Goods",
-      "path": "tables/Ref_Location_Goods.csv",
+      "name": "ref_location_goods",
+      "path": "tables/ref_location_goods.csv",
       "format": "csv",
-      "version": "1.0.0",
       "schema": {
         "fields": [
           { "name": "location_key", "type": "string" },
@@ -173,20 +171,19 @@
         "foreignKeys": [
           {
             "fields": [ "location_key" ],
-            "reference": { "resource": "Ref_Locations", "fields": [ "location_key" ] }
+            "reference": { "resource": "ref_locations", "fields": [ "location_key" ] }
           },
           {
             "fields": [ "good_key" ],
-            "reference": { "resource": "Ref_Goods", "fields": [ "good_key" ] }
+            "reference": { "resource": "ref_goods", "fields": [ "good_key" ] }
           }
         ]
       }
     },
     {
-      "name": "Ref_Location_Services",
-      "path": "tables/Ref_Location_Services.csv",
+      "name": "ref_location_services",
+      "path": "tables/ref_location_services.csv",
       "format": "csv",
-      "version": "1.0.0",
       "schema": {
         "fields": [
           { "name": "location_key", "type": "string" },
@@ -196,20 +193,19 @@
         "foreignKeys": [
           {
             "fields": [ "location_key" ],
-            "reference": { "resource": "Ref_Locations", "fields": [ "location_key" ] }
+            "reference": { "resource": "ref_locations", "fields": [ "location_key" ] }
           },
           {
             "fields": [ "service_code" ],
-            "reference": { "resource": "Lkup_ServiceTypes", "fields": [ "service_code" ] }
+            "reference": { "resource": "lkup_service_types", "fields": [ "service_code" ] }
           }
         ]
       }
     },
     {
-      "name": "Ref_Locations",
-      "path": "tables/Ref_Locations.csv",
+      "name": "ref_locations",
+      "path": "tables/ref_locations.csv",
       "format": "csv",
-      "version": "1.0.0",
       "schema": {
         "fields": [ 
           { "name": "location_key", "type": "string" }, 
@@ -224,24 +220,23 @@
         "foreignKeys": [
           {
             "fields": ["region"],
-            "reference": { "resource": "Lkup_Regions", "fields": [ "region_code" ] }
+            "reference": { "resource": "lkup_regions", "fields": [ "region_code" ] }
           },
           {
             "fields": [ "location_type" ],
-            "reference": { "resource": "Lkup_LocationTypes", "fields": [ "type_code" ] }
+            "reference": { "resource": "lkup_location_types", "fields": [ "type_code" ] }
           },
           {
             "fields": [ "waypoint_location_key" ],
-            "reference": { "resource": "Ref_Locations", "fields": [ "location_key" ] }
+            "reference": { "resource": "ref_locations", "fields": [ "location_key" ] }
           }
         ]
       }
     },
     {
-      "name": "Ref_Officers",
-      "path": "tables/Ref_Officers.csv",
+      "name": "ref_officers",
+      "path": "tables/ref_officers.csv",
       "format": "csv",
-      "version": "1.0.0",
       "schema": {
         "fields": [
           { "name": "officer_key", "type": "string" }, 
@@ -263,20 +258,19 @@
         "foreignKeys": [
           { 
             "fields": [ "parent_key" ], 
-            "reference": { "resource": "Ref_Officers", "fields": [ "officer_key" ] }
+            "reference": { "resource": "ref_officers", "fields": [ "officer_key" ] }
           },
           { 
             "fields": [ "position_slot" ], 
-            "reference": { "resource": "Lkup_BridgeSlots", "fields": [ "slot_code" ] }
+            "reference": { "resource": "lkup_bridge_slots", "fields": [ "slot_code" ] }
           }
         ]
       }
     },
     {
-      "name": "Ref_TransitTolls",
-      "path": "tables/Ref_TransitTolls.csv",
+      "name": "ref_transit_tolls",
+      "path": "tables/ref_transit_tolls.csv",
       "format": "csv",
-      "version": "1.0.0",
       "schema": {
         "fields": [
           { "name": "location_key", "type": "string" }, 
@@ -298,33 +292,33 @@
         "foreignKeys": [
           {
             "fields": [ "location_key" ], 
-            "reference": { "resource": "Ref_Locations", "fields": [ "location_key" ] } 
+            "reference": { "resource": "ref_locations", "fields": [ "location_key" ] } 
           }, 
           {
             "fields": [ "origin_region" ], 
-            "reference": { "resource": "Lkup_Regions", "fields": [ "region_code" ] } 
+            "reference": { "resource": "lkup_regions", "fields": [ "region_code" ] } 
           }, 
           { 
             "fields": [ "connects_to_region" ], 
-            "reference": { "resource": "Lkup_Regions", "fields": [ "region_code" ] }
+            "reference": { "resource": "lkup_regions", "fields": [ "region_code" ] }
           },
           { 
             "fields": [ "permit_key" ], 
-            "reference": { "resource": "Lkup_TransitPermits", "fields": [ "transit_permit_key" ] } 
+            "reference": { "resource": "lkup_transit_permits", "fields": [ "transit_permit_key" ] } 
           }, 
           { 
             "fields": [ "goods_key" ], 
-            "reference": { "resource": "Ref_Goods", "fields": [ "good_key" ] }
+            "reference": { "resource": "ref_goods", "fields": [ "good_key" ] }
           },
           {
             "fields": [ "possession_key" ], 
-            "reference": { "resource": "Lkup_Possessions", "fields": [ "possession_key" ] }
+            "reference": { "resource": "lkup_possessions", "fields": [ "possession_key" ] }
           }
         ]
       }
     },
     {
-      "name": "State_Action",
+      "name": "state_action",
       "data": [
         ["action_id", "parent_action_id", "title", "action_type", "action_status", "target_location_key", "target_entity_key", "quantity_required", "quantity_delivered", "priority", "is_pinned", "created_epoch", "updated_epoch", "deadline_epoch", "notes"],
         ["ACT-1000", "", "The Orphean", "quest", "active", "new_winchester", "Captain Whitlock", 1, 0, "high", "", 73, 73, "", "Your engine was damaged in its escape from the Blue Kingdom. The Captain was injured. Can you see her back to New Winchester?"]
@@ -351,17 +345,17 @@
         "foreignKeys": [
           {
             "fields": [ "parent_action_id" ],
-            "reference": { "resource": "State_Action", "fields": [ "action_id" ] }
+            "reference": { "resource": "state_action", "fields": [ "action_id" ] }
           },
           {
             "fields": [ "target_location_key" ],
-            "reference": { "resource": "Ref_Locations", "fields": [ "location_key" ] }
+            "reference": { "resource": "ref_locations", "fields": [ "location_key" ] }
           }
         ]
       }
     },
     {
-      "name": "State_Bazaar_Stock",
+      "name": "state_bazaar_stock",
       "data": [
         ["location_key", "good_key", "qty_available", "cost", "expiration_epoch"]
       ],
@@ -377,17 +371,17 @@
         "foreignKeys": [
           {
             "fields": ["location_key"],
-            "reference": { "resource": "Ref_Locations", "fields": ["location_key"] }
+            "reference": { "resource": "ref_locations", "fields": ["location_key"] }
           },
           {
             "fields": ["good_key"],
-            "reference": { "resource": "Ref_Goods", "fields": ["good_key"] }
+            "reference": { "resource": "ref_goods", "fields": ["good_key"] }
           }
         ]
       }
     },
     {
-      "name": "State_Discovered_Locations",
+      "name": "state_discovered_locations",
       "data": [
         ["location_key", "clock_position", "bazaar_reset_epoch"],
         ["blue_kingdom_transit_relay", "", ""]
@@ -402,13 +396,13 @@
         "foreignKeys": [
           {
             "fields": ["location_key"],
-            "reference": { "resource": "Ref_Locations", "fields": ["location_key"] }
+            "reference": { "resource": "ref_locations", "fields": ["location_key"] }
           }
         ]
       }
     },
     {
-      "name": "State_Inventory",
+      "name": "state_inventory",
       "data": [
         ["good_key", "hold_qty", "bank_qty", "average_unit_cost"],
         ["fuel", 1, 0, 0.0],
@@ -425,13 +419,13 @@
         "foreignKeys": [
           {
             "fields": [ "good_key" ],
-            "reference": { "resource": "Ref_Goods", "fields": [ "good_key" ] }
+            "reference": { "resource": "ref_goods", "fields": [ "good_key" ] }
           }
         ]
       }
     },
     {
-      "name": "State_Navigation_History",
+      "name": "state_navigation_history",
       "data": [
         ["leg_index", "location_key", "arrived_epoch"],
         [1, "blue_kingdom_transit_relay", 73]
@@ -446,13 +440,13 @@
         "foreignKeys": [
           {
             "fields": [ "location_key" ],
-            "reference": { "resource": "Ref_Locations", "fields": [ "location_key" ] }
+            "reference": { "resource": "ref_locations", "fields": [ "location_key" ] }
           }
         ]
       }
     },
     {
-      "name": "State_Navigation_Itinerary",
+      "name": "state_navigation_itinerary",
       "data": [
         ["sequence_order", "location_key"],
         [1, "new_winchester"]
@@ -466,13 +460,13 @@
         "foreignKeys": [
           {
             "fields": [ "location_key" ],
-            "reference": { "resource": "Ref_Locations", "fields": [ "location_key" ] }
+            "reference": { "resource": "ref_locations", "fields": [ "location_key" ] }
           }
         ]
       }
     },
     {
-      "name": "State_Officers",
+      "name": "state_officers",
       "data": [
         ["officer_key", "officer_status"]
       ],
@@ -485,23 +479,22 @@
         "foreignKeys": [
           {
             "fields": [ "officer_key" ],
-            "reference": { "resource": "Ref_Officers", "fields": [ "officer_key" ] }
+            "reference": { "resource": "ref_officers", "fields": [ "officer_key" ] }
           }
         ]
       }
     },
     {
-      "name": "State_Scalars",
-      "path": "tables/State_Scalars.csv",
+      "name": "state_scalars",
+      "path": "tables/state_scalars.csv",
       "format": "csv",
-      "version": "1.0.1",
       "schema": {
         "fields": [
-          { "name": "domain_group", "type": "string", "constraints": { "enum": [ "captain", "crew", "locomotive", "session" ] },"description": "Logical subsystem grouping" },
-          { "name": "property_key", "type": "string", "description": "Primary key slug for the scalar variable" },
-          { "name": "property_value", "type": "string", "description": "Scalar value stored as a string (cast dynamically based on data_type)" },
-          { "name": "data_type", "type": "string", "constraints": { "enum": [ "string", "integer", "number", "boolean" ] },"description": "Expected type casting rule" },
-          { "name": "description", "type": "string", "description": "Human-readable explanation of the property" }
+          { "name": "domain_group", "type": "string", "constraints": { "enum": [ "captain", "crew", "locomotive", "session" ] },"description": "logical subsystem grouping" },
+          { "name": "property_key", "type": "string", "description": "primary key slug for the scalar variable" },
+          { "name": "property_value", "type": "string", "description": "scalar value stored as a string (cast dynamically based on data_type)" },
+          { "name": "data_type", "type": "string", "constraints": { "enum": [ "string", "integer", "number", "boolean" ] },"description": "expected type casting rule" },
+          { "name": "description", "type": "string", "description": "human-readable explanation of the property" }
         ],
         "primaryKey": [ "property_key" ]
       }

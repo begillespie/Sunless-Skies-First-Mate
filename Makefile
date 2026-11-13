@@ -6,7 +6,7 @@ STAMP_FILE := $(VENV_DIR)/.installed
 
 .PHONY: all venv validate build clean clean-all
 
-all: validate build
+all: build
 
 ## Automatically create .venv and install dependencies if missing or outdated
 venv: $(STAMP_FILE)
@@ -23,7 +23,7 @@ $(STAMP_FILE): requirements-dev.txt
 validate: venv
 	@FRICTIONLESS_BIN="$(VENV_DIR)/bin/frictionless" ./scripts/build_skill.sh --validate-only
 
-## Build and package the deployable skill archive into dist/
+## Build and package the deployable skill archive (.zip + .sha256) into dist/
 build: venv
 	@FRICTIONLESS_BIN="$(VENV_DIR)/bin/frictionless" ./scripts/build_skill.sh
 
