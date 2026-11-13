@@ -22,17 +22,15 @@ jobs:
         with:
           python-version: '3.12'
           cache: 'pip'
+          cache-dependency-path: 'requirements-dev.txt'
 
-      - name: Install Frictionless Validator & System Tools
+      - name: Install System Dependencies
         run: |
-          sudo apt-get update && sudo apt-get install -y jq zip
-          pip install frictionless
+          sudo apt-get update
+          sudo apt-get install -y jq zip python3-venv
 
-      - name: Validate Data Package & CSV Tables
-        run: make validate
-
-      - name: Build Skill Package
-        run: make build
+      - name: Bootstrap Venv, Validate Schema & Build Skill Package
+        run: make all
 
       - name: Upload Skill Artifact (CI Preview)
         uses: actions/upload-artifact@v4

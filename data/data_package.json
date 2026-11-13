@@ -131,7 +131,7 @@
     },
     {
       "name": "Ref_Compatibility_Contract",
-      "path": "data/tables/Ref_Compatibility_Contract.csv",
+      "path": "tables/Ref_Compatibility_Contract.csv",
       "format": "csv",
       "version": "1.0.1",
       "schema": {
@@ -146,7 +146,7 @@
     },
     {
       "name": "Ref_Goods",
-      "path": "data/tables/Ref_Goods.csv",
+      "path": "tables/Ref_Goods.csv",
       "format": "csv",
       "schema": {
         "fields": [
@@ -161,7 +161,7 @@
     },
     {
       "name": "Ref_Location_Goods",
-      "path": "data/tables/Ref_Location_Goods.csv",
+      "path": "tables/Ref_Location_Goods.csv",
       "format": "csv",
       "version": "1.0.0",
       "schema": {
@@ -184,7 +184,7 @@
     },
     {
       "name": "Ref_Location_Services",
-      "path": "data/tables/Ref_Location_Services.csv",
+      "path": "tables/Ref_Location_Services.csv",
       "format": "csv",
       "version": "1.0.0",
       "schema": {
@@ -207,7 +207,7 @@
     },
     {
       "name": "Ref_Locations",
-      "path": "data/tables/Ref_Locations.csv",
+      "path": "tables/Ref_Locations.csv",
       "format": "csv",
       "version": "1.0.0",
       "schema": {
@@ -239,7 +239,7 @@
     },
     {
       "name": "Ref_Officers",
-      "path": "data/tables/Ref_Officers.csv",
+      "path": "tables/Ref_Officers.csv",
       "format": "csv",
       "version": "1.0.0",
       "schema": {
@@ -274,7 +274,7 @@
     },
     {
       "name": "Ref_TransitTolls",
-      "path": "data/tables/Ref_TransitTolls.csv",
+      "path": "tables/Ref_TransitTolls.csv",
       "format": "csv",
       "version": "1.0.0",
       "schema": {
@@ -484,7 +484,7 @@
     },
     {
       "name": "State_Scalars",
-      "path": "data/tables/State_Scalars.csv",
+      "path": "tables/State_Scalars.csv",
       "format": "csv",
       "version": "1.0.1",
       "schema": {

@@ -1,1 +1,22 @@
-todo.md
+# OS & Editor artifacts
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/
+
+# Python / Frictionless virtual environments
+.venv/
+venv/
+__pycache__/
+
+# Live campaign state exports / personal playtest dumps
+# (Keep State_Scalars.csv tracked as the clean seed template, ignore live dumps)
+data/live_exports/
+*.xlsx
+*.ods
+*credentials*.json
+*token*.json
+
+# Build artifacts
+dist/

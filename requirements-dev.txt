@@ -1,0 +1,2 @@
+# requirements-dev.txt
+frictionless>=5.17.0,<6.0.0
