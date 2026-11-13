@@ -1,11 +1,11 @@
 contract_key,target_subsystem,current_version,minimum_version
 engine_core,First Mate ruleset,1.0.1,1.0.0
-db_schema,Frictionless datastore,1.1.2,1.1.0
+db_schema,Frictionless datastore,1.1.3,1.1.0
 logbook,Markdown Logbook,1.0.1,1.0.0
 ref_goods,Goods reference table,1.0.0,1.0.0
 ref_location_goods,Location Export Goods reference table,1.0.0,1.0.0
 ref_location_services,Location Services reference table,1.0.0,1.0.0
 ref_officers,Officer reference table,1.0.0,1.0.0
 ref_transit_tolls,Transit Toll reference table,1.0.0,1.0.0
-state_scalars,State Scalars starting values,1.0.0,1.0.0
+state_scalars,State Scalars starting values,1.0.1,1.0.0
 game_version,Sunless Skies game,2.0.7,2.0.0
