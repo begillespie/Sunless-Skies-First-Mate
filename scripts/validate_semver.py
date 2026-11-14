@@ -78,7 +78,9 @@ def main() -> int:
         repo_root / "src" / "SKILL.md",
         repo_root / "src" / "Sunless_Skies.md",
         repo_root / "src" / "logbook.md",
-        repo_root / "data" / "data_package.json",
+        repo_root / "src" / "tools" / "engine_tools.py",
+        repo_root / "src" / "tools" / "ui_tools.py",
+        repo_root / "data" / "data_package.json"
     ]
 
     errors: list[str] = []

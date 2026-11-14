@@ -30,6 +30,7 @@ def compile_datapackage(src_path: Path, dst_path: Path) -> int:
         pkg.remove_resource(name)
         pkg.add_resource(inline_resource)
 
+        print(f"    {GREEN}✓ [Assemble]{NC} Inlined resource '{name}' into package.")
     # 4. Validate new data_package
     report = pkg.validate()
     if not report.valid:
@@ -57,17 +58,17 @@ def main() -> int:
     )
 
     if not src_path.exists():
-        print(f"  {RED}✗ [Compile]{NC} Source data package not found: {src_path}", file=sys.stderr)
+        print(f"    {RED}✗ [Compile]{NC} Source data package not found: {src_path}", file=sys.stderr)
         return 1
 
     try:
         inlined_count = compile_datapackage(src_path, dst_path)
     except Exception as exc:
-        print(f"  {RED}✗ [Compile]{NC} {exc}", file=sys.stderr)
+        print(f"    {RED}✗ [Compile]{NC} {exc}", file=sys.stderr)
         return 1
 
     rel_dst = dst_path.relative_to(repo_root) if dst_path.is_relative_to(repo_root) else dst_path
-    print(f"  {GREEN}✓ [Compile]{NC} Inlined & validated {inlined_count} resources into {rel_dst}.")
+    print(f"    {GREEN}✓ [Compile]{NC} Inlined & validated {inlined_count} resources into {rel_dst}.")
     return 0
 
 

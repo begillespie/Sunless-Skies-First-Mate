@@ -9,6 +9,8 @@ Thumbs.db
 .venv/
 venv/
 __pycache__/
+*.py[cod]
+*$py.class
 
 # Live campaign state exports / personal playtest dumps
 # (Keep State_Scalars.csv tracked as the clean seed template, ignore live dumps)
