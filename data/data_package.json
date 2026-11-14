@@ -321,7 +321,7 @@
       "name": "state_action",
       "data": [
         ["action_id", "parent_action_id", "title", "action_type", "action_status", "target_location_key", "target_entity_key", "quantity_required", "quantity_delivered", "priority", "is_pinned", "created_epoch", "updated_epoch", "deadline_epoch", "notes"],
-        ["ACT-1000", "", "The Orphean", "quest", "active", "new_winchester", "Captain Whitlock", 1, 0, "high", "", 73, 73, "", "Your engine was damaged in its escape from the Blue Kingdom. The Captain was injured. Can you see her back to New Winchester?"]
+        ["ACT-1000", "", "The Orphean", "quest", "active", "new_winchester", "captain_whitlock", 1, 0, "high", "FALSE", 73, 73, "", "Your engine was damaged in its escape from the Blue Kingdom. The Captain was injured. Can you see her back to New Winchester?"]
       ],
       "schema": {
         "fields": [

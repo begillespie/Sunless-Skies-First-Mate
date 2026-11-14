@@ -27,13 +27,13 @@ captain,possession_vision_of_the_heavens,0,integer,Possession count for vision_o
 captain,albion_transit_permit,FALSE,boolean,Whether the captain has an Albion transit permit
 captain,blue_kingdom_transit_permit,FALSE,boolean,Whether the captain has a Blue Kingdom transit permit
 captain,eleutheria_transit_permit,FALSE,boolean,Whether the captain has an Eleutheria transit permit
-crew,current_crew,10,integer,Current number of crew aboard
+crew,current_crew,8,integer,Current number of crew aboard
 crew,max_crew,10,integer,Maximum crew capacity
 crew,terror,0,integer,Current terror level (0-100)
 crew,nightmares,0,integer,Current nightmares level (0-4)
 locomotive,model,Spatchcock,string,Locomotive class model
 locomotive,vessel_name,The Orphean,string,Name of the vessel
-locomotive,current_hull,30,integer,Current hull integrity
+locomotive,current_hull,15,integer,Current hull integrity
 locomotive,max_hull,30,integer,Maximum hull integrity
 locomotive,fuel_used_last_leg,0,integer,Fuel consumed on the previous leg
 locomotive,hold_capacity,12,integer,Cargo hold capacity
@@ -43,6 +43,6 @@ locomotive,reserve_supplies_min,3,integer,Minimum reserve supplies threshold
 session,first_mate_name,,string,Active first mate name
 session,current_epoch,73,integer,Current game time epoch
 session,sovereigns,0,integer,Sovereigns currency balance
-session,current_location_key,,string,Current location key. Foreign key: Ref_Locations.location_key
-session,last_location_visited_key,blue_kingdom_transit_relay,string,Last visited location key. Foreign key: Ref_Locations.location_key
+session,current_location_key,,string,Current location key. Foreign key: ref_locations.location_key
+session,last_location_visited_key,blue_kingdom_transit_relay,string,Last visited location key. Foreign key: ref_locations.location_key
 session,navigation_state,enroute,string,"Navigation state (arriving, departing, docked, enroute)"
