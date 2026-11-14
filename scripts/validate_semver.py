@@ -3,7 +3,7 @@
 scripts/validate_semver.py
 Validates SemVer syntax and compatibility contracts by extracting
 @subsystem and @version tags across source files and comparing them
-against data/tables/Ref_Compatibility_Contract.csv.
+against data/tables/ref_compatibility_contract.csv.
 """
 import csv
 import json
@@ -19,7 +19,7 @@ SEMVER_RE = re.compile(r"^(\d+)\.(\d+)\.(\d+)$")
 SUBSYSTEM_RE = re.compile(r"^\s*(?:<!--\s*)?@subsystem:\s*([a-z0-9_]+)", re.MULTILINE)
 VERSION_RE = re.compile(r"^\s*(?:<!--\s*)?@version:\s*([0-9]+\.[0-9]+\.[0-9]+)", re.MULTILINE)
 
-# External subsystems tracked in Ref_Compatibility_Contract.csv that do not have local source files
+# External subsystems tracked in ref_compatibility_contract.csv that do not have local source files
 EXTERNAL_SUBSYSTEMS = {"sunless_skies_game"}
 
 
@@ -72,7 +72,7 @@ def extract_declarations(file_path: Path, rel_name: str, errors: list[str]) -> l
 
 def main() -> int:
     repo_root = Path(__file__).resolve().parent.parent
-    contract_path = repo_root / "data" / "tables" / "Ref_Compatibility_Contract.csv"
+    contract_path = repo_root / "data" / "tables" / "ref_compatibility_contract.csv"
 
     target_files = [
         repo_root / "src" / "SKILL.md",
@@ -90,7 +90,7 @@ def main() -> int:
         )
         return 1
 
-    # 1. Load & validate Ref_Compatibility_Contract.csv keyed by target_subsystem
+    # 1. Load & validate ref_compatibility_contract.csv keyed by target_subsystem
     contracts: dict[str, dict[str, str]] = {}
     with contract_path.open("r", encoding="utf-8", newline="") as f:
         for row in csv.DictReader(f):
@@ -98,8 +98,8 @@ def main() -> int:
             cur_v = row["current_version"].strip()
             min_v = row["minimum_version"].strip()
 
-            cur_t = parse_semver(cur_v, f"Ref_Compatibility_Contract[{subsystem}].current_version", errors)
-            min_t = parse_semver(min_v, f"Ref_Compatibility_Contract[{subsystem}].minimum_version", errors)
+            cur_t = parse_semver(cur_v, f"ref_compatibility_contract[{subsystem}].current_version", errors)
+            min_t = parse_semver(min_v, f"ref_compatibility_contract[{subsystem}].minimum_version", errors)
 
             if cur_t and min_t and cur_t < min_t:
                 errors.append(
@@ -130,7 +130,7 @@ def main() -> int:
             if subsystem not in contracts:
                 errors.append(
                     f"{rel_name} declares unknown @subsystem '{subsystem}' "
-                    f"(not found in Ref_Compatibility_Contract.csv)"
+                    f"(not found in ref_compatibility_contract.csv)"
                 )
                 continue
 
@@ -155,13 +155,13 @@ def main() -> int:
 
             verified_subsystems[subsystem] = declared_ver
 
-    # 3. Verify every internal row in Ref_Compatibility_Contract.csv was accounted for
+    # 3. Verify every internal row in ref_compatibility_contract.csv was accounted for
     for subsystem in contracts:
         if subsystem in EXTERNAL_SUBSYSTEMS:
             continue
         if subsystem not in verified_subsystems:
             errors.append(
-                f"Subsystem '{subsystem}' in Ref_Compatibility_Contract.csv was not declared in any source file"
+                f"Subsystem '{subsystem}' in ref_compatibility_contract.csv was not declared in any source file"
             )
 
     if errors:
