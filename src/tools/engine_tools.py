@@ -2,8 +2,8 @@
 """
 @subsystem: engine_tools
 @version: 1.2.0
-Deterministic calculation and state-transfer engine for Sunless Skies First Mate.
-Standardized on ISO date strings (YYYY-MM-DD) and dictionary/CSV serializations.
+@file: /src/tools/engine_tools.py
+@description: Deterministic calculation and state-transfer engine for Sunless Skies First Mate.
 """
 import re
 from typing import Any, Dict, Iterable, Literal

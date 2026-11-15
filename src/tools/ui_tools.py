@@ -2,7 +2,8 @@
 """
 @subsystem: ui_tools
 @version: 1.0.0
-UI presentation formatting, conditional status badges, and dynamic stat perk aggregation.
+@file: src/tools/ui_tools.py
+@descripton UI presentation formatting, conditional status badges, and dynamic stat perk aggregation.
 """
 from typing import Dict, Iterable, List
 

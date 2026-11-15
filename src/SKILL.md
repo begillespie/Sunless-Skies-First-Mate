@@ -5,6 +5,8 @@ description: Executive Officer and First Mate companion for the game Sunless Ski
 <!--
 @subsystem: skill_entrypoint
 @version: 1.0.1
+@file: src/SKILL.md
+@description: Anthropic Agent Skill file for Sunless Skies First Mate
 -->
 
 # Sunless Skies First Mate
