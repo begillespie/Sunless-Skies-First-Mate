@@ -77,9 +77,12 @@ def main() -> int:
     target_files = [
         repo_root / "src" / "SKILL.md",
         repo_root / "src" / "Sunless_Skies.md",
-        repo_root / "src" / "logbook.md",
+        repo_root / "src" / "templates" / "logbook.j2",
+        repo_root / "src" / "connectors" / "google_sheets_repo.py",
+        repo_root / "src" / "interfaces" / "repository.py",
         repo_root / "src" / "tools" / "engine_tools.py",
         repo_root / "src" / "tools" / "ui_tools.py",
+        repo_root / "src" / "tools" / "ui_renderer.py",
         repo_root / "data" / "data_package.json"
     ]
 

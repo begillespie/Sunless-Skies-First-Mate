@@ -20,5 +20,9 @@ data/live_exports/
 *credentials*.json
 *token*.json
 
+# Test artifacts
+.coverage
+htmlcov
+
 # Build artifacts
 dist/

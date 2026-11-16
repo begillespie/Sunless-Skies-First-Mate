@@ -42,7 +42,9 @@ test: $(TEST_STAMP)
 
 $(TEST_STAMP): $(VENV_STAMP) $(VAL_STAMP) $(shell find src/tools tests -type f 2>/dev/null)
 	@echo "==> [TEST] Running unit test suite..."
-	@$(VENV_DIR)/bin/python3 -m unittest discover -s tests -p "test_*.py" -v
+	@$(VENV_DIR)/bin/coverage run --source=src -m unittest discover -s tests -v
+	@echo "==> [TEST] Test Coverage Report"
+	@$(VENV_DIR)/bin/coverage report
 	@touch $(TEST_STAMP)
 
 ## 4. Incremental Build & Packaging (.zip + .sha256)
@@ -60,6 +62,8 @@ clean:
 	rm -rf $(DIST_DIR) $(VENV_DIR)/.validated $(VENV_DIR)/.tested
 	find . -type d -name "__pycache__" -exec rm -rf {} +
 	find . -type f -name "*.pyc" -delete
+	@$(VENV_DIR)/bin/coverage erase
+	rm -rf htmlcov
 
 ## Remove build artifacts and the entire Python virtual environment
 clean-all: clean

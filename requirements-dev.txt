@@ -1,2 +1,5 @@
 # requirements-dev.txt
 frictionless>=5.17.0,<6.0.0
+jinja2>=3.1.0,<4.0.0
+coverage>=7.17.3,<8.0.0
+pandas>=3.1.1,<4.0.0

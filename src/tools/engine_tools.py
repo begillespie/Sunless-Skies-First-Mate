@@ -78,27 +78,6 @@ def compute_mac(old_total_qty: int, old_mac: float, acquired_qty: int, unit_pric
     return round(((old_total_qty * old_mac) + (acquired_qty * unit_price)) / new_total, 2)
 
 
-def compute_hold_utilization_OLD(
-    inventory_rows: Iterable[dict], contraband_keys: set[str], hidden_slots: int) -> dict:
-    """
-    Returns a structured dictionary for easy LLM parsing:
-    {"standard_hold_used": int, "hidden_hold_used": int} per Rule 3.1.2.2.
-    """
-    if not isinstance(inventory_rows, Iterable):
-        raise TypeError("inventory_rows must be an iterable of dictionaries")
-    
-    non_contraband = sum(int(r.get("hold_qty", 0)) for r in inventory_rows if r["good_key"] not in contraband_keys)
-    contraband = sum(int(r.get("hold_qty", 0)) for r in inventory_rows if r["good_key"] in contraband_keys)
-    hidden_used = min(contraband, hidden_slots)
-    spillover = max(0, contraband - hidden_slots)
-    
-    return {
-        "standard_hold_used": non_contraband + spillover,
-        "hidden_hold_used": hidden_used
-    }
-
-
-
 def compute_hold_utilization(inventory_rows: Iterable[Dict[str, Any]], hidden_slots: int) -> dict:
     """
     Returns a structured dictionary for easy LLM parsing:

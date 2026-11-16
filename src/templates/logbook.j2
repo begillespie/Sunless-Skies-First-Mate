@@ -1,0 +1,132 @@
+{#
+@subsystem: logbook
+@version: 2.0.0
+@file: src/templates/logbook.j2
+@description: This template generates a logbook entry for the Sunless Skies First Mate application
+#}
+
+# 🚂 CAPTAIN'S LOG 🚀
+
+## 📅 {{ date }} (Day {{ epoch }}) | ⚓ {{ location_name }} | {{ kinetic_state }}
+**🗺️ Region:** {{ region_name }} | **👤 Captain:** {{ captain_name }} | **🪙 Wallet:** {{ sovereigns }} Sovereigns
+**🚂 Current Engine:** {{ vessel_name }} ({{ model }})
+
+---
+
+## ⚙️ VESSEL SYSTEMS & RECOVERY STATUS
+| System | Status | Current / Max |
+| :--- | :---: | :--- |
+| **Hull** | {{ hull_badge }} | {{ current_hull }} / {{ max_hull }} Hull |
+| **Crew** | {{ crew_badge }} | {{ current_crew }} / {{ max_crew }} Souls |
+| **Terror** | {{ terror_badge }} | {{ terror_level }} / 100 |
+| **Nightmares** | {{ nightmares_badge }} | {{ nightmares_level }} / 4 |
+
+## 🔮 VESSEL APTITUDE & STAT BALANCES
+
+| 📐 SKILLS | Base | Perks | Total |
+| :--- | :---: | :---: | :---: |
+| - 👊 Iron | {{ skill_iron }} | {{ iron_total - skill_iron }} | **{{ iron_total }}** |
+| - 👁️ Mirrors | {{ skill_mirrors }} | {{ mirrors_total - skill_mirrors }} | **{{ mirrors_total }}** |
+| - ❤️ Hearts | {{ skill_hearts }} | {{ hearts_total - skill_hearts }} | **{{ hearts_total }}** |
+| - 🎭 Veils | {{ skill_veils }} | {{ veils_total - skill_veils }} | **{{ veils_total }}** |
+| 🔍 **AFFILIATIONS** | **Base** | **Perks** | **Total** |
+| - 🔍 Academe | {{ affiliation_academe }}| {{ academe_total - affiliation_academe }} | **{{ academe_total }}** |
+| - 🍷 Bohemia | {{ affiliation_bohemia }}| {{ bohemia_total - affiliation_bohemia }} | **{{ bohemia_total }}** |
+| - 👑 Establishment | {{ affiliation_establishment }} | {{ establishment_total - affiliation_establishment }} | **{{ establishment_total }}** |
+| - 🎩 Villainy | {{ affiliation_villainy }}| {{ villainy_total - affiliation_villainy }} | **{{ villainy_total }}** |
+
+---
+
+## 🗺️ OPERATIONS & TRANSIT
+
+📋 **Executive Officer's Counsel ({{ first_mate_name }} — Operations Update):**
+> {{ narrative_counsel }}
+
+### 🧭 Active Trajectory:
+
+{% for leg in itinerary | sort(attribute='sequence_order') -%}
+### ➡️ STOP {{ leg.sequence_order }} {{ leg.display_name }} {{ leg.resupply_badge }}
+{% for action in leg.actions -%}
+{% if action.type == "ambition" -%}
+- {{ action.priority_badge }} 🎯 **AMBITION:** {{ action.title}}
+{{ action.notes }}
+{% endif %}
+{% if action.type == "officer" -%}
+- {{ action.priority_badge }} 👤 **OFFICER STORY:** {{ action.title}}
+{{ action.notes }}
+{% endif %}
+{% if action.type == "secondment" -%}
+- {{ action.priority_badge }} 💼 **SECONDMENT READY:** {{ action.title }}
+{{ action.notes }}
+{% endif %}
+{% if action.type == "prospect" -%}
+- {{ action.priority_badge }} 🔑 **PROSPECT:** {{ action.title }}
+{{ action.notes }}
+{% endif %}
+{% if action.type == "quest" -%}
+- {{ action.priority_badge }} 📖 **QUEST:** {{ action.title }}
+{{ action.notes }}
+{% endif %}
+{% if action.type == "todo" -%}
+- {{ action.priority_badge }} 📌 **TODO:** {{ action.title }}
+{{ action.notes }}
+{% endif %}
+{% endfor -%}
+{% endfor -%}
+
+---
+
+{% if pinned_objectives -%}
+## 📌 PINNED OBJECTIVES (OFF-ITINERARY)
+{% for obj in pinned_objectives -%}
+- **[#{{ obj.id }}] {{ obj.title }}:** {{ obj.description }} *(Target: {{ obj.port }})*
+{% endfor %}
+---
+{% endif %}
+
+{% if active_passengers -%}
+## 👤 ACTIVE PASSENGERS
+{% for pax in active_passengers -%}
+- **{{ pax.name }}** (Destination: {{ pax.destination }}) — *Quarters: {{ pax.quarters }}*
+{% endfor %}
+---
+{% endif %}
+
+## 📦 LOGISTICS
+**Hold Capacity:** {{ standard_hold_used }} / {{ hold_capacity }} Standard Slots
+{% if hidden_slots > 0 -%}
+**🗝️ Hidden Hold Utilization:** {{ hidden_hold_used }} / {{ hidden_slots }} Slots Occupied
+{% endif %}
+| Cargo / Good Key | Hold Qty | Bank Qty | Avg Unit Cost | Status / Earmark | Destination Port |
+| :--- | :---: | :---: | :---: | :--- |
+{% for item in inventory_rows -%}
+| {{ item.good_key }} | {{ item.hold_qty }} | {{ item.bank_qty }} | £{{ "%.2f"|format(item.mac) }} | {{ item.status }} | {{ item.destination_port }}
+{% endfor %}
+
+---
+
+## 🛞 BRIDGE ROSTER
+
+| Station | Active Officer | Skill Perks | Affiliation Perks |
+| :--- | :--- | :--- | :--- |
+| ⚓ **First Officer** | {{ officers.first_officer.name | default('🔘 Vacant') }} | {{ officers.first_officer.skills }} | {{ officers.first_officer.affiliation }} |
+| 🛞 **Quartermaster** | {{ officers.quartermaster.name | default('🔘 Vacant') }} | {{ officers.quartermaster.skills }} | {{ officers.quartermaster.affiliation }} |
+| 🏮 **Signaller** | {{ officers.signaller.name | default('🔘 Vacant') }} | {{ officers.signaller.skills }} | {{ officers.signaller.affiliation }} |
+| ⚙️ **Chief Engineer** | {{ officers.chief_engineer.name | default('🔘 Vacant') }} | {{ officers.chief_engineer.skills }} | {{ officers.chief_engineer.affiliation }} |
+| 🐶 **Mascot** | {{ officers.mascot.name | default('🔘 Vacant') }} | {{ officers.mascot.skills }} | {{ officers.mascot.affiliation }} |
+
+---
+
+{% if secondment_outlook -%}
+## ⏳ SECONDMENT OUTLOOK
+{% for sec in secondment_outlook -%}
+- **{{ sec.officer_key }}:** {{ sec.status_note }}
+{% endfor %}
+---
+{% endif %}
+
+*Respectfully submitted,*  
+### 🪶 **_{{ first_mate_name }}_**
+*Executive Officer, {{ vessel_name }}*
+
+⚜️ ─── ✦ 🧭 ۞ ⚓ ✦ ─── ⚜️

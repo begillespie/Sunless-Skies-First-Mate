@@ -1,5 +1,5 @@
 <!--
-@subsystem: logbook
+@subsystem: logbook_OLD
 @version: 1.0.1
 -->
 
