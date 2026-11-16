@@ -1,182 +1,211 @@
 #!/usr/bin/env python3
 """
-Tier 2 Unit Test Suite for engine_tools.py and ui_renderer.py.
-Covers valid operational inputs, boundary conditions, and all variants of invalid inputs.
+Tier 2 Unit Test Suite for LLM Tool Registry, Guarded Engine Mutators,
+Officer Rules, and Read-Only Service Calculators.
 """
 import unittest
+import pandas as pd
 
-from src.tools.engine_tools import (
-    date_to_epoch,
-    epoch_to_date,
-    compute_mac,
+import src.tools.engine_tools  # noqa: F401 - ensures tools register on import
+from src.connectors.google_sheets_repo import GoogleSheetsRepository
+from src.services.calculators import (
+    calculate_attribute_perks,
     compute_hold_utilization,
-    transfer_inventory,
+    compute_mac,
 )
-from src.tools.ui_tools import (
-    vitals_badge,
-    terror_badge,
-    reserve_badge,
-    calculate_stats,
+from src.tools.registry import (
+    TOOL_REGISTRY,
+    dispatch_tool_call,
+    get_tool_declarations,
 )
 
 
-class TestEngineTools(unittest.TestCase):
-    def test_date_to_epoch_valid(self):
-        self.assertEqual(date_to_epoch("1905-01-01"), 0)
-        self.assertEqual(date_to_epoch("1905-01-31"), 30)
-        self.assertEqual(date_to_epoch("1906-01-15"), 379)
-        self.assertEqual(date_to_epoch("1908-03-01"), 1154)
+class TestToolsAndRegistry(unittest.TestCase):
 
-    def test_date_to_epoch_invalid_inputs(self):
-        for bad_date in ["01/01/1905", "1905-1-1", "1905-01-32", "April 15, 1906", "not-a-date", "", None, 19050101, True]:
-            with self.assertRaises((ValueError, TypeError), msg=f"Failed with input {bad_date}"):
-                date_to_epoch(bad_date)
+    def setUp(self):
+        self.repo = GoogleSheetsRepository("mock_id")
+        self.repo._cache["state_scalars"] = pd.DataFrame([
+            {"key": "epoch", "value": 30},
+            {"key": "current_date", "value": "1905-01-31"},
+            {"key": "navigation_state", "value": "docked"},
+            {"key": "sovereigns", "value": 1000},
+            {"key": "current_hull", "value": 80},
+            {"key": "max_hull", "value": 100},
+            {"key": "current_crew", "value": 18},
+            {"key": "max_crew", "value": 20},
+            {"key": "terror_level", "value": 15},
+            {"key": "nightmares_level", "value": 0},
+            {"key": "hidden_slots", "value": 2},
+            {"key": "current_location", "value": "new_winchester"},
+            {"key": "skill_iron", "value": 10},
+            {"key": "skill_mirrors", "value": 3},
+            {"key": "skill_hearts", "value": 6},
+            {"key": "skill_veils", "value": 3},
+            {"key": "affiliation_academe", "value": 0},
+            {"key": "affiliation_bohemia", "value": 0},
+            {"key": "affiliation_establishment", "value": 1},
+            {"key": "affiliation_villainy", "value": 0}
+        ])
+        self.repo._cache["state_inventory"] = pd.DataFrame([
+            {"good_key": "fuel", "hold_qty": 10, "bank_qty": 5, "average_unit_cost": 12.0},
+            {"good_key": "supplies", "hold_qty": 8, "bank_qty": 2, "average_unit_cost": 18.0},
+        ])
+        self.repo._cache["ref_goods"] = pd.DataFrame([
+            {"good_key": "fuel", "is_contraband": False},
+            {"good_key": "supplies", "is_contraband": False},
+            {"good_key": "red_honey", "is_contraband": True},
+            {"good_key": "bronzewood", "is_contraband": False}
+        ])
+        self.repo._cache["ref_officers"] = pd.DataFrame([
+            {
+                "officer_key": "incautious_driver",
+                "name": "Incautious Driver",
+                "station": "chief_engineer",
+                "lineage": "driver",
+                "tier": 1,
+                "skill_iron": 2, "skill_mirrors": 0, "skill_hearts": 0, "skill_veils": 0,
+                "affiliation_academe": 0, "affiliation_bohemia": 0,
+                "affiliation_establishment": 0, "affiliation_villainy": 0,
+            },
+            {
+                "officer_key": "reckless_driver",
+                "name": "Reckless Driver",
+                "station": "chief_engineer",
+                "lineage": "driver",
+                "tier": 2,
+                "skill_iron": 5, "skill_mirrors": 0, "skill_hearts": -1, "skill_veils": 0,
+                "affiliation_academe": 0, "affiliation_bohemia": 0,
+                "affiliation_establishment": 0, "affiliation_villainy": 1,
+            },
+            {
+                "officer_key": "clay_conductor",
+                "name": "Clay Conductor",
+                "station": "chief_engineer",
+                "lineage": "conductor",
+                "tier": 1,
+                "skill_iron": 0, "skill_mirrors": 4, "skill_hearts": 0, "skill_veils": 0,
+                "affiliation_academe": 1, "affiliation_bohemia": 0,
+                "affiliation_establishment": 0, "affiliation_villainy": 0,
+            },
+        ])
+        self.repo._cache["state_officers"] = pd.DataFrame([
+            {"officer_key": "incautious_driver", "officer_status": "active"},
+            {"officer_key": "clay_conductor", "officer_status": "unassigned"},
+        ])
+        self.repo._cache["state_navigation_itinerary"] = pd.DataFrame([
+            {"sequence_order": 1, "location_key": "port_avon", "action_summary": "Deliver cargo"},
+        ])
+        self.repo._cache["state_navigation_history"] = pd.DataFrame(
+            columns=["sequence_order", "location_key", "action_summary"]
+        )
+
+    def test_registry_schema_generation_and_isolation(self):
+        declarations = get_tool_declarations()
+        decl_map = {d["name"]: d for d in declarations}
+
+        expected_tools = {
+            "adjust_scalar",
+            "set_scalar",
+            "set_game_epoch",
+            "buy_goods",
+            "sell_goods",
+            "adjust_hold_qty",
+            "transfer_inventory",
+            "assign_officer",
+            "transition_navigation",
+        }
+        self.assertEqual(set(decl_map.keys()), expected_tools)
+
+        # Ensure 'repo' is stripped from every parameter schema
+        for decl in declarations:
+            self.assertNotIn("repo", decl["parameters"]["properties"])
+            self.assertNotIn("repo", decl["parameters"]["required"])
+
+        # Ensure Literal compiles to enum
+        transfer_props = decl_map["transfer_inventory"]["parameters"]["properties"]
+        self.assertEqual(transfer_props["direction"]["enum"], ["deposit", "withdraw"])
+
+        # Ensure read-only helpers are blocked from LLM dispatch
+        with self.assertRaises(KeyError):
+            dispatch_tool_call(self.repo, "compute_mac", {"good_key": "fuel", "acquired_qty": 2, "unit_price": 10})
+
+    def test_adjust_and_set_scalar_guards(self):
+        # Loot 50 sovereigns from Marauder wreckage
+        self.assertTrue(dispatch_tool_call(self.repo, "adjust_scalar", {"key": "sovereigns", "delta": 50}))
+        self.assertEqual(self.repo.get_cell("state_scalars", {"key": "sovereigns"}, "value"), 1050)
+
+        # Hull repairs clamp at max_hull (100)
+        self.assertTrue(dispatch_tool_call(self.repo, "adjust_scalar", {"key": "current_hull", "delta": 50}))
+        self.assertEqual(self.repo.get_cell("state_scalars", {"key": "current_hull"}, "value"), 100)
+
+        # Protected scalar cannot be mutated directly
         with self.assertRaises(ValueError):
-            date_to_epoch("1904-12-31")
+            dispatch_tool_call(self.repo, "set_scalar", {"key": "navigation_state", "value": "enroute"})
+
+    def test_buy_sell_and_transfer_goods(self):
+        # Buy 4 bronzewood @ 25.0 -> appends row, deducts 100 sovereigns
+        self.assertTrue(dispatch_tool_call(self.repo, "buy_goods", {"good_key": "bronzewood", "qty": 4, "unit_price": 25.0}))
+        self.assertEqual(self.repo.get_cell("state_scalars", {"key": "sovereigns"}, "value"), 900)
+        bw_row = self.repo.get_row("state_inventory", {"good_key": "bronzewood"})
+        self.assertEqual(bw_row["hold_qty"], 4)
+        self.assertEqual(bw_row["average_unit_cost"], 25.0)
+
+        # Compute MAC helper has zero side effects
+        self.assertEqual(compute_mac(self.repo, "bronzewood", 4, 25.0), 25.0)
+
+        # Deposit 2 bronzewood to bank via update_row-backed transfer_inventory
+        self.assertTrue(dispatch_tool_call(self.repo, "transfer_inventory", {"good_key": "bronzewood", "direction": "deposit", "qty": 2}))
+        bw_row = self.repo.get_row("state_inventory", {"good_key": "bronzewood"})
+        self.assertEqual(bw_row["hold_qty"], 2)
+        self.assertEqual(bw_row["bank_qty"], 2)
+
+        # Sell remaining 2 in hold -> row remains because bank_qty == 2
+        self.assertTrue(dispatch_tool_call(self.repo, "sell_goods", {"good_key": "bronzewood", "qty": 2, "unit_price": 40.0}))
+        self.assertEqual(self.repo.get_cell("state_scalars", {"key": "sovereigns"}, "value"), 980)
+
+        # Withdraw 2 and sell 2 -> total stock hits 0, non-baseline row is deleted
+        dispatch_tool_call(self.repo, "transfer_inventory", {"good_key": "bronzewood", "direction": "withdraw", "qty": 2})
+        dispatch_tool_call(self.repo, "sell_goods", {"good_key": "bronzewood", "qty": 2, "unit_price": 40.0})
+        with self.assertRaises(LookupError):
+            self.repo.get_row("state_inventory", {"good_key": "bronzewood"})
+
+    def test_hold_utilization_contraband_spillover(self):
+        # Add 3 red_honey (contraband) against 2 hidden_slots -> 2 hidden, 1 spillover + 18 standard = 19 standard
+        dispatch_tool_call(self.repo, "adjust_hold_qty", {"good_key": "red_honey", "delta": 3})
+        util = compute_hold_utilization(self.repo)
+        self.assertEqual(util, {"standard_hold_used": 19, "hidden_hold_used": 2})
+
+    def test_officer_rules_and_attribute_perks(self):
+        # Station exclusivity: activating clay_conductor demotes incautious_driver
+        self.assertTrue(dispatch_tool_call(self.repo, "assign_officer", {"officer_key": "clay_conductor", "officer_status": "active"}))
+        self.assertEqual(
+            self.repo.get_cell("state_officers", {"officer_key": "incautious_driver"}, "officer_status"),
+            "unassigned",
+        )
+
+        # Lineage upgrade: activating reckless_driver (Tier 2) purges incautious_driver (Tier 1) and demotes clay_conductor
+        self.assertTrue(dispatch_tool_call(self.repo, "assign_officer", {"officer_key": "reckless_driver", "officer_status": "active"}))
+        roster_keys = set(self.repo.get_table("state_officers")["officer_key"])
+        self.assertNotIn("incautious_driver", roster_keys)
+        self.assertEqual(
+            self.repo.get_cell("state_officers", {"officer_key": "clay_conductor"}, "officer_status"),
+            "unassigned",
+        )
+
+        # Downgrade blocked
         with self.assertRaises(ValueError):
-            date_to_epoch("1905-02-29")
-        with self.assertRaises(ValueError):
-            date_to_epoch("1905-04-31")
+            dispatch_tool_call(self.repo, "assign_officer", {"officer_key": "incautious_driver", "officer_status": "unassigned"})
 
-    def test_epoch_to_date_valid(self):
-        self.assertEqual(epoch_to_date(0), "1905-01-01")
-        self.assertEqual(epoch_to_date(30), "1905-01-31")
-        self.assertEqual(epoch_to_date(31), "1905-02-01")
-        self.assertEqual(epoch_to_date(379), "1906-01-15")
-        self.assertEqual(epoch_to_date(1153), "1908-02-28")
-        self.assertEqual(epoch_to_date(1154), "1908-03-01")
+        # Attribute perks calculation
+        totals = calculate_attribute_perks(self.repo)
+        self.assertEqual(totals["skill_iron"], 15)
+        self.assertEqual(totals["skill_hearts"], 5)
+        self.assertEqual(totals["affiliation_villainy"], 1)
+        self.assertEqual(totals["affiliation_establishment"], 1)
 
-    def test_epoch_to_date_invalid_inputs(self):
-        for bad_epoch in [-1, "30", 30.5, None, True]:
-            with self.assertRaises((ValueError, TypeError), msg=f"Failed with input {bad_epoch}"):
-                epoch_to_date(bad_epoch)
-
-    def test_compute_mac_valid(self):
-        self.assertEqual(compute_mac(2, 60.0, 4, 30.0), 40.0)
-        self.assertEqual(compute_mac(0, 0.0, 5, 20.0), 20.0)
-        self.assertEqual(compute_mac(0, 0.0, 0, 50.0), 0.0)
-
-    def test_compute_mac_invalid_inputs(self):
-        for bad_args in [
-            (-1, 60.0, 4, 30.0),
-            (2, -60.0, 4, 30.0),
-            (2, 60.0, -4, 30.0),
-            (2, 60.0, 4, -30.0),
-            ("2", 60.0, 4, 30.0),
-            (2, True, 4, 30.0),
-        ]:
-            with self.assertRaises((ValueError, TypeError), msg=f"Failed with input {bad_args}"):
-                compute_mac(*bad_args)
-
-    def test_compute_hold_utilization_valid(self):
-        inv = [{"good_key": "fuel", "hold_qty": 3}, {"good_key": "illicit_literature", "hold_qty": 2}]
-        res = compute_hold_utilization(inv, 4)
-        self.assertEqual(res, {"standard_hold_used": 3, "hidden_hold_used": 2})
-
-        res2 = compute_hold_utilization(inv, 1)
-        self.assertEqual(res2, {"standard_hold_used": 4, "hidden_hold_used": 1})
-
-    def test_compute_hold_utilization_invalid_inputs(self):
-        with self.assertRaises((ValueError, TypeError)):
-            compute_hold_utilization([{"good_key": "fuel", "hold_qty": -1}], 4)
-        with self.assertRaises((ValueError, TypeError)):
-            compute_hold_utilization([{"good_key": "fuel", "hold_qty": 3}], -1)
-        with self.assertRaises((ValueError, TypeError)):
-            compute_hold_utilization("not-an-iterable", 4) #type: ignore
-        with self.assertRaises((ValueError, TypeError)):
-            compute_hold_utilization([{"missing_keys": 1}], 4)
-
-    def test_transfer_inventory_valid(self):
-        row = ["fuel", 4, 0, 20.0]
-        self.assertEqual(transfer_inventory(row, "deposit", 1), "fuel,3,1,20.00")
-        row2 = ["supplies", 2, 3, 40.0]
-        self.assertEqual(transfer_inventory(row2, "withdraw", 2), "supplies,4,1,40.00")
-
-    def test_transfer_inventory_invalid_inputs(self):
-        with self.assertRaises(ValueError):
-            transfer_inventory(["fuel", 1, 2, 20.0], "deposit", 3)
-        with self.assertRaises(ValueError):
-            transfer_inventory(["fuel", 1, 2, 20.0], "withdraw", 5)
-        with self.assertRaises(ValueError):
-            transfer_inventory(["fuel", 4, 0, 20.0], "deposit", 0)
-        with self.assertRaises(ValueError):
-            transfer_inventory(["fuel", 4, 0, 20.0], "deposit", -2)
-        with self.assertRaises(ValueError):
-            transfer_inventory(["fuel", 4, 0, 20.0], "transfer", 1) #type: ignore
-        with self.assertRaises(ValueError):
-            transfer_inventory(["fuel", 4], "deposit", 1)
-        for bad_val in ["4", -1, 10.5, True]:
-            with self.assertRaises((ValueError, TypeError), msg=f"Failed with input {bad_val}"):
-                transfer_inventory(["fuel", bad_val, 0, 20.0], "deposit", 1)
-
-
-class TestUIRenderer(unittest.TestCase):
-    def test_vitals_badge_valid(self):
-        self.assertEqual(vitals_badge(8, 10), "🟢")
-        self.assertEqual(vitals_badge(5, 10), "🟡")
-        self.assertEqual(vitals_badge(2, 10), "🔴")
-
-    def test_vitals_badge_invalid_inputs(self):
-        for args in [(-1, 10), (8, 0), (8, -5), ("8", 10), (8, "10"), (True, 10), (8, False)]:
-            with self.assertRaises((ValueError, TypeError), msg=f"Failed with input {args}"):
-                vitals_badge(*args)
-
-    def test_terror_badge_valid(self):
-        self.assertEqual(terror_badge(20), "🟢")
-        self.assertEqual(terror_badge(50), "🟡")
-        self.assertEqual(terror_badge(80), "🔴")
-
-    def test_terror_badge_invalid_inputs(self):
-        for bad_t in [-1, 101, "50", 45.5, True, None]:
-            with self.assertRaises((ValueError, TypeError), msg=f"Failed with input {bad_t}"):
-                terror_badge(bad_t)
-
-    def test_reserve_badge_valid(self):
-        self.assertEqual(reserve_badge(4, 3), "🟢")
-        self.assertEqual(reserve_badge(3, 3), "⚠️")
-        self.assertEqual(reserve_badge(1, 3), "🚨")
-
-    def test_reserve_badge_invalid_inputs(self):
-        for args in [(-1, 3), (4, -1), ("4", 3), (4, "3"), (True, 3), (4, True)]:
-            with self.assertRaises((ValueError, TypeError), msg=f"Failed with input {args}"):
-                reserve_badge(*args)
-
-    def test_calculate_stats_valid(self):
-        base = {"iron": 10, "mirrors": 3, "hearts": 6, "veils": 3, "academe": 0, "bohemia": 0, "establishment": 1, "villainy": 0}
-        officers = [
-            {"officer_key": "aunt_inconvenient", "officer_status": "active", "perk_iron": 6, "perk_veils": 2},
-            {"officer_key": "forged-companion_pugilistic","officer_status": "unassigned", "perk_iron": 10},
-            {"officer_key": "navigator_fortunate", "officer_status": "active", "perk_establishment": 1}
-        ]
-        res = calculate_stats(base, officers)
-        self.assertEqual(res["iron"], 16)
-        self.assertEqual(res["mirrors"], 3)
-        self.assertEqual(res["veils"], 5)
-        self.assertEqual(res["establishment"], 2)
-
-        officers = [
-            {"officer_key": "aunt_inconvenient", "officer_status": "active", "perk_iron": 6, "perk_veils": 2},
-            {"officer_key": "mascot_dilly", "officer_status": "active", "perk_hearts": -1},
-            {"officer_key": "navigator_fortunate", "officer_status": "active", "perk_establishment": 1}
-        ]
-        res = calculate_stats(base, officers)
-        self.assertEqual(res["hearts"], 5)
-
-
-    def test_calculate_stats_invalid_inputs(self):
-        base = {"iron": 10, "mirrors": 3, "hearts": 6, "veils": 3, "academe": 0, "bohemia": 0, "establishment": 1, "villainy": 0}
-        with self.assertRaises(TypeError):
-            calculate_stats("not-a-dict", []) #type: ignore
-        with self.assertRaises(ValueError):
-            calculate_stats({"iron": -10}, [])
-        with self.assertRaises(TypeError):
-            calculate_stats(base, ["not-a-dict"]) #type: ignore
-        with self.assertRaises(ValueError):
-            calculate_stats(base, [{"officer_key": "aunt_inconvenient", "officer_status": "active", "perk_iron": "ten"}])
-        with self.assertRaises(ValueError):
-            calculate_stats(base, [{"officer_key": "aunt_inconvenient", "officer_status": "active", "perk_hearts": -1}])
-        with self.assertRaises(ValueError):
-            calculate_stats(base, [{"officer_key": "aunt_inconvenient", "officer_status": "active", "perk_bohemia": -1}])
+    def test_transition_navigation_via_dispatch(self):
+        self.assertTrue(dispatch_tool_call(self.repo, "transition_navigation", {"action": "DEPART"}))
+        self.assertEqual(self.repo.get_cell("state_scalars", {"key": "navigation_state"}, "value"), "departing")
 
 
 if __name__ == "__main__":

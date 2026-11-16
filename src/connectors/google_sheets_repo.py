@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 @subsystem: google_sheets_connector
-@version: 1.0.0
+@version: 1.2.0
 @file: src/connectors/google_sheets_repo.py
 @description: Concrete implementation of BaseRepository using Pandas and Google Sheets CSV exports.
 """
@@ -35,24 +35,58 @@ class GoogleSheetsRepository(BaseRepository):
             self._cache[table_name] = self._fetch_sheet_as_df(table_name)
         return self._cache[table_name]
 
+    def get_row(self, table_name: str, primary_key: dict) -> dict:
+        df = self.get_table(table_name)
+        mask = pd.Series([True] * len(df))
+        for pk_col, pk_val in primary_key.items():
+            if pk_col not in df.columns:
+                raise ValueError(f"Primary key column '{pk_col}' not found in table '{table_name}'.")
+            mask &= (df[pk_col] == pk_val)
+
+        matched_rows = df[mask]
+        if matched_rows.empty:
+            raise LookupError(f"No row found matching primary key {primary_key} in table '{table_name}'.")
+
+        return matched_rows.iloc[0].to_dict()
+
     def append_row(self, table_name: str, row_data: dict) -> bool:
         df = self.get_table(table_name)
         new_row_df = pd.DataFrame([row_data])
         self._cache[table_name] = pd.concat([df, new_row_df], ignore_index=True)
         return True
 
-    def delete_row(self, table_name: str, primary_key: dict) -> bool:
+    def update_row(self, table_name: str, primary_key: dict, updates: dict) -> bool:
         df = self.get_table(table_name)
-        # Construct boolean mask for primary key matching
+        for col in updates.keys():
+            if col not in df.columns:
+                raise ValueError(f"Update column '{col}' not found in table '{table_name}'.")
+
         mask = pd.Series([True] * len(df))
         for pk_col, pk_val in primary_key.items():
             if pk_col not in df.columns:
                 raise ValueError(f"Primary key column '{pk_col}' not found in table '{table_name}'.")
             mask &= (df[pk_col] == pk_val)
-        
+
         if not mask.any():
             raise LookupError(f"No row found matching primary key {primary_key} in table '{table_name}'.")
-        
+
+        for col, val in updates.items():
+            df.loc[mask, col] = val
+
+        self._cache[table_name] = df
+        return True
+
+    def delete_row(self, table_name: str, primary_key: dict) -> bool:
+        df = self.get_table(table_name)
+        mask = pd.Series([True] * len(df))
+        for pk_col, pk_val in primary_key.items():
+            if pk_col not in df.columns:
+                raise ValueError(f"Primary key column '{pk_col}' not found in table '{table_name}'.")
+            mask &= (df[pk_col] == pk_val)
+
+        if not mask.any():
+            raise LookupError(f"No row found matching primary key {primary_key} in table '{table_name}'.")
+
         self._cache[table_name] = df[~mask].reset_index(drop=True)
         return True
 
@@ -60,33 +94,33 @@ class GoogleSheetsRepository(BaseRepository):
         df = self.get_table(table_name)
         if column not in df.columns:
             raise ValueError(f"Column '{column}' not found in table '{table_name}'.")
-        
+
         mask = pd.Series([True] * len(df))
         for pk_col, pk_val in primary_key.items():
             if pk_col not in df.columns:
                 raise ValueError(f"Primary key column '{pk_col}' not found in table '{table_name}'.")
             mask &= (df[pk_col] == pk_val)
-            
+
         matched_rows = df[mask]
         if matched_rows.empty:
             raise LookupError(f"No row found matching primary key {primary_key} in table '{table_name}'.")
-        
+
         return matched_rows.iloc[0][column]
 
     def set_cell(self, table_name: str, primary_key: dict, column: str, value: Any) -> bool:
         df = self.get_table(table_name)
         if column not in df.columns:
             raise ValueError(f"Column '{column}' not found in table '{table_name}'.")
-        
+
         mask = pd.Series([True] * len(df))
         for pk_col, pk_val in primary_key.items():
             if pk_col not in df.columns:
                 raise ValueError(f"Primary key column '{pk_col}' not found in table '{table_name}'.")
             mask &= (df[pk_col] == pk_val)
-            
+
         if not mask.any():
             raise LookupError(f"No row found matching primary key {primary_key} in table '{table_name}'.")
-        
+
         df.loc[mask, column] = value
         self._cache[table_name] = df
         return True

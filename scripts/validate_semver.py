@@ -11,6 +11,38 @@ import re
 import sys
 from pathlib import Path
 
+REPO_ROOT = Path(__file__).resolve().parent.parent
+
+CONTRACT_PATH = REPO_ROOT / "data" / "tables" / "ref_compatibility_contract.csv"
+
+TRACKED_PATHS = [
+    # Prompts
+    REPO_ROOT / "src" / "Sunless_Skies.md", # BASE-01
+    REPO_ROOT / "src" / "SKILL.md", # BASE-02
+
+    # Data Interfaces & Connectors
+    REPO_ROOT / "src" / "interfaces" / "repository.py", # DATA-01
+    REPO_ROOT / "src" / "connectors" / "google_sheets_repo.py", # DATA-02
+    
+    # State & Services
+    REPO_ROOT / "src" / "state" / "game_fsm.py", # STATE-01
+    REPO_ROOT / "src" / "services" / "calendar.py", # STATE-02
+    REPO_ROOT / "src" / "services" / "calculators.py", # STATE-03
+    
+    # Tools & Registry
+    REPO_ROOT / "src" / "tools" / "registry.py", # TOOLS-01
+    REPO_ROOT / "src" / "tools" / "engine_tools.py", # TOOLS-02
+    
+    # UI, Services & Renderers
+    REPO_ROOT / "src" / "ui" / "ui_tools.py", # UI-01
+    REPO_ROOT / "src" / "ui" / "logbook_service.py", # UI-02
+    REPO_ROOT / "src" / "ui" / "ui_renderer.py", # UI-03
+    REPO_ROOT / "src" / "templates" / "logbook.j2", # UI-04
+    
+    # Data & Contracts
+    REPO_ROOT / "data" / "data_package.json", # SCHEMA-01
+]
+
 GREEN = "\033[1;32m"
 RED = "\033[1;31m"
 NC = "\033[0m"
@@ -71,33 +103,19 @@ def extract_declarations(file_path: Path, rel_name: str, errors: list[str]) -> l
 
 
 def main() -> int:
-    repo_root = Path(__file__).resolve().parent.parent
-    contract_path = repo_root / "data" / "tables" / "ref_compatibility_contract.csv"
-
-    target_files = [
-        repo_root / "src" / "SKILL.md",
-        repo_root / "src" / "Sunless_Skies.md",
-        repo_root / "src" / "templates" / "logbook.j2",
-        repo_root / "src" / "connectors" / "google_sheets_repo.py",
-        repo_root / "src" / "interfaces" / "repository.py",
-        repo_root / "src" / "tools" / "engine_tools.py",
-        repo_root / "src" / "tools" / "ui_tools.py",
-        repo_root / "src" / "tools" / "ui_renderer.py",
-        repo_root / "data" / "data_package.json"
-    ]
 
     errors: list[str] = []
 
-    if not contract_path.exists():
+    if not CONTRACT_PATH.exists():
         print(
-            f"  {RED}✗ [SemVer] Missing contract table: {contract_path.relative_to(repo_root)}{NC}",
+            f"  {RED}✗ [SemVer] Missing contract table: {CONTRACT_PATH.relative_to(REPO_ROOT)}{NC}",
             file=sys.stderr,
         )
         return 1
 
     # 1. Load & validate ref_compatibility_contract.csv keyed by target_subsystem
     contracts: dict[str, dict[str, str]] = {}
-    with contract_path.open("r", encoding="utf-8", newline="") as f:
+    with CONTRACT_PATH.open("r", encoding="utf-8", newline="") as f:
         for row in csv.DictReader(f):
             subsystem = row["target_subsystem"].strip()
             cur_v = row["current_version"].strip()
@@ -116,10 +134,10 @@ def main() -> int:
     # 2. Loop over files, extract @subsystem and @version, and compare to contract rows
     verified_subsystems: dict[str, str] = {}
 
-    for file_path in target_files:
+    for file_path in TRACKED_PATHS:
         if not file_path.exists():
             continue
-        rel_name = str(file_path.relative_to(repo_root))
+        rel_name = str(file_path.relative_to(REPO_ROOT))
         declarations = extract_declarations(file_path, rel_name, errors)
 
         for subsystem, declared_ver in declarations:

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 @subsystem: repository_interface
-@version: 1.0.0
+@version: 1.2.0
 @file: src/interfaces/repository.py
 @description Abstract repository contract for Sunless Skies data management.
 Enforces the 'no silent methods' rule: all mutations return True on success.
@@ -20,8 +20,18 @@ class BaseRepository(ABC):
         pass
 
     @abstractmethod
+    def get_row(self, table_name: str, primary_key: dict) -> dict:
+        """Fetches a single row matching the primary key dictionary as a dictionary."""
+        pass
+
+    @abstractmethod
     def append_row(self, table_name: str, row_data: dict) -> bool:
         """Appends a new row to the specified table. Returns True on success."""
+        pass
+
+    @abstractmethod
+    def update_row(self, table_name: str, primary_key: dict, updates: dict) -> bool:
+        """Updates multiple columns for a single row matching the primary key dictionary. Returns True on success."""
         pass
 
     @abstractmethod

@@ -1,4 +1,4 @@
-officer_key,lexical_name,lineage,parent_key,position_slot,tier,perk_academe,perk_bohemia,perk_establishment,perk_villainy,perk_hearts,perk_iron,perk_mirrors,perk_veils
+officer_key,lexical_name,lineage,parent_key,position_slot,tier,academe,bohemia,establishment,villainy,hearts,iron,mirrors,veils
 aunt_inconvenient,Inconvenient Aunt,aunt,,quartermaster,1,0,0,1,0,0,6,2,0
 aunt_revolutionary,Your Revolutionary Aunt,aunt,aunt_inconvenient,quartermaster,2,0,0,0,2,0,0,0,10
 aunt_spymaster,Your Spymaster Aunt,aunt,aunt_inconvenient,quartermaster,2,0,0,2,0,0,10,0,0

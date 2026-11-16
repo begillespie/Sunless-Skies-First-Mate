@@ -18,8 +18,8 @@ class TestGoogleSheetsRepository(unittest.TestCase):
             {"key": "sovereigns", "value": 1000}
         ])
         self.repo._cache["state_inventory"] = pd.DataFrame([
-            {"good_key": "fuel", "hold_qty": 14, "bank_qty": 5},
-            {"good_key": "supplies", "hold_qty": 12, "bank_qty": 2}
+            {"good_key": "fuel", "hold_qty": 14, "bank_qty": 5, "average_unit_cost": 20.00},
+            {"good_key": "supplies", "hold_qty": 12, "bank_qty": 2, "average_unit_cost": 40.00}
         ])
 
     def test_get_table(self):
@@ -42,6 +42,19 @@ class TestGoogleSheetsRepository(unittest.TestCase):
         df = self.repo.get_table("state_inventory")
         self.assertEqual(len(df), 3)
         self.assertEqual(df.iloc[-1]["good_key"], "bronzewood")
+
+    def test_get_row_success(self):
+        success = self.repo.get_row("state_inventory", {"good_key": "supplies"})
+        self.assertTrue(success)
+        self.assertEqual(len(success), 4)
+        self.assertEqual(success["good_key"], "supplies")
+        self.assertEqual(success["bank_qty"], 2)
+
+    def test_update_row_success(self):
+        self.assertTrue(self.repo.update_row("state_inventory", {"good_key": "supplies"}, {"hold_qty": 15, "average_unit_cost": 35.55}))
+        row = self.repo.get_row("state_inventory", {"good_key": "supplies"})
+        self.assertEqual(row["hold_qty"], 15)
+        self.assertEqual(row["average_unit_cost"], 35.55)
 
     def test_delete_row_success(self):
         success = self.repo.delete_row("state_inventory", {"good_key": "supplies"})

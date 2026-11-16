@@ -8,6 +8,18 @@
 from typing import Dict, Iterable, List
 
 
+ATTRIBUTE_KEYS = (
+    "skill_iron",
+    "skill_mirrors",
+    "skill_hearts",
+    "skill_veils",
+    "affiliation_academe",
+    "affiliation_bohemia",
+    "affiliation_establishment",
+    "affiliation_villainy",
+)
+
+
 def vitals_badge(current: int, maximum: int) -> str:
     """Crew & Hull badge (Rule 4.4.2.1): >70% 🟢, 31%-70% 🟡, <=30% 🔴."""
     if not isinstance(current, int) or not isinstance(maximum, int) or isinstance(current, bool) or isinstance(maximum, bool):
@@ -49,6 +61,19 @@ def reserve_badge(hold_qty: int, reserve_min: int) -> str:
     if hold_qty == reserve_min:
         return "⚠️"
     return "🚨"
+
+
+def format_officer_perks(officer_row: dict, prefix: str) -> str:
+    """Formats 'skill_*' or 'affiliation_*' columns into '+5 Iron, -1 Hearts'."""
+    formatted = []
+    for attr in ATTRIBUTE_KEYS:
+        if attr.startswith(prefix):
+            val = int(officer_row.get(attr, 0) or 0)
+            if val != 0:
+                sign = "+" if val > 0 else ""
+                label = attr.removeprefix(prefix).title()
+                formatted.append(f"{sign}{val} {label}")
+    return ", ".join(formatted) if formatted else "—"
 
 
 def calculate_stats(captain_stats: Dict[str, int], active_officers: List[Dict]) -> Dict[str, int]:
