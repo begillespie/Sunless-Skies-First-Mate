@@ -27,16 +27,18 @@ HASH_PATH="${ARCHIVE_PATH}.sha256"
 echo "  [1/3] Assembling skill bundle & compiling inline Data Package..."
 rm -rf "$BUILD_DIR" "$ARCHIVE_PATH" "$HASH_PATH"
 mkdir -p "${BUILD_DIR}/references"
-mkdir -p "${BUILD_DIR}/tools"
+mkdir -p "${BUILD_DIR}/src"
 
 cp src/SKILL.md "${BUILD_DIR}/SKILL.md"
 cp src/Sunless_Skies.md "${BUILD_DIR}/references/Sunless_Skies.md"
-cp src/logbook.md "${BUILD_DIR}/references/logbook.md"
 
-# Copy decoupled Python tools into the deployable skill package
-if [[ -d "src/tools" ]]; then
-    cp src/tools/*.py "${BUILD_DIR}/tools/"
-fi
+# Copy modular Python packages and Jinja2 templates into the deployable skill bundle
+for pkg_dir in interfaces connectors services state tools ui templates; do
+    if [[ -d "src/${pkg_dir}" ]]; then
+        mkdir -p "${BUILD_DIR}/src/${pkg_dir}"
+        find "src/${pkg_dir}" -maxdepth 1 -type f ! -name "*.pyc" -exec cp {} "${BUILD_DIR}/src/${pkg_dir}/" \;
+    fi
+done
 
 "$PYTHON_BIN" scripts/compile_datapackage.py \
     "data/data_package.json" \
@@ -44,10 +46,20 @@ fi
 
 echo "  [2/3] Verifying compiled skill bundle integrity..."
 for req_file in \
-    "${BUILD_DIR}/SKILL.md" \
+"${BUILD_DIR}/SKILL.md" \
     "${BUILD_DIR}/references/Sunless_Skies.md" \
-    "${BUILD_DIR}/references/logbook.md" \
-    "${BUILD_DIR}/references/data_package.json"; do
+    "${BUILD_DIR}/references/data_package.json" \
+    "${BUILD_DIR}/src/interfaces/repository.py" \
+    "${BUILD_DIR}/src/connectors/google_sheets_repo.py" \
+    "${BUILD_DIR}/src/services/calendar.py" \
+    "${BUILD_DIR}/src/services/calculators.py" \
+    "${BUILD_DIR}/src/state/game_fsm.py" \
+    "${BUILD_DIR}/src/tools/registry.py" \
+    "${BUILD_DIR}/src/tools/engine_tools.py" \
+    "${BUILD_DIR}/src/ui/ui_tools.py" \
+    "${BUILD_DIR}/src/ui/logbook_service.py" \
+    "${BUILD_DIR}/src/ui/ui_renderer.py" \
+    "${BUILD_DIR}/src/templates/logbook.j2"; do
     if [[ ! -s "$req_file" ]]; then
         echo "Error: Missing or empty required build artifact: ${req_file}" >&2
         exit 1

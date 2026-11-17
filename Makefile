@@ -40,7 +40,7 @@ $(VAL_STAMP): $(VENV_STAMP) $(shell find data scripts -type f)
 ## 3. Incremental Tier 2 Unit Tests
 test: $(TEST_STAMP)
 
-$(TEST_STAMP): $(VENV_STAMP) $(VAL_STAMP) $(shell find src/tools tests -type f 2>/dev/null)
+$(TEST_STAMP): $(VENV_STAMP) $(VAL_STAMP) $(SRC_FILES) $(TEST_FILES)
 	@echo "==> [TEST] Running unit test suite..."
 	@$(VENV_DIR)/bin/coverage run --source=src -m unittest discover -s tests -v
 	@echo "==> [TEST] Test Coverage Report"
