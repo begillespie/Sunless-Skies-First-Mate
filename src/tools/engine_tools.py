@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 @subsystem: engine_tools
-@version: 2.0.0
+@version: 2.1.0
 @file src/tools/engine_tools.py
 @description Guarded state mutators for Sunless Skies First Mate.
 All state-modifying functions enforce domain invariants, delegate pure math to
@@ -54,64 +54,64 @@ NUMERIC_SCALARS = {
 }
 
 
-def _apply_scalar_bounds(repo, key: str, value):
+def _apply_scalar_bounds(repo, property_key: str, property_value):
     """Validates and clamps bounded scalar values."""
-    if key == "current_hull":
-        max_hull = int(repo.get_cell("state_scalars", {"key": "max_hull"}, "value"))
-        return max(0, min(int(value), max_hull))
-    if key == "current_crew":
-        max_crew = int(repo.get_cell("state_scalars", {"key": "max_crew"}, "value"))
-        return max(0, min(int(value), max_crew))
-    if key == "terror_level":
-        return max(0, min(int(value), 100))
-    if key == "nightmares_level":
-        return max(0, min(int(value), 4))
-    if key == "sovereigns":
-        rounded = round(float(value), 2)
+    if property_key == "current_hull":
+        max_hull = int(repo.get_cell("state_scalars", {"property_key": "max_hull"}, "property_value"))
+        return max(0, min(int(property_value), max_hull))
+    if property_key == "current_crew":
+        max_crew = int(repo.get_cell("state_scalars", {"property_key": "max_crew"}, "property_value"))
+        return max(0, min(int(property_value), max_crew))
+    if property_key == "terror_level":
+        return max(0, min(int(property_value), 100))
+    if property_key == "nightmares_level":
+        return max(0, min(int(property_value), 4))
+    if property_key == "sovereigns":
+        rounded = round(float(property_value), 2)
         if rounded < 0:
             raise ValueError(f"Sovereigns cannot be negative (attempted {rounded}).")
         return int(rounded) if rounded.is_integer() else rounded
-    return value
+    return property_value
 
 
 @llm_tool(category="mutator")
-def adjust_scalar(repo, key: str, delta: int | float) -> bool:
+def adjust_scalar(repo, property_key: str, delta: int | float) -> bool:
     """
     Applies a relative numeric delta (positive or negative) to an allowed gameplay scalar
     such as sovereigns, current_hull, current_crew, terror_level, nightmares_level, or base skills.
     """
-    if key not in MUTABLE_SCALARS or key not in NUMERIC_SCALARS:
-        raise ValueError(f"Scalar '{key}' does not support numeric delta adjustments.")
+    if property_key not in MUTABLE_SCALARS or property_key not in NUMERIC_SCALARS:
+        raise ValueError(f"Scalar '{property_key}' does not support numeric delta adjustments.")
     if not isinstance(delta, numbers.Real) or isinstance(delta, bool):
         raise TypeError(f"Delta must be a numeric value, got {delta!r}.")
 
-    current = repo.get_cell("state_scalars", {"key": key}, "value")
-    new_val = _apply_scalar_bounds(repo, key, current + delta)
-    repo.set_cell("state_scalars", {"key": key}, "value", new_val)
+    current = repo.get_cell("state_scalars", {"property_key": property_key}, "property_value")
+    new_val = _apply_scalar_bounds(repo, property_key, current + delta)
+    repo.set_cell("state_scalars", {"property_key": property_key}, "property_value", new_val)
     return True
 
 
 @llm_tool(category="mutator")
-def set_scalar(repo, key: str, value: str | int | float) -> bool:
+def set_scalar(repo, property_key: str, property_value: str | int | float) -> bool:
     """
     Sets an allowed mutable scalar (such as current_location, region_name, or a base attribute)
     to an explicit value while enforcing domain bounds.
     """
-    if key not in MUTABLE_SCALARS:
-        raise ValueError(f"Scalar '{key}' is protected or invalid.")
-    if isinstance(value, bool):
+    if property_key not in MUTABLE_SCALARS:
+        raise ValueError(f"Scalar '{property_key}' is protected or invalid.")
+    if isinstance(property_value, bool):
         raise TypeError("Scalar value cannot be a boolean.")
 
-    if key in NUMERIC_SCALARS:
-        if not isinstance(value, numbers.Real):
-            raise TypeError(f"Scalar '{key}' requires a numeric value, got {value!r}.")
-        bounded_val = _apply_scalar_bounds(repo, key, value)
+    if property_key in NUMERIC_SCALARS:
+        if not isinstance(property_value, numbers.Real):
+            raise TypeError(f"Scalar '{property_key}' requires a numeric value, got {property_value!r}.")
+        bounded_val = _apply_scalar_bounds(repo, property_key, property_value)
     else:
-        if not isinstance(value, str) or not value.strip():
-            raise ValueError(f"Scalar '{key}' requires a non-empty string.")
-        bounded_val = value.strip()
+        if not isinstance(property_value, str) or not property_value.strip():
+            raise ValueError(f"Scalar '{property_key}' requires a non-empty string.")
+        bounded_val = property_value.strip()
 
-    repo.set_cell("state_scalars", {"key": key}, "value", bounded_val)
+    repo.set_cell("state_scalars", {"property_key": property_key}, "property_value", bounded_val)
     return True
 
 
@@ -126,8 +126,7 @@ def set_game_epoch(repo, epoch: int) -> bool:
 
     epoch_int = int(epoch)
     date_str = epoch_to_date(epoch_int)
-    repo.set_cell("state_scalars", {"key": "epoch"}, "value", epoch_int)
-    repo.set_cell("state_scalars", {"key": "current_date"}, "value", date_str)
+    repo.set_cell("state_scalars", {"property_key": "epoch"}, "property_value", epoch_int)
     return True
 
 
@@ -151,7 +150,7 @@ def buy_goods(repo, good_key: str, qty: int, unit_price: float) -> bool:
     unit_price = float(unit_price)
     total_cost = round(qty * unit_price, 2)
 
-    sovereigns = repo.get_cell("state_scalars", {"key": "sovereigns"}, "value")
+    sovereigns = repo.get_cell("state_scalars", {"property_key": "sovereigns"}, "property_value")
     if sovereigns < total_cost:
         raise ValueError(
             f"Insufficient sovereigns to buy {qty}x '{good_key}': need {total_cost}, have {sovereigns}."
@@ -181,7 +180,7 @@ def buy_goods(repo, good_key: str, qty: int, unit_price: float) -> bool:
     new_sovereigns = round(float(sovereigns) - total_cost, 2)
     if new_sovereigns.is_integer():
         new_sovereigns = int(new_sovereigns)
-    repo.set_cell("state_scalars", {"key": "sovereigns"}, "value", new_sovereigns)
+    repo.set_cell("state_scalars", {"property_key": "sovereigns"}, "property_value", new_sovereigns)
     return True
 
 
@@ -228,11 +227,11 @@ def sell_goods(repo, good_key: str, qty: int, unit_price: float) -> bool:
         )
 
     revenue = round(qty * unit_price, 2)
-    sovereigns = repo.get_cell("state_scalars", {"key": "sovereigns"}, "value")
+    sovereigns = repo.get_cell("state_scalars", {"property_key": "sovereigns"}, "property_value")
     new_sovereigns = round(float(sovereigns) + revenue, 2)
     if new_sovereigns.is_integer():
         new_sovereigns = int(new_sovereigns)
-    repo.set_cell("state_scalars", {"key": "sovereigns"}, "value", new_sovereigns)
+    repo.set_cell("state_scalars", {"property_key": "sovereigns"}, "property_value", new_sovereigns)
     return True
 
 

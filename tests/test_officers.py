@@ -10,14 +10,14 @@ class TestOfficerManagement(unittest.TestCase):
     def setUp(self):
         self.repo = GoogleSheetsRepository("mock_id")
         self.repo._cache["state_scalars"] = pd.DataFrame([
-            {"key": "skill_iron", "value": 10},
-            {"key": "skill_mirrors", "value": 3},
-            {"key": "skill_hearts", "value": 6},
-            {"key": "skill_veils", "value": 3},
-            {"key": "affiliation_academe", "value": 0},
-            {"key": "affiliation_bohemia", "value": 0},
-            {"key": "affiliation_establishment", "value": 1},
-            {"key": "affiliation_villainy", "value": 0},
+            {"property_key": "skill_iron", "property_value": 10},
+            {"property_key": "skill_mirrors", "property_value": 3},
+            {"property_key": "skill_hearts", "property_value": 6},
+            {"property_key": "skill_veils", "property_value": 3},
+            {"property_key": "affiliation_academe", "property_value": 0},
+            {"property_key": "affiliation_bohemia", "property_value": 0},
+            {"property_key": "affiliation_establishment", "property_value": 1},
+            {"property_key": "affiliation_villainy", "property_value": 0},
         ])
 
         self.repo._cache["ref_officers"] = pd.DataFrame([

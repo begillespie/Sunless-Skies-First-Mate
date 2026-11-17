@@ -1,13 +1,13 @@
 {#
 @subsystem: logbook
-@version: 2.0.0
+@version: 2.0.1
 @file: src/templates/logbook.j2
 @description: This template generates a logbook entry for the Sunless Skies First Mate application
 #}
 
 # 🚂 CAPTAIN'S LOG 🚀
 
-## 📅 {{ date }} (Day {{ epoch }}) | ⚓ {{ location_name }} | {{ kinetic_state }}
+## 📅 {{ display_date }} (Day {{ epoch }}) | ⚓ {{ location_name }} | {{ kinetic_state }}
 **🗺️ Region:** {{ region_name }} | **👤 Captain:** {{ captain_name }} | **🪙 Wallet:** {{ sovereigns }} Sovereigns
 **🚂 Current Engine:** {{ vessel_name }} ({{ model }})
 
@@ -44,32 +44,43 @@
 
 ### 🧭 Active Trajectory:
 
-{% for leg in itinerary | sort(attribute='sequence_order') -%}
-### ➡️ STOP {{ leg.sequence_order }} {{ leg.display_name }} {{ leg.resupply_badge }}
+{% for leg in legs | sort(attribute='sequence_order') -%}
+### ➡️ STOP {{ leg.sequence_order }} {{ leg.location_name }} {{ leg.resupply_badge }}
 {% for action in leg.actions -%}
 {% if action.type == "ambition" -%}
 - {{ action.priority_badge }} 🎯 **AMBITION:** {{ action.title}}
-{{ action.notes }}
+  - {{ action.note }}
+
 {% endif %}
 {% if action.type == "officer" -%}
 - {{ action.priority_badge }} 👤 **OFFICER STORY:** {{ action.title}}
-{{ action.notes }}
+  - {{ action.note }}
+
 {% endif %}
 {% if action.type == "secondment" -%}
 - {{ action.priority_badge }} 💼 **SECONDMENT READY:** {{ action.title }}
-{{ action.notes }}
+  - {{ action.note }}
+
+{% endif %}
+{% if action.type == "passenger" -%}
+- {{ action.priority_badge }} 👤 **PASSENGER:** {{ action.title }}
+  - {{ action.note }}
+
 {% endif %}
 {% if action.type == "prospect" -%}
 - {{ action.priority_badge }} 🔑 **PROSPECT:** {{ action.title }}
-{{ action.notes }}
+  - {{ action.note }}
+
 {% endif %}
 {% if action.type == "quest" -%}
 - {{ action.priority_badge }} 📖 **QUEST:** {{ action.title }}
-{{ action.notes }}
+  - {{ action.note }}
+
 {% endif %}
 {% if action.type == "todo" -%}
 - {{ action.priority_badge }} 📌 **TODO:** {{ action.title }}
-{{ action.notes }}
+  - {{ action.note }}
+  
 {% endif %}
 {% endfor -%}
 {% endfor -%}
@@ -79,7 +90,7 @@
 {% if pinned_objectives -%}
 ## 📌 PINNED OBJECTIVES (OFF-ITINERARY)
 {% for obj in pinned_objectives -%}
-- **[#{{ obj.id }}] {{ obj.title }}:** {{ obj.description }} *(Target: {{ obj.port }})*
+- {{ obj.priority_badge }} **{{ obj.title }}:** {{ obj.note }} *⚓({{ obj.port }})*
 {% endfor %}
 ---
 {% endif %}
@@ -87,20 +98,21 @@
 {% if active_passengers -%}
 ## 👤 ACTIVE PASSENGERS
 {% for pax in active_passengers -%}
-- **{{ pax.name }}** (Destination: {{ pax.destination }}) — *Quarters: {{ pax.quarters }}*
+- **{{ pax.name }}** (Destination: {{ pax.destination }}){% if pax.deadline %} — *Deadline: {{ pax.deadline }}*{% endif %}
+
 {% endfor %}
 ---
 {% endif %}
 
 ## 📦 LOGISTICS
-**Hold Capacity:** {{ standard_hold_used }} / {{ hold_capacity }} Standard Slots
+**Hold Utilization:** {{ standard_hold_used }} / {{ hold_capacity }} Standard Slots
 {% if hidden_slots > 0 -%}
 **🗝️ Hidden Hold Utilization:** {{ hidden_hold_used }} / {{ hidden_slots }} Slots Occupied
 {% endif %}
-| Cargo / Good Key | Hold Qty | Bank Qty | Avg Unit Cost | Status / Earmark | Destination Port |
-| :--- | :---: | :---: | :---: | :--- |
+| Cargo | Hold Qty | Bank Qty | Avg Unit Cost | Status / Earmark | Destination Port |
+| :--- | :---: | :---: | :---: | :--- | :--- |
 {% for item in inventory_rows -%}
-| {{ item.good_key }} | {{ item.hold_qty }} | {{ item.bank_qty }} | £{{ "%.2f"|format(item.mac) }} | {{ item.status }} | {{ item.destination_port }}
+| {{ item.display_name }} | {{ item.hold_qty }} | {{ item.bank_qty }} | £{{ "%.2f"|format(item.mac) }} | {{ item.status }} | {{ item.destination_port }} |
 {% endfor %}
 
 ---
@@ -120,7 +132,7 @@
 {% if secondment_outlook -%}
 ## ⏳ SECONDMENT OUTLOOK
 {% for sec in secondment_outlook -%}
-- **{{ sec.officer_key }}:** {{ sec.status_note }}
+- **{{ sec.name }}:** {{ sec.status_note }}
 {% endfor %}
 ---
 {% endif %}

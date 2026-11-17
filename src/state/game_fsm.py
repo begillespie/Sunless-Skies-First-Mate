@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 @subsystem: game_fsm
-@version: 1.1.0
+@version: 1.2.0
 Cyclical Finite State Machine regulating navigation and kinetic states in state_scalars.
 """
 
@@ -14,7 +14,7 @@ class GameFSM:
 
     def get_current_state(self) -> str:
         try:
-            return str(self.repo.get_cell("state_scalars", {"key": "navigation_state"}, "value"))
+            return str(self.repo.get_cell("state_scalars", {"property_key": "navigation_state"}, "property_value"))
         except (LookupError, ValueError):
             return "docked"
 
@@ -66,17 +66,17 @@ class GameFSM:
 
     def _handle_depart(self, **kwargs) -> bool:
         self._pop_and_reindex_itinerary()
-        self.repo.set_cell("state_scalars", {"key": "navigation_state"}, "value", "departing")
+        self.repo.set_cell("state_scalars", {"property_key": "navigation_state"}, "property_value", "departing")
         return True
 
     def _handle_clear(self, **kwargs) -> bool:
-        self.repo.set_cell("state_scalars", {"key": "navigation_state"}, "value", "enroute")
+        self.repo.set_cell("state_scalars", {"property_key": "navigation_state"}, "property_value", "enroute")
         return True
 
     def _handle_arrive(self, **kwargs) -> bool:
-        self.repo.set_cell("state_scalars", {"key": "navigation_state"}, "value", "arriving")
+        self.repo.set_cell("state_scalars", {"property_key": "navigation_state"}, "property_value", "arriving")
         return True
 
     def _handle_dock(self, **kwargs) -> bool:
-        self.repo.set_cell("state_scalars", {"key": "navigation_state"}, "value", "docked")
+        self.repo.set_cell("state_scalars", {"property_key": "navigation_state"}, "property_value", "docked")
         return True

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 @subsystem: calculators
-@version: 1.0.0
+@version: 1.0.1
 @file: /src/tools/calculators.py
 @description: Deterministic state-transfer engine for Sunless Skies First Mate.
 """
@@ -55,6 +55,14 @@ def compute_mac(repo, good_key, acquired_qty: int, unit_price: float) -> float:
         return 0.0
     return round(((old_total_qty * old_mac) + (acquired_qty * unit_price)) / new_total, 2)
 
+def _get_scalar_cell(repo, key_name: str, default=0):
+    """Reads a scalar value in data_package (property_key/property_value) schemas."""
+    try:
+        return repo.get_cell("state_scalars", {"property_key": key_name}, "property_value")
+    except (LookupError, ValueError):
+        return default
+
+
 def compute_hold_utilization(repo) -> dict:
     """
     Computes standard hold and hidden hold utilization by querying the repository directly.
@@ -67,8 +75,8 @@ def compute_hold_utilization(repo) -> dict:
     
     # 2. Get hidden slots from scalar state
     try:
-        hidden_slots = int(repo.get_cell("state_scalars", {"key": "hidden_slots"}, "value"))
-    except (LookupError, ValueError):
+        hidden_slots = int(_get_scalar_cell(repo, "hidden_slots", 0))
+    except ValueError:
         hidden_slots = 0
 
     if hidden_slots < 0:
@@ -117,8 +125,8 @@ def calculate_attribute_perks(repo) -> dict[str, int]:
     totals: dict[str, int] = {}
     for attr in ATTRIBUTE_KEYS:
         try:
-            totals[attr] = int(repo.get_cell("state_scalars", {"key": attr}, "value"))
-        except (LookupError, ValueError):
+            totals[attr] = int(_get_scalar_cell(repo, attr, 0))
+        except ValueError:
             totals[attr] = 0
 
     roster_df = repo.get_table("state_officers")
@@ -133,7 +141,19 @@ def calculate_attribute_perks(repo) -> dict[str, int]:
     merged = active_df.merge(ref_df, on="officer_key", how="left")
 
     for attr in ATTRIBUTE_KEYS:
-        if attr in merged.columns:
-            totals[attr] += int(merged[attr].fillna(0).sum())
+        short_name = attr.split("_", 1)[1]
+        col = attr if attr in merged.columns else (short_name if short_name in merged.columns else None)
+        if col is not None:
+            totals[attr] += int(merged[col].fillna(0).sum())
 
     return totals
+
+def exports_good(repo, location_key: str, good_key: str) -> bool:
+    """
+    Returns True if  location_key exports good_key
+    """
+    exports = set(repo.get_table("ref_location_goods").itertuples(index=False, name=None))
+    try:
+        return (location_key, good_key) in exports
+    except:
+        return False

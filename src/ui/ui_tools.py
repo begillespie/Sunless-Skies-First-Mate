@@ -1,54 +1,95 @@
 #!/usr/bin/env python3
 """
 @subsystem: ui_tools
-@version: 1.0.0
+@version: 1.1.0
 @file: src/tools/ui_tools.py
-@descripton UI presentation formatting, conditional status badges, and dynamic stat perk aggregation.
+@descripton Stateless micro-formatters for Sunless Skies First Mate UI presentation.
 """
-from typing import Dict, Iterable, List
+from datetime import date
+import numbers
+import re
 
+from src.services.calculators import ATTRIBUTE_KEYS
 
-ATTRIBUTE_KEYS = (
-    "skill_iron",
-    "skill_mirrors",
-    "skill_hearts",
-    "skill_veils",
-    "affiliation_academe",
-    "affiliation_bohemia",
-    "affiliation_establishment",
-    "affiliation_villainy",
-)
+ISO_DATE_REGEX = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
-
-def vitals_badge(current: int, maximum: int) -> str:
-    """Crew & Hull badge (Rule 4.4.2.1): >70% 🟢, 31%-70% 🟡, <=30% 🔴."""
-    if not isinstance(current, int) or not isinstance(maximum, int) or isinstance(current, bool) or isinstance(maximum, bool):
-        raise TypeError("Current and maximum must be integers")
-    if current < 0:
-        raise ValueError("Current cannot be negative")
+def vitals_badge(current: int | float, maximum: int | float) -> str:
+    """
+    Evaluates a current/maximum ratio (Hull, Crew) and returns a status indicator badge:
+    - '🟢' when ratio >= 0.70
+    - '🟡' when 0.25 <= ratio < 0.70
+    - '🔴' when ratio < 0.25 or current <= 0
+    """
+    if not isinstance(current, numbers.Real) or isinstance(current, bool):
+        raise TypeError(f"current must be numeric, got {current!r}")
+    if not isinstance(maximum, numbers.Real) or isinstance(maximum, bool):
+        raise TypeError(f"maximum must be numeric, got {maximum!r}")
     if maximum <= 0:
-        raise ValueError("Maximum must be positive")
+        raise ValueError(f"maximum must be positive, got {maximum}")
     if maximum < current:
         raise ValueError("Maximum cannot be less than current")
-    ratio = current / maximum if maximum > 0 else 0.0
-    if ratio > 0.70:
-        return "🟢"
-    if ratio > 0.30:
+
+    if current <= 0:
+        return "🔴"
+    ratio = float(current) / float(maximum)
+    if ratio < 0.25:
+        return "🔴"
+    if ratio < 0.70:
         return "🟡"
-    return "🔴"
+    return "🟢"
 
 
-def terror_badge(terror: int) -> str:
-    """Terror badge (Rule 4.4.2.2): 0-39 🟢, 40-69 🟡, >=70 🔴."""
-    if not isinstance(terror, int) or isinstance(terror, bool):
-        raise TypeError("Terror must be an integer")
-    if terror < 0 or terror > 100:
-        raise ValueError("Terror must be between 0 and 100")
-    return "🟢" if terror < 40 else ("🟡" if terror < 70 else "🔴")
+def terror_badge(terror_level: int) -> str:
+    """
+        Evaluates crew dread (0-100) and returns a threat badge:
+        - '🚨' when terror_level >= 75
+        - '⚠️' when terror_level >= 50
+        - '🟡' when terror_level >= 25
+        - '🟢' otherwise
+        """
+    if not isinstance(terror_level, numbers.Integral) or isinstance(terror_level, bool):
+        raise TypeError(f"terror_level must be an integer, got {terror_level!r}")
+    if terror_level < 0 or terror_level >100:
+        raise ValueError("terror_level must be between 0 and 100.")
+
+    if terror_level >= 75:
+        return "🚨"
+    if terror_level >= 50:
+        return "🔴"
+    if terror_level >= 25:
+        return "🟡"
+    return "🟢"
+
+
+def nightmares_badge(nightmares_level: int) -> str:
+    """
+    Evaluates captain nightmares (0-4) and returns a threat badge:
+    - '🚨' when nightmares_level >= 3
+    - '🔴' when nightmares_level >= 2
+    - '🟡' when nightmares_level >= 1
+    - '🟢' otherwise
+    """
+    if not isinstance(nightmares_level, numbers.Integral) or isinstance(nightmares_level, bool):
+        raise TypeError(f"nightmares_level must be an integer, got {nightmares_level!r}")
+    if nightmares_level < 0 or nightmares_level > 4:
+        raise ValueError("Nightmares must be between 0 and 4")
+
+    if nightmares_level >= 3:
+        return "🚨"
+    if nightmares_level >= 2:
+        return "🔴"
+    if nightmares_level >= 1:
+        return "🟡"
+    return "🟢"
 
 
 def reserve_badge(hold_qty: int, reserve_min: int) -> str:
-    """Fuel & Supplies reserve badge (Rule 4.4.2.5): >min 🟢, ==min ⚠️, <min 🚨.
+    """
+    Evaluates consumable reserve quantities (Fuel, Supplies) against a minimum safe threshold:
+    - '🟢' when qty > threshold
+    - '⚠️' when qty == threshold
+    - '🔴' when threshold * 0.5 <= qty < threshold
+    - '🚨' when qty <= 0 or qty < (threshold * 0.5)
     """
     if not isinstance(hold_qty, int) or not isinstance(reserve_min, int) or isinstance(hold_qty, bool) or isinstance(reserve_min, bool):
         raise TypeError("Hold quantity and reserve minimum must be integers")
@@ -60,68 +101,54 @@ def reserve_badge(hold_qty: int, reserve_min: int) -> str:
         return "🟢"
     if hold_qty == reserve_min:
         return "⚠️"
+    if hold_qty >= float(reserve_min) * 0.5:
+        return "🔴"
     return "🚨"
 
 
+def resupply_badge(has_fuel: bool, has_supplies: bool) -> str:
+    """
+    Evaluates resupply availability and returns a resupply badge:
+    - '🔴' when no resupply is available
+    - '🟡' when either fuel OR supplies are available
+    - '🟢' when fuel AND supplies are available
+    """ 
+    if has_fuel and has_supplies:
+        return "🟢"
+    elif has_fuel or has_supplies:
+        return "🟡"
+    else:
+        return "🔴"
+
+
 def format_officer_perks(officer_row: dict, prefix: str) -> str:
-    """Formats 'skill_*' or 'affiliation_*' columns into '+5 Iron, -1 Hearts'."""
-    formatted = []
+    """
+    Scans ATTRIBUTE_KEYS matching prefix ('skill_' or 'affiliation_') and formats
+    non-zero modifiers into signed strings (e.g. '+5 Iron, -1 Hearts' or '—').
+    """
+    if prefix not in ("skill_", "affiliation_"):
+        raise ValueError(f"Invalid prefix '{prefix}'. Expected 'skill_' or 'affiliation_'.")
+
+    formatted: list[str] = []
     for attr in ATTRIBUTE_KEYS:
         if attr.startswith(prefix):
-            val = int(officer_row.get(attr, 0) or 0)
+            short_name = attr[len(prefix):]
+            raw_val = officer_row.get(attr, officer_row.get(short_name, 0))
+            val = int(raw_val) if raw_val is not None and raw_val == raw_val else 0
             if val != 0:
                 sign = "+" if val > 0 else ""
-                label = attr.removeprefix(prefix).title()
+                label = short_name.replace("_", " ").title()
                 formatted.append(f"{sign}{val} {label}")
     return ", ".join(formatted) if formatted else "—"
 
 
-def calculate_stats(captain_stats: Dict[str, int], active_officers: List[Dict]) -> Dict[str, int]:
+def format_iso_date(iso_date: str, fmt: str = "%d %B, %Y") -> str:
     """
-    Calculates total ship aptitude stats (Base + Perks) for the 8 canonical attributes.
-    - captain_stats: Dict with keys: iron, mirrors, hearts, veils, academe, bohemia, establishment, villainy (all ints >= 0).
-    - active_officers: List of dicts for active officers, each containing officer_key, officer_status, and the 8 perk_ values.
-                       (Enforces officer_status == 'active' and allows mascot_dilly.perk_hearts == -1).
-    Returns a dict with the 8 total stat values.
+    Formats a standardized ISO date string ('YYYY-MM-DD') using Python's built-in
+    datetime.date.fromisoformat() and strftime(), stripping leading/trailing whitespace.
     """
-    if not isinstance(captain_stats, dict):
-        raise TypeError("captain_stats must be a dictionary.")
-    if not isinstance(active_officers, list):
-        raise TypeError("active_officers must be a list of dictionaries.")
+    if not isinstance(iso_date, str) or not ISO_DATE_REGEX.match(iso_date.strip()):
+        raise ValueError(f"Invalid ISO date string '{iso_date}'. Expected 'YYYY-MM-DD'.")
 
-    stat_keys = ["iron", "mirrors", "hearts", "veils", "academe", "bohemia", "establishment", "villainy"]
-    totals = {}
-    
-    # 1. Validate and load captain base stats
-    for k in stat_keys:
-        val = captain_stats.get(k, 0)
-        if not isinstance(val, int) or isinstance(val, bool) or val < 0:
-            raise ValueError(f"Captain base stat '{k}' must be a non-negative integer, got {val}")
-        totals[k] = val
-
-    # 2. Validate and aggregate active officers
-    for officer in active_officers:
-        if not isinstance(officer, dict):
-            raise TypeError("Each officer record in active_officers must be a dictionary.")
-        
-        status = officer.get("officer_status")
-
-        if officer.get("officer_status") == "active":
-        
-            key = officer.get("officer_key")
-            if not isinstance(key, str) or not key.strip():
-                raise ValueError("Officer record missing a valid string 'officer_key'.")
-
-            for k in stat_keys:
-                perk_val = officer.get(f"perk_{k}", 0)
-                if not isinstance(perk_val, int) or isinstance(perk_val, bool):
-                    raise ValueError(f"Perk '{k}' for officer '{key}' must be an integer.")
-                
-                # Allow mascot_dilly to have perk_hearts == -1; all other perks must be >= 0
-                min_allowed = -1 if (key == "mascot_dilly" and k == "hearts") else 0
-                if perk_val < min_allowed:
-                    raise ValueError(f"Perk '{k}' for officer '{key}' is {perk_val}, which violates minimum bound {min_allowed}.")
-                
-                totals[k] += perk_val
-
-    return totals
+    parsed = date.fromisoformat(iso_date.strip())
+    return parsed.strftime(fmt).lstrip("0")

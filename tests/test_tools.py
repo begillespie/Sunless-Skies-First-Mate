@@ -25,26 +25,26 @@ class TestToolsAndRegistry(unittest.TestCase):
     def setUp(self):
         self.repo = GoogleSheetsRepository("mock_id")
         self.repo._cache["state_scalars"] = pd.DataFrame([
-            {"key": "epoch", "value": 30},
-            {"key": "current_date", "value": "1905-01-31"},
-            {"key": "navigation_state", "value": "docked"},
-            {"key": "sovereigns", "value": 1000},
-            {"key": "current_hull", "value": 80},
-            {"key": "max_hull", "value": 100},
-            {"key": "current_crew", "value": 18},
-            {"key": "max_crew", "value": 20},
-            {"key": "terror_level", "value": 15},
-            {"key": "nightmares_level", "value": 0},
-            {"key": "hidden_slots", "value": 2},
-            {"key": "current_location", "value": "new_winchester"},
-            {"key": "skill_iron", "value": 10},
-            {"key": "skill_mirrors", "value": 3},
-            {"key": "skill_hearts", "value": 6},
-            {"key": "skill_veils", "value": 3},
-            {"key": "affiliation_academe", "value": 0},
-            {"key": "affiliation_bohemia", "value": 0},
-            {"key": "affiliation_establishment", "value": 1},
-            {"key": "affiliation_villainy", "value": 0}
+            {"property_key": "epoch", "property_value": 30},
+            {"property_key": "current_date", "property_value": "1905-01-31"},
+            {"property_key": "navigation_state", "property_value": "docked"},
+            {"property_key": "sovereigns", "property_value": 1000},
+            {"property_key": "current_hull", "property_value": 80},
+            {"property_key": "max_hull", "property_value": 100},
+            {"property_key": "current_crew", "property_value": 18},
+            {"property_key": "max_crew", "property_value": 20},
+            {"property_key": "terror_level", "property_value": 15},
+            {"property_key": "nightmares_level", "property_value": 0},
+            {"property_key": "hidden_slots", "property_value": 2},
+            {"property_key": "current_location", "property_value": "new_winchester"},
+            {"property_key": "skill_iron", "property_value": 10},
+            {"property_key": "skill_mirrors", "property_value": 3},
+            {"property_key": "skill_hearts", "property_value": 6},
+            {"property_key": "skill_veils", "property_value": 3},
+            {"property_key": "affiliation_academe", "property_value": 0},
+            {"property_key": "affiliation_bohemia", "property_value": 0},
+            {"property_key": "affiliation_establishment", "property_value": 1},
+            {"property_key": "affiliation_villainy", "property_value": 0}
         ])
         self.repo._cache["state_inventory"] = pd.DataFrame([
             {"good_key": "fuel", "hold_qty": 10, "bank_qty": 5, "average_unit_cost": 12.0},
@@ -131,21 +131,21 @@ class TestToolsAndRegistry(unittest.TestCase):
 
     def test_adjust_and_set_scalar_guards(self):
         # Loot 50 sovereigns from Marauder wreckage
-        self.assertTrue(dispatch_tool_call(self.repo, "adjust_scalar", {"key": "sovereigns", "delta": 50}))
-        self.assertEqual(self.repo.get_cell("state_scalars", {"key": "sovereigns"}, "value"), 1050)
+        self.assertTrue(dispatch_tool_call(self.repo, "adjust_scalar", {"property_key": "sovereigns", "delta": 50}))
+        self.assertEqual(self.repo.get_cell("state_scalars", {"property_key": "sovereigns"}, "property_value"), 1050)
 
         # Hull repairs clamp at max_hull (100)
-        self.assertTrue(dispatch_tool_call(self.repo, "adjust_scalar", {"key": "current_hull", "delta": 50}))
-        self.assertEqual(self.repo.get_cell("state_scalars", {"key": "current_hull"}, "value"), 100)
+        self.assertTrue(dispatch_tool_call(self.repo, "adjust_scalar", {"property_key": "current_hull", "delta": 50}))
+        self.assertEqual(self.repo.get_cell("state_scalars", {"property_key": "current_hull"}, "property_value"), 100)
 
         # Protected scalar cannot be mutated directly
         with self.assertRaises(ValueError):
-            dispatch_tool_call(self.repo, "set_scalar", {"key": "navigation_state", "value": "enroute"})
+            dispatch_tool_call(self.repo, "set_scalar", {"property_key": "navigation_state", "property_value": "enroute"})
 
     def test_buy_sell_and_transfer_goods(self):
         # Buy 4 bronzewood @ 25.0 -> appends row, deducts 100 sovereigns
         self.assertTrue(dispatch_tool_call(self.repo, "buy_goods", {"good_key": "bronzewood", "qty": 4, "unit_price": 25.0}))
-        self.assertEqual(self.repo.get_cell("state_scalars", {"key": "sovereigns"}, "value"), 900)
+        self.assertEqual(self.repo.get_cell("state_scalars", {"property_key": "sovereigns"}, "property_value"), 900)
         bw_row = self.repo.get_row("state_inventory", {"good_key": "bronzewood"})
         self.assertEqual(bw_row["hold_qty"], 4)
         self.assertEqual(bw_row["average_unit_cost"], 25.0)
@@ -161,7 +161,7 @@ class TestToolsAndRegistry(unittest.TestCase):
 
         # Sell remaining 2 in hold -> row remains because bank_qty == 2
         self.assertTrue(dispatch_tool_call(self.repo, "sell_goods", {"good_key": "bronzewood", "qty": 2, "unit_price": 40.0}))
-        self.assertEqual(self.repo.get_cell("state_scalars", {"key": "sovereigns"}, "value"), 980)
+        self.assertEqual(self.repo.get_cell("state_scalars", {"property_key": "sovereigns"}, "property_value"), 980)
 
         # Withdraw 2 and sell 2 -> total stock hits 0, non-baseline row is deleted
         dispatch_tool_call(self.repo, "transfer_inventory", {"good_key": "bronzewood", "direction": "withdraw", "qty": 2})
@@ -205,7 +205,7 @@ class TestToolsAndRegistry(unittest.TestCase):
 
     def test_transition_navigation_via_dispatch(self):
         self.assertTrue(dispatch_tool_call(self.repo, "transition_navigation", {"action": "DEPART"}))
-        self.assertEqual(self.repo.get_cell("state_scalars", {"key": "navigation_state"}, "value"), "departing")
+        self.assertEqual(self.repo.get_cell("state_scalars", {"property_key": "navigation_state"}, "property_value"), "departing")
 
 
 if __name__ == "__main__":

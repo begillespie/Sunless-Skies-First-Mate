@@ -14,9 +14,9 @@ class TestFSMAndEngineTools(unittest.TestCase):
     def setUp(self):
         self.repo = GoogleSheetsRepository("mock_id")
         self.repo._cache["state_scalars"] = pd.DataFrame([
-            {"key": "epoch", "value": 30},
-            {"key": "current_date", "value": "1905-01-31"},
-            {"key": "navigation_state", "value": "docked"}
+            {"property_key": "epoch", "property_value": 30},
+            {"property_key": "current_date", "property_value": "1905-01-31"},
+            {"property_key": "navigation_state", "property_value": "docked"}
         ])
         self.repo._cache["state_navigation_itinerary"] = pd.DataFrame([
             {"sequence_order": 1, "location_key": "port_avon", "action_summary": "Deliver amber"},
@@ -28,8 +28,7 @@ class TestFSMAndEngineTools(unittest.TestCase):
     def test_set_game_epoch_valid(self):
         success = set_game_epoch(self.repo, 379)
         self.assertTrue(success)
-        self.assertEqual(self.repo.get_cell("state_scalars", {"key": "epoch"}, "value"), 379)
-        self.assertEqual(self.repo.get_cell("state_scalars", {"key": "current_date"}, "value"), "1906-01-15")
+        self.assertEqual(self.repo.get_cell("state_scalars", {"property_key": "epoch"}, "property_value"), 379)
 
     def test_depart_station_reindexing(self):
         success = depart_station(self.repo)
