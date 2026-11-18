@@ -9,6 +9,9 @@ class TestOfficerManagement(unittest.TestCase):
 
     def setUp(self):
         self.repo = GoogleSheetsRepository("mock_id")
+        self.repo._cache["state_fsm"] = pd.DataFrame([
+            {"property_key": "navigation_state", "property_value": "docked"},
+        ])
         self.repo._cache["state_scalars"] = pd.DataFrame([
             {"property_key": "skill_iron", "property_value": 10},
             {"property_key": "skill_mirrors", "property_value": 3},

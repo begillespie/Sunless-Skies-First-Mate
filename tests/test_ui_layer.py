@@ -37,15 +37,17 @@ class TestUILayer(unittest.TestCase):
         self.repo = GoogleSheetsRepository("mock_id")
 
         # state_scalars schema: domain_group, property_key, property_value, data_type, description
+        self.repo._cache["state_fsm"] = pd.DataFrame([
+            {"property_key": "current_location_key", "property_value": "new_winchester"},
+            {"property_key": "last_location_visited_key", "property_value": "new_winchester"},
+            {"property_key": "navigation_state", "property_value": "docked"},
+        ])
         self.repo._cache["state_scalars"] = pd.DataFrame([
             {"domain_group": "captain", "property_key": "captain_name", "property_value": "Captain Hawthorne", "data_type": "string", "description": "Active captain's callsign"},
             {"domain_group": "session", "property_key": "first_mate_name", "property_value": "Mr. Penn", "data_type": "string", "description": "Active first mate name"},
             {"domain_group": "locomotive", "property_key": "vessel_name", "property_value": "HMS Orpheus", "data_type": "string", "description": "Name of the vessel"},
             {"domain_group": "locomotive", "property_key": "model", "property_value": "Pellicle-class", "data_type": "string", "description": "Locomotive class model"},
-            {"domain_group": "session", "property_key": "current_location_key", "property_value": "new_winchester", "data_type": "string", "description": "Current location key"},
-            {"domain_group": "session", "property_key": "last_location_visited_key", "property_value": "new_winchester", "data_type": "string", "description": "Last visited location key"},
             {"domain_group": "session", "property_key": "current_epoch", "property_value": 30, "data_type": "integer", "description": "Current game time epoch"},
-            {"domain_group": "session", "property_key": "navigation_state", "property_value": "docked", "data_type": "string", "description": "Navigation state"},
             {"domain_group": "session", "property_key": "sovereigns", "property_value": 1250, "data_type": "integer", "description": "Sovereigns currency balance"},
             {"domain_group": "locomotive", "property_key": "current_hull", "property_value": 85, "data_type": "integer", "description": "Current hull integrity"},
             {"domain_group": "locomotive", "property_key": "max_hull", "property_value": 100, "data_type": "integer", "description": "Maximum hull integrity"},
@@ -385,7 +387,7 @@ class TestUILayer(unittest.TestCase):
         self.assertNotIn("Hidden Hold Utilization", rendered)
 
     def test_fsm_enroute_suppression_and_force_override(self):
-        self.repo.set_cell("state_scalars", {"property_key": "navigation_state"}, "property_value", "enroute")
+        self.repo.set_cell("state_fsm", {"property_key": "navigation_state"}, "property_value", "enroute")
         self.assertFalse(should_render_logbook(self.repo))
         self.assertIsNone(render_logbook(self.repo))
 

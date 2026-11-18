@@ -43,6 +43,3 @@ locomotive,reserve_supplies_min,3,integer,Minimum reserve supplies threshold
 session,first_mate_name,,string,Active first mate name
 session,current_epoch,73,integer,Current game time epoch
 session,sovereigns,0,integer,Sovereigns currency balance
-session,current_location_key,,string,Current location key. Foreign key: ref_locations.location_key
-session,last_location_visited_key,blue_kingdom_transit_relay,string,Last visited location key. Foreign key: ref_locations.location_key
-session,navigation_state,enroute,string,"Navigation state (arriving, departing, docked, enroute)"

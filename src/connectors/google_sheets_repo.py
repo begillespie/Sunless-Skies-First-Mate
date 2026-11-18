@@ -9,6 +9,7 @@ import io
 import urllib.request
 import pandas as pd
 from typing import Any
+from src.exceptions import DatastoreError, EntityNotFoundError
 from src.interfaces.repository import BaseRepository
 
 
@@ -28,7 +29,7 @@ class GoogleSheetsRepository(BaseRepository):
             csv_data = req.read().decode("utf-8")
             return pd.read_csv(io.StringIO(csv_data))
         except Exception as e:
-            raise RuntimeError(f"Failed to fetch sheet '{sheet_name}' from Google Sheets: {e}")
+            raise DatastoreError(f"Failed to fetch sheet '{sheet_name}' from Google Sheets: {e}")
 
     def get_table(self, table_name: str) -> pd.DataFrame:
         if table_name not in self._cache:
@@ -45,7 +46,7 @@ class GoogleSheetsRepository(BaseRepository):
 
         matched_rows = df[mask]
         if matched_rows.empty:
-            raise LookupError(f"No row found matching primary key {primary_key} in table '{table_name}'.")
+            raise EntityNotFoundError(f"No row found matching primary key {primary_key} in table '{table_name}'.")
 
         return matched_rows.iloc[0].to_dict()
 
@@ -68,7 +69,7 @@ class GoogleSheetsRepository(BaseRepository):
             mask &= (df[pk_col] == pk_val)
 
         if not mask.any():
-            raise LookupError(f"No row found matching primary key {primary_key} in table '{table_name}'.")
+            raise EntityNotFoundError(f"No row found matching primary key {primary_key} in table '{table_name}'.")
 
         for col, val in updates.items():
             df.loc[mask, col] = val
@@ -85,7 +86,7 @@ class GoogleSheetsRepository(BaseRepository):
             mask &= (df[pk_col] == pk_val)
 
         if not mask.any():
-            raise LookupError(f"No row found matching primary key {primary_key} in table '{table_name}'.")
+            raise EntityNotFoundError(f"No row found matching primary key {primary_key} in table '{table_name}'.")
 
         self._cache[table_name] = df[~mask].reset_index(drop=True)
         return True
@@ -103,7 +104,7 @@ class GoogleSheetsRepository(BaseRepository):
 
         matched_rows = df[mask]
         if matched_rows.empty:
-            raise LookupError(f"No row found matching primary key {primary_key} in table '{table_name}'.")
+            raise EntityNotFoundError(f"No row found matching primary key {primary_key} in table '{table_name}'.")
 
         return matched_rows.iloc[0][column]
 
@@ -119,7 +120,7 @@ class GoogleSheetsRepository(BaseRepository):
             mask &= (df[pk_col] == pk_val)
 
         if not mask.any():
-            raise LookupError(f"No row found matching primary key {primary_key} in table '{table_name}'.")
+            raise EntityNotFoundError(f"No row found matching primary key {primary_key} in table '{table_name}'.")
 
         df.loc[mask, column] = value
         self._cache[table_name] = df

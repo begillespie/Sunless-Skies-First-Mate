@@ -5,7 +5,8 @@ Tier 2 Unit Test Suite for GameFSM, set_game_epoch, and depart_station.
 import unittest
 import pandas as pd
 from src.connectors.google_sheets_repo import GoogleSheetsRepository
-from src.tools.engine_tools import set_game_epoch, depart_station
+from src.exceptions import InvalidTransitionError
+from src.tools.engine_tools import set_game_epoch
 from src.state.game_fsm import GameFSM
 
 
@@ -16,6 +17,8 @@ class TestFSMAndEngineTools(unittest.TestCase):
         self.repo._cache["state_scalars"] = pd.DataFrame([
             {"property_key": "epoch", "property_value": 30},
             {"property_key": "current_date", "property_value": "1905-01-31"},
+        ])
+        self.repo._cache["state_fsm"] = pd.DataFrame([
             {"property_key": "navigation_state", "property_value": "docked"}
         ])
         self.repo._cache["state_navigation_itinerary"] = pd.DataFrame([
@@ -31,7 +34,7 @@ class TestFSMAndEngineTools(unittest.TestCase):
         self.assertEqual(self.repo.get_cell("state_scalars", {"property_key": "epoch"}, "property_value"), 379)
 
     def test_depart_station_reindexing(self):
-        success = depart_station(self.repo)
+        success = self.fsm.transition("DEPART")
         self.assertTrue(success)
         
         # Check history has port_avon
@@ -67,7 +70,7 @@ class TestFSMAndEngineTools(unittest.TestCase):
 
     def test_fsm_invalid_transition(self):
         # Cannot 'CLEAR' from 'docked' state
-        with self.assertRaises(ValueError):
+        with self.assertRaises(InvalidTransitionError):
             self.fsm.transition("CLEAR")
 
 

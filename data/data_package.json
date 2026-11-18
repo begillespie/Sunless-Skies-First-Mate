@@ -402,6 +402,22 @@
       }
     },
     {
+      "name": "state_fsm",
+      "data": [
+        ["property_key","property_value","description"],
+        ["current_location_key","","Current location key. Foreign key: ref_locations.location_key"],
+        ["last_location_visited_key","blue_kingdom_transit_relay","Last visited location key. Foreign key: ref_locations.location_key"],
+        ["navigation_state","enroute","Navigation state (arriving, departing, docked, enroute)"]
+      ],
+      "schema": {
+        "fields": [
+          { "name": "property_key", "type": "string", "description": "primary key slug for the scalar variable" },
+          { "name": "property_value", "type": "string", "description": "scalar value stored as a string (cast dynamically based on data_type)" },
+          { "name": "description", "type": "string", "description": "human-readable explanation of the property" }
+        ]
+      }
+    },
+    {
       "name": "state_inventory",
       "data": [
         ["good_key", "hold_qty", "bank_qty", "average_unit_cost"],

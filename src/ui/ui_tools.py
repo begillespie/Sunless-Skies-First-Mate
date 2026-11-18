@@ -7,11 +7,9 @@
 """
 from datetime import date
 import numbers
-import re
 
 from src.services.calculators import ATTRIBUTE_KEYS
-
-ISO_DATE_REGEX = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+from src.services.calendar import ISO_DATE_REGEX
 
 def vitals_badge(current: int | float, maximum: int | float) -> str:
     """

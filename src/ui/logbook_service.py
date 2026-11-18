@@ -77,26 +77,39 @@ def should_render_logbook(repo) -> bool:
     return fsm.get_current_state() != "enroute"
 
 
+def _load_key_value_dict(repo, table_name: str) -> dict:
+    """Reads a property_key/property_value table into a flat dictionary."""
+    df = _safe_get_table(repo, table_name)
+    if df.empty or not {"property_key", "property_value"} <= set(df.columns):
+        return {}
+    return dict(zip(df["property_key"], df["property_value"]))
+
+
 def _load_scalars_dict(repo) -> dict:
     """Reads state_scalars table into a flat key -> value dictionary."""
-    scalars_df = _safe_get_table(repo, "state_scalars")
-    if scalars_df.empty:
-        return {}
-    if {"property_key", "property_value"} <= set(scalars_df.columns):
-        return dict(zip(scalars_df["property_key"], scalars_df["property_value"]))
-    return dict(zip(scalars_df["property_key"], scalars_df["property_value"]))
+    return _load_key_value_dict(repo, "state_scalars")
 
 
 def _assemble_header_vitals(repo, scalars: dict) -> dict:
     """Assembles ship header metadata, epoch-derived dates, and vital gauges with badges."""
+    fsm_state = _load_key_value_dict(repo, "state_fsm")
+
     epoch = int(scalars.get("current_epoch", scalars.get("epoch", 0)))
     iso_date = epoch_to_date(epoch)
-    formatted_date = format_iso_date(iso_date, "%d %B, %Y").lstrip("0")
+    formatted_date = format_iso_date(iso_date, "%d %B, %Y")
 
-    nav_state = str(scalars.get("navigation_state", "docked"))
+    nav_state = str(fsm_state.get("navigation_state", scalars.get("navigation_state", "docked")))
     kinetic_state = KINETIC_STATE_DISPLAY.get(nav_state, nav_state.title())
 
-    current_location = str(scalars.get("current_location_key", scalars.get("current_location", "unknown")))
+    current_location = str(
+        fsm_state.get(
+            "current_location",
+            fsm_state.get(
+                "current_location_key",
+                scalars.get("current_location_key", scalars.get("current_location", "unknown")),
+            ),
+        )
+    )
     location_name = current_location.replace("_", " ").title()
     ref_loc_df = _safe_get_table(repo, "ref_locations")
     if not ref_loc_df.empty and "location_key" in ref_loc_df.columns:
