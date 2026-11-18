@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 @subsystem: ui_tools
-@version: 1.1.0
+@version: 1.1.1
 @file: src/tools/ui_tools.py
 @descripton Stateless micro-formatters for Sunless Skies First Mate UI presentation.
 """

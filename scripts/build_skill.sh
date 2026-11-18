@@ -32,7 +32,8 @@ mkdir -p "${BUILD_DIR}/src"
 cp src/SKILL.md "${BUILD_DIR}/SKILL.md"
 cp src/Sunless_Skies.md "${BUILD_DIR}/references/Sunless_Skies.md"
 
-# Copy modular Python packages and Jinja2 templates into the deployable skill bundle
+# Copy top-level Python modules and modular Python packages / Jinja2 templates into the deployable skill bundle
+find "src" -maxdepth 1 -type f -name "*.py" -exec cp {} "${BUILD_DIR}/src/" \;
 for pkg_dir in interfaces connectors services state tools ui templates; do
     if [[ -d "src/${pkg_dir}" ]]; then
         mkdir -p "${BUILD_DIR}/src/${pkg_dir}"
@@ -49,7 +50,11 @@ for req_file in \
 "${BUILD_DIR}/SKILL.md" \
     "${BUILD_DIR}/references/Sunless_Skies.md" \
     "${BUILD_DIR}/references/data_package.json" \
+    "${BUILD_DIR}/src/exceptions.py" \
+    "${BUILD_DIR}/src/config.py" \
+    "${BUILD_DIR}/src/mcp_server.py" \
     "${BUILD_DIR}/src/interfaces/repository.py" \
+    "${BUILD_DIR}/src/interfaces/mcp_interface.py" \
     "${BUILD_DIR}/src/connectors/google_sheets_repo.py" \
     "${BUILD_DIR}/src/services/calendar.py" \
     "${BUILD_DIR}/src/services/calculators.py" \

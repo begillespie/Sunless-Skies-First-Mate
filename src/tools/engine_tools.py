@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 @subsystem: engine_tools
-@version: 2.1.0
+@version: 2.2.0
 @file src/tools/engine_tools.py
 @description Guarded state mutators for Sunless Skies First Mate.
 All state-modifying functions enforce domain invariants, delegate pure math to

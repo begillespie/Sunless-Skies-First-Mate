@@ -1,16 +1,20 @@
 contract_key,target_subsystem,current_version,minimum_version
 BASE-01,engine_core,2.0.0,2.0.0
 BASE-02,skill_entrypoint,2.0.0,2.0.0
+BASE-03,exceptions,1.0.0,1.0.0
 DATA-01,repository_interface,1.2.0,1.2.0
-DATA-02,google_sheets_connector,1.2.0,1.2.0
-SCHEMA-01,data_package,1.3.0,1.3.0
-STATE-01,game_fsm, 1.2.0, 1.2.0
+DATA-02,google_sheets_connector,1.3.0,1.2.0
+DATA-03,engine_config,1.0.0,1.0.0
+MCP-01,mcp_interface,1.0.0,1.0.0
+MCP-02,mcp_entrypoint,1.0.0,1.0.0
+SCHEMA-01,data_package,1.4.0,1.4.0
+STATE-01,game_fsm,2.0.0,2.0.0
 STATE-02,calendar,1.3.0,1.3.0
 STATE-03,calculators,1.0.1,1.0.0
 TARGET-01,sunless_skies_game,2.0.7,2.0.0
-TOOLS-01,llm_tools_registry,1.0.0,1.0.0
-TOOLS-02,engine_tools,2.1.0,2.1.0
-UI-01,ui_tools,1.1.0,1.0.0
-UI-02,logbook_service,1.0.0,1.0.0
+TOOLS-01,llm_tools_registry,1.1.0,1.1.0
+TOOLS-02,engine_tools,2.2.0,2.2.0
+UI-01,ui_tools,1.1.1,1.0.0
+UI-02,logbook_service,1.1.0,1.1.0
 UI-03,ui_renderer,1.0.0,1.0.0
 UI-04,logbook,2.0.1,2.0.0

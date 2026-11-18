@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 @subsystem: llm_tools_registry
-@version: 1.0.0
+@version: 1.1.0
 @file: src/tools/registry.py
 @description: Decorator and runtime dispatcher for the Sunless Skies LLM Tools API.
 Introspects type hints to build JSON Schema declarations while stripping 'repo'

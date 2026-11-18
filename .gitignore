@@ -26,3 +26,8 @@ htmlcov
 
 # Build artifacts
 dist/
+
+# Environment secrets & local config
+.env
+.env.*
+!.env.example

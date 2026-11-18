@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 @subsystem: google_sheets_connector
-@version: 1.2.0
+@version: 1.3.0
 @file: src/connectors/google_sheets_repo.py
 @description: Concrete implementation of BaseRepository using Pandas and Google Sheets CSV exports.
 """

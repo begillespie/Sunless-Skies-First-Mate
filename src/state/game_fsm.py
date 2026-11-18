@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 @subsystem: game_fsm
-@version: 1.2.0
+@version: 2.0.0
 Cyclical Finite State Machine regulating navigation, state-action gating, and kinetic states in state_fsm.
 """
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 @subsystem: logbook_service
-@version: 1.0.0
+@version: 1.1.0
 @file: src/ui/logbook_service.py
 @description: Pandas-powered Logbook Assembler for Sunless Skies First Mate.
 Queries BaseRepository tables, performs relational joins across state_* and ref_*

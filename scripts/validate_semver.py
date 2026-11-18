@@ -19,10 +19,16 @@ TRACKED_PATHS = [
     # Prompts
     REPO_ROOT / "src" / "Sunless_Skies.md", # BASE-01
     REPO_ROOT / "src" / "SKILL.md", # BASE-02
+    REPO_ROOT / "src" / "exceptions.py", # BASE-03
 
     # Data Interfaces & Connectors
     REPO_ROOT / "src" / "interfaces" / "repository.py", # DATA-01
     REPO_ROOT / "src" / "connectors" / "google_sheets_repo.py", # DATA-02
+    REPO_ROOT / "src" / "config.py", # DATA-03
+
+    # MCP Adapter & Entrypoint
+    REPO_ROOT / "src" / "interfaces" / "mcp_interface.py", # MCP-01
+    REPO_ROOT / "src" / "mcp_server.py", # MCP-02
     
     # State & Services
     REPO_ROOT / "src" / "state" / "game_fsm.py", # STATE-01
